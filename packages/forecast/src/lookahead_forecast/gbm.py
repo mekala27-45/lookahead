@@ -286,6 +286,38 @@ class GbmForecaster:
         )
 
 
+def validation_coverage(
+    fitted: GbmFitted, data: PanelData, level_pair: tuple[float, float] = (0.05, 0.95)
+) -> float:
+    """Share of validation year actuals inside the calibrated interval of the calibration model,
+    pooled over authorities and horizons: what the registry's coverage gate reads."""
+    boosters = fitted.boosters["calibration"]
+    levels = list(fitted.conformal.levels)
+    inside = 0
+    total = 0
+    for authority, d in fitted.designs.items():
+        a = data.authorities[authority]
+        valid = (
+            (d.origin_position >= a.series.position(data.validation_start))
+            & (d.origin_position < a.series.position(data.test_start))
+            & d.usable
+            & np.isfinite(d.y_ratio)
+        )
+        if not valid.any():
+            continue
+        q = sort_quantiles(
+            fitted.conformal.apply(sort_quantiles(_predict(boosters, d.x[valid])), d.horizon[valid])
+        )
+        actual = d.y_ratio[valid]
+        lo = q[:, levels.index(level_pair[0])]
+        hi = q[:, levels.index(level_pair[1])]
+        inside += int(np.sum((actual >= lo) & (actual <= hi)))
+        total += int(valid.sum())
+    if total == 0:
+        raise ValueError("no validation rows to measure coverage on")
+    return inside / total
+
+
 def feature_importance(fitted: GbmFitted, key: str = "calibration") -> list[tuple[str, float]]:
     booster = fitted.boosters[key][0]
     scores: dict[str, float] = booster.get_score(importance_type="total_gain")  # type: ignore[attr-defined]

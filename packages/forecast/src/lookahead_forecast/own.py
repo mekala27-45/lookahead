@@ -360,6 +360,27 @@ class OwnForecaster:
         )
 
 
+def validation_coverage(fitted: OwnFitted, level_pair: tuple[float, float] = (0.05, 0.95)) -> float:
+    """Share of validation year actuals inside the interval the calibrated offsets give, pooled
+    over authorities and horizons: what the registry's coverage gate reads."""
+    inside = 0
+    total = 0
+    for authority, run in fitted.validation.items():
+        conformal = fitted.conformal[authority]
+        ok = np.isfinite(run.pred_ratio) & np.isfinite(run.actual_ratio) & (run.pred_ratio > 0)
+        if not ok.any():
+            continue
+        q = conformal.apply(run.pred_ratio[ok], run.horizon[ok])
+        lo = q[:, conformal.levels.index(level_pair[0])]
+        hi = q[:, conformal.levels.index(level_pair[1])]
+        actual = run.actual_ratio[ok]
+        inside += int(np.sum((actual >= lo) & (actual <= hi)))
+        total += int(ok.sum())
+    if total == 0:
+        raise ValueError("no validation rows to measure coverage on")
+    return inside / total
+
+
 def coefficient_table(fitted: OwnFitted, authority: str) -> list[tuple[str, float]]:
     state = fitted.states[authority]
     beta = state.solve()

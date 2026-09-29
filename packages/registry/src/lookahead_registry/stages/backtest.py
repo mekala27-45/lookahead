@@ -149,6 +149,14 @@ def run(
         export_own(result.fitted, data, spec, paths.results / "models" / "own_model.json")
     if backend == "gbm" and result.fitted is not None:
         _gbm_details(w, prefix, result.fitted, folder)
+        from lookahead_forecast.gbm import validation_coverage as gbm_validation_coverage
+
+        w.put(f"{prefix}.validation_coverage_90", gbm_validation_coverage(result.fitted, data), "pct1")
+        w.put(
+            f"{prefix}.validation_coverage_50",
+            gbm_validation_coverage(result.fitted, data, (0.25, 0.75)),
+            "pct1",
+        )
         export_gbm(result.fitted, data, spec, paths.results / "models" / "gbm_model.json")
     if result.fitted is not None and backend in ("own", "gbm"):
         write_bundle(data, paths.results / "models" / "serving_bundle.parquet")
@@ -402,6 +410,10 @@ def _own_choices(w: Scribe, prefix: str, fitted: Any, data: PanelData, folder: o
         "int",
     )
     w.put(f"{prefix}.search_fits", fitted.fits, "int")
+    from lookahead_forecast.own import validation_coverage
+
+    w.put(f"{prefix}.validation_coverage_90", validation_coverage(fitted), "pct1")
+    w.put(f"{prefix}.validation_coverage_50", validation_coverage(fitted, (0.25, 0.75)), "pct1")
     pl.DataFrame(grid_rows).write_parquet(Path(str(folder)) / "threshold_search.parquet")
     coefficients = []
     for authority in data.names:
