@@ -1,18 +1,30 @@
 [project]
 name = "lookahead-events"
 version = "0.1.0"
-description = "Residual based detection, defect classification, the operating point and the known events"
-requires-python = ">=3.12,<3.13"
-license = "Apache-2.0"
+description = "Residual based anomaly detection: demand events told apart from data defects, graded on planted and known events"
+requires-python = ">=3.12"
 dependencies = [
   "lookahead-core",
-  "numpy>=1.26",
-  "polars>=1.10",
+  "lookahead-contracts",
+  "lookahead-features",
+  "lookahead-forecast",
+  "lookahead-evaluation",
+  "lookahead-sim",
+  "numpy>=2.1",
+  "polars>=1.20",
 ]
 
 [build-system]
-requires = ["hatchling>=1.25"]
+requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/lookahead_events"]
+
+[tool.uv.sources]
+lookahead-core = { workspace = true }
+lookahead-contracts = { workspace = true }
+lookahead-features = { workspace = true }
+lookahead-forecast = { workspace = true }
+lookahead-evaluation = { workspace = true }
+lookahead-sim = { workspace = true }
