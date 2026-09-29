@@ -2,15 +2,48 @@
 
 from __future__ import annotations
 
+import datetime as dt
+import os
+
 import typer
+from lookahead_core.paths import paths
 
 app = typer.Typer(add_completion=False, help="lookahead: demand forecasting for the grid and the meter")
 
+DEMONSTRATION_SEED = 13
+
+
+def as_of() -> str:
+    return os.environ.get("LOOKAHEAD_AS_OF", dt.date.today().isoformat())
+
 
 @app.command()
-def version() -> None:
-    """Print the version."""
-    typer.echo("lookahead 0.1.0")
+def data(
+    skip_london: bool = typer.Option(False, help="ingest the grid only; the meter step is not done"),
+) -> None:
+    """EIA-930 in full with the quarantine, the hierarchy, and the London release into DuckDB."""
+    from lookahead_registry.stages import data as stage
+
+    manifest = stage.run(paths(), as_of(), DEMONSTRATION_SEED, require_london=not skip_london)
+    typer.echo(f"data: {manifest.counts()}")
+
+
+@app.command()
+def weather(no_pull: bool = typer.Option(False, help="use the cache only, never try the host")) -> None:
+    """Hourly weather per authority location from the Open-Meteo cache, committed as parquet."""
+    from lookahead_registry.stages import weather as stage
+
+    manifest = stage.run(paths(), as_of(), DEMONSTRATION_SEED, attempt_pull=not no_pull)
+    typer.echo(f"weather: {manifest.counts()}")
+
+
+@app.command()
+def manifest() -> None:
+    """Merge every stage manifest into results/manifest.json."""
+    from lookahead_registry.stages import assemble
+
+    merged = assemble.run(paths(), as_of(), DEMONSTRATION_SEED)
+    typer.echo(f"manifest: {merged.counts()}")
 
 
 if __name__ == "__main__":

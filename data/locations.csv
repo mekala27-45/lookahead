@@ -1,0 +1,70 @@
+authority,name,state,latitude,longitude,reason,source,reports_demand
+AEC,Andalusia,AL,31.31,-86.48,population weighted centroid of a diffuse cooperative territory in south Alabama and northwest Florida,PowerSouth Energy Cooperative service area,1
+AECI,Springfield,MO,37.21,-93.29,population weighted centroid of the member cooperatives in Missouri and adjoining states,Associated Electric Cooperative service area,1
+AVA,Spokane,WA,47.66,-117.43,largest load center,Avista service area,1
+AVRN,Klamath Falls,OR,42.22,-121.78,generation only authority,Avangrid Renewables,0
+AZPS,Phoenix,AZ,33.45,-112.07,largest load center,Arizona Public Service service area,1
+BANC,Sacramento,CA,38.58,-121.49,largest load center,Sacramento Municipal Utility District within BANC,1
+BPAT,Portland,OR,45.52,-122.68,largest load pocket of a diffuse federal marketing area,Bonneville Power Administration public utility customers,1
+CHPD,Wenatchee,WA,47.42,-120.31,largest load center,Chelan County PUD service area,1
+CISO,Los Angeles,CA,34.05,-118.24,largest load center (the Southern California Edison area around Los Angeles),California ISO participating transmission owners,1
+CPLE,Raleigh,NC,35.78,-78.64,largest load center,Duke Energy Progress East service area,1
+CPLW,Asheville,NC,35.6,-82.55,largest load center,Duke Energy Progress West service area,1
+DEAA,Arlington,AZ,33.31,-112.79,generation only authority,Arlington Valley,0
+DOPD,East Wenatchee,WA,47.42,-120.29,largest load center,Douglas County PUD service area,1
+DUK,Charlotte,NC,35.23,-80.84,largest load center,Duke Energy Carolinas service area,1
+EEI,Joppa,IL,37.2,-88.85,generation only authority (retired),Electric Energy Inc,0
+EPE,El Paso,TX,31.76,-106.49,largest load center,El Paso Electric service area,1
+ERCO,Houston,TX,29.76,-95.37,largest load center,ERCOT weather zones,1
+FMPP,Orlando,FL,28.54,-81.38,largest load center,Florida Municipal Power Pool members,1
+FPC,St. Petersburg,FL,27.77,-82.64,largest load center,Duke Energy Florida service area,1
+FPL,Miami,FL,25.76,-80.19,largest load center,Florida Power and Light service area,1
+GCPD,Moses Lake,WA,47.13,-119.28,largest load center,Grant County PUD service area,1
+GLHB,Oklahoma City,OK,35.47,-97.52,population weighted centroid of a small transmission authority,GridLiance High Plains,1
+GRID,Houston,TX,29.76,-95.37,generation only authority,Gridforce Energy Management,0
+GRIF,Kingman,AZ,35.19,-114.05,generation only authority,Griffith Energy,0
+GRIS,Gila Bend,AZ,32.95,-112.72,generation only authority,Gila River Power,0
+GRMA,Gila Bend,AZ,32.95,-112.72,generation only authority (retired),Gila River,0
+GVL,Gainesville,FL,29.65,-82.32,largest load center,Gainesville Regional Utilities service area,1
+GWA,Shelby,MT,48.5,-111.86,generation only authority,NaturEner Power Watch,0
+HGMA,Tonopah,AZ,33.5,-112.93,generation only authority,New Harquahala,0
+HST,Homestead,FL,25.47,-80.48,largest load center,City of Homestead service area,1
+IID,El Centro,CA,32.79,-115.56,largest load center,Imperial Irrigation District service area,1
+IPCO,Boise,ID,43.62,-116.2,largest load center,Idaho Power service area,1
+ISNE,Boston,MA,42.36,-71.06,largest load center,ISO New England load zones,1
+JEA,Jacksonville,FL,30.33,-81.66,largest load center,JEA service area,1
+LDWP,Los Angeles,CA,34.05,-118.24,largest load center,Los Angeles Department of Water and Power,1
+LGEE,Louisville,KY,38.25,-85.76,largest load center,LG&E and KU service area,1
+MISO,Indianapolis,IN,39.77,-86.16,population weighted centroid of a fifteen state footprint,MISO load zones,1
+NEVP,Las Vegas,NV,36.17,-115.14,largest load center,Nevada Power service area,1
+NSB,New Smyrna Beach,FL,29.03,-80.93,largest load center (authority retired in 2020),Utilities Commission of New Smyrna Beach,1
+NWMT,Billings,MT,45.78,-108.5,largest load center,NorthWestern Energy Montana service area,1
+NYIS,New York,NY,40.71,-74.01,largest load center,NYISO load zones,1
+OVEC,Piketon,OH,39.07,-83.02,the authority's single industrial load,Ohio Valley Electric Corporation,1
+PACE,Salt Lake City,UT,40.76,-111.89,largest load center,PacifiCorp East service area,1
+PACW,Portland,OR,45.52,-122.68,largest load center,PacifiCorp West service area,1
+PGE,Portland,OR,45.52,-122.68,largest load center,Portland General Electric service area,1
+PJM,Pittsburgh,PA,40.44,-79.99,population weighted centroid of a thirteen state footprint,PJM transmission zones,1
+PNM,Albuquerque,NM,35.08,-106.65,largest load center,Public Service Company of New Mexico service area,1
+PSCO,Denver,CO,39.74,-104.99,largest load center,Public Service Company of Colorado service area,1
+PSEI,Bellevue,WA,47.61,-122.2,largest load center,Puget Sound Energy service area,1
+SC,Charleston,SC,32.78,-79.93,largest load center,Santee Cooper service area,1
+SCEG,Columbia,SC,34.0,-81.03,largest load center,Dominion Energy South Carolina service area,1
+SCL,Seattle,WA,47.61,-122.33,largest load center,Seattle City Light service area,1
+SEC,Tampa,FL,27.95,-82.46,population weighted centroid of the member cooperatives,Seminole Electric Cooperative members,1
+SEPA,Elberton,GA,34.11,-82.87,generation only authority,Southeastern Power Administration,0
+SOCO,Atlanta,GA,33.75,-84.39,largest load center,Southern Company service area,1
+SPA,Tulsa,OK,36.15,-95.99,population weighted centroid of a federal marketing area,Southwestern Power Administration,1
+SRP,Phoenix,AZ,33.45,-112.07,largest load center,Salt River Project service area,1
+SWPP,Kansas City,MO,39.1,-94.58,population weighted centroid of a fourteen state footprint,SPP load zones,1
+TAL,Tallahassee,FL,30.44,-84.28,largest load center,City of Tallahassee service area,1
+TEC,Tampa,FL,27.95,-82.46,largest load center,Tampa Electric service area,1
+TEPC,Tucson,AZ,32.22,-110.97,largest load center,Tucson Electric Power service area,1
+TIDC,Turlock,CA,37.49,-120.85,largest load center,Turlock Irrigation District service area,1
+TPWR,Tacoma,WA,47.25,-122.44,largest load center,Tacoma Power service area,1
+TVA,Nashville,TN,36.16,-86.78,largest load center,Tennessee Valley Authority service area,1
+WACM,Loveland,CO,40.4,-105.07,population weighted centroid of a diffuse federal marketing area,WAPA Rocky Mountain,1
+WALC,Phoenix,AZ,33.45,-112.07,largest load center,WAPA Desert Southwest,1
+WAUW,Billings,MT,45.78,-108.5,population weighted centroid of a diffuse federal marketing area,WAPA Upper Great Plains West,1
+WWA,Shelby,MT,48.5,-111.86,generation only authority,NaturEner Wind Watch,0
+YAD,Badin,NC,35.41,-80.12,generation only authority,Alcoa Power Generating Yadkin,0
