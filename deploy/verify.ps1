@@ -44,6 +44,7 @@ $auditAt = [DateTime]::Parse($issue.at).ToUniversalTime()
 $auditBefore = $auditAt -le $servedAt
 
 $ok = ($forecast.authority -eq $authority) -and ($forecast.rows.Count -eq 48) -and ($forecast.scores.Count -ge 1) -and $auditBefore -and ($forecast.statement.Length -gt 100)
+$firstHour = ($forecast.rows | Sort-Object horizon | Select-Object -First 1).q50
 $result = [ordered]@{
     base_url = $base
     client = "$env:COMPUTERNAME, Windows, PowerShell $($PSVersionTable.PSVersion)"
@@ -51,10 +52,15 @@ $result = [ordered]@{
     health = @{ status = $health.status; database = $health.database; model_version = $health.model_version; backend = $health.backend; authorities = $health.authorities }
     authority = $authority
     origin = $forecast.origin
+    model_version = $forecast.model_version
+    backend = $forecast.backend
     forecast_id = $forecastId
-    rows_read_back = $forecast.rows.Count
+    forecast_rows_read_back = $forecast.rows.Count
+    median_first_hour_mw = $firstHour
     scores_read_back = $forecast.scores.Count
+    scored_now = $scored.scored_rows
     scored_share = $forecast.scored_share
+    unscored_share = $scored.unscored_share
     audit_entries = $audit.entries.Count
     audit_before_response = $auditBefore
     statement_present = ($forecast.statement.Length -gt 100)

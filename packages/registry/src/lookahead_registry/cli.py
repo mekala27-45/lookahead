@@ -125,6 +125,24 @@ def registry() -> None:
 
 
 @app.command()
+def latency() -> None:
+    """Record the load test results into the manifest."""
+    from lookahead_registry.stages import latency as stage
+
+    manifest = stage.run(paths(), as_of(), DEMONSTRATION_SEED)
+    typer.echo(f"latency: {manifest.counts()}")
+
+
+@app.command()
+def marts() -> None:
+    """The marts and the bundle the control room queries in the browser."""
+    from lookahead_registry.stages import marts as stage
+
+    manifest = stage.run(paths(), as_of(), DEMONSTRATION_SEED)
+    typer.echo(f"marts: {manifest.counts()}")
+
+
+@app.command()
 def manifest() -> None:
     """Merge every stage manifest into results/manifest.json."""
     from lookahead_registry.stages import assemble
