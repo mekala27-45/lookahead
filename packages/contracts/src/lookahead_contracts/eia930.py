@@ -18,6 +18,7 @@ import polars as pl
 
 BALANCE_COLUMNS = {
     "Balancing Authority": "authority",
+    "Local Time at End of Hour": "local_hour_text",
     "UTC Time at End of Hour": "utc_hour_text",
     "Demand Forecast (MW)": "forecast_operator",
     "Demand (MW)": "demand",
@@ -126,6 +127,7 @@ def read_balance(path: Path) -> pl.DataFrame:
     frame = raw.select([pl.col(src).alias(dst) for src, dst in BALANCE_COLUMNS.items()])
     frame = frame.with_columns(
         _parse_time(pl.col("utc_hour_text")).alias("utc_hour"),
+        _parse_time(pl.col("local_hour_text")).dt.replace_time_zone(None).alias("local_hour"),
         *[_to_number(pl.col(c)).alias(c) for c in NUMERIC],
         pl.col("authority").str.strip_chars(),
         pl.col("region").str.strip_chars(),
@@ -135,9 +137,17 @@ def read_balance(path: Path) -> pl.DataFrame:
     if unparsed:
         sample = frame.filter(pl.col("utc_hour").is_null())["utc_hour_text"].head(3).to_list()
         raise ValueError(f"{path.name}: {unparsed} timestamps did not parse, for example {sample}")
-    return frame.drop("utc_hour_text").select(
+    # The local offset, in whole hours, from the two clocks EIA prints side by side.
+    frame = frame.with_columns(
+        ((pl.col("local_hour") - pl.col("utc_hour").dt.replace_time_zone(None)).dt.total_minutes() / 60)
+        .round(0)
+        .cast(pl.Int8)
+        .alias("utc_offset_hours")
+    )
+    return frame.drop("utc_hour_text", "local_hour_text", "local_hour").select(
         "authority",
         "utc_hour",
+        "utc_offset_hours",
         "demand",
         "forecast_operator",
         "net_generation",
@@ -185,20 +195,33 @@ def region_of_authorities(balance: pl.DataFrame) -> pl.DataFrame:
 
 
 def demand_reporters(balance: pl.DataFrame, minimum_share: float = 0.5) -> pl.DataFrame:
-    """Which authorities report demand: those with a non null demand in at least half of their hours.
+    """Which authorities report demand: those with a non null demand in at least half of the hours
+    between their first and last reported demand.
 
     Generation only authorities report net generation and interchange and no demand; they are
-    listed with their share so the README can print the rule and the count.
+    listed with their share so the README can print the rule and the count. An authority that
+    started reporting late (or stopped early) is judged over its own span, not the files' span.
     """
+    with_demand = balance.filter(pl.col("demand").is_not_null() & pl.col("demand").is_not_nan())
+    spans = with_demand.group_by("authority").agg(
+        pl.col("utc_hour").min().alias("first_demand_hour"),
+        pl.col("utc_hour").max().alias("last_demand_hour"),
+        pl.len().alias("hours_with_demand"),
+    )
+    totals = balance.group_by("authority").agg(
+        pl.len().alias("hours"),
+        pl.col("utc_hour").min().alias("first_hour"),
+        pl.col("utc_hour").max().alias("last_hour"),
+    )
+    joined = totals.join(spans, on="authority", how="left")
+    span_hours = ((pl.col("last_demand_hour") - pl.col("first_demand_hour")).dt.total_hours() + 1).cast(
+        pl.Float64
+    )
     return (
-        balance.group_by("authority")
-        .agg(
-            pl.len().alias("hours"),
-            pl.col("demand").is_not_null().sum().alias("hours_with_demand"),
-            pl.col("utc_hour").min().alias("first_hour"),
-            pl.col("utc_hour").max().alias("last_hour"),
+        joined.with_columns(
+            pl.col("hours_with_demand").fill_null(0),
+            (pl.col("hours_with_demand").fill_null(0) / span_hours).fill_null(0.0).alias("demand_share"),
         )
-        .with_columns((pl.col("hours_with_demand") / pl.col("hours")).alias("demand_share"))
         .with_columns((pl.col("demand_share") >= minimum_share).alias("reports_demand"))
         .sort("authority")
     )

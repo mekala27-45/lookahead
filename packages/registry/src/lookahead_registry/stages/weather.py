@@ -27,7 +27,9 @@ def run(paths: Paths, as_of: str, seed: int, *, attempt_pull: bool = True) -> Ma
         raise FileNotFoundError(
             f"data/locations.csv has no row for the demand reporting authorities {missing_locations}"
         )
-    chosen = locations.filter(pl.col("authority").is_in(reporters)).sort("authority")
+    # Weather is pulled for the authorities in the backtest: every one with a full validation and test year.
+    eligible = authorities.filter(pl.col("backtest_eligible"))["authority"].to_list()
+    chosen = locations.filter(pl.col("authority").is_in(eligible)).sort("authority")
     windows = load_windows(paths)
     first = date.fromisoformat(str(windows["training_start"]))
     last = min(date.fromisoformat(str(windows["test_end"])), pulls.last_archived_day())
@@ -67,6 +69,11 @@ def run(paths: Paths, as_of: str, seed: int, *, attempt_pull: bool = True) -> Ma
         origin="lookahead_registry.stages.weather",
     )
     w.put("data.weather.authorities", chosen.height, "int")
+    w.put(
+        "data.weather.reporters_without_weather",
+        ", ".join(sorted(set(reporters) - set(eligible))) or "none",
+        "text",
+    )
     w.put("data.weather.rows", weather.height, "int")
     w.put("data.weather.first_hour", str(weather["utc_hour"].min()), "text")
     w.put("data.weather.last_hour", str(weather["utc_hour"].max()), "text")

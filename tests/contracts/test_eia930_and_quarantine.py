@@ -30,6 +30,7 @@ def test_reader_parses_numbers_with_separators_and_both_time_formats(tmp_path: P
     assert frame["demand"].dtype == pl.Float64
     assert frame["demand"].min() > 5_000
     assert str(frame["utc_hour"].dtype) == "Datetime(time_unit='us', time_zone='UTC')"
+    assert frame["utc_offset_hours"].unique().to_list() == [-5]
     iso = write_balance(tmp_path / "iso.csv", {"PJM": "MIDA"}, START, 24, time_format="%Y-%m-%dT%H:%M:%S")
     assert eia930.read_balance(iso)["utc_hour"][0] == frame["utc_hour"][0]
 

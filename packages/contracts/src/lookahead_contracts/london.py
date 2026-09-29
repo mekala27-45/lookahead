@@ -9,6 +9,8 @@ and group aggregates.
 
 from __future__ import annotations
 
+import shutil
+import subprocess
 import zipfile
 from dataclasses import dataclass
 from pathlib import Path
@@ -50,7 +52,10 @@ def connect(
 
 
 def unpack(folder: Path) -> Path:
-    """Extract the consolidated CSV from the zip if it is not already on disk."""
+    """Extract the consolidated CSV from the zip if it is not already on disk.
+
+    The London Datastore zip is compressed with Deflate64, which Python's zipfile refuses, so
+    Info-ZIP's unzip does the extraction when it is installed and zipfile is the fallback."""
     csv = folder / RAW_CSV
     if csv.exists():
         return csv
@@ -64,9 +69,16 @@ def unpack(folder: Path) -> Path:
         if not members:
             raise ValueError(f"{archive} holds no csv member")
         member = members[0]
-        with zf.open(member) as src, csv.open("wb") as dst:
-            while chunk := src.read(1 << 24):
-                dst.write(chunk)
+        method = zf.getinfo(member).compress_type
+    if shutil.which("unzip") and method not in (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED):
+        partial = csv.with_suffix(".csv.part")
+        with partial.open("wb") as dst:
+            subprocess.run(["unzip", "-p", str(archive), member], stdout=dst, check=True)
+        partial.rename(csv)
+        return csv
+    with zipfile.ZipFile(archive) as zf, zf.open(member) as src, csv.open("wb") as dst:
+        while chunk := src.read(1 << 24):
+            dst.write(chunk)
     return csv
 
 

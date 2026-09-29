@@ -68,3 +68,5 @@ WALC,Phoenix,AZ,33.45,-112.07,largest load center,WAPA Desert Southwest,1
 WAUW,Billings,MT,45.78,-108.5,population weighted centroid of a diffuse federal marketing area,WAPA Upper Great Plains West,1
 WWA,Shelby,MT,48.5,-111.86,generation only authority,NaturEner Wind Watch,0
 YAD,Badin,NC,35.41,-80.12,generation only authority,Alcoa Power Generating Yadkin,0
+BHBA,Bismarck,ND,46.81,-100.78,population weighted centroid of a new authority in the Upper Great Plains (reports from April 2026; not in the backtest),EIA-930 balance files from 2026,1
+SWPW,Loveland,CO,40.4,-105.07,population weighted centroid of the former WACM and WAUW territories it took over in April 2026 (not in the backtest),EIA-930 balance files from 2026,1

@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import asdict
-from datetime import timedelta
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import polars as pl
@@ -93,13 +93,23 @@ def run(paths: Paths, as_of: str, seed: int, *, require_london: bool = True) -> 
     hierarchy = build_hierarchy(hierarchy_regions, subregions)
 
     windows = _windows(panel, demand_authorities)
+    authorities = authorities.join(_eligibility(panel, windows), on="authority", how="left").with_columns(
+        pl.col("validation_coverage").fill_null(0.0),
+        pl.col("test_coverage").fill_null(0.0),
+        pl.col("backtest_eligible").fill_null(False),
+    )
     gap = _subregion_gap(panel, subregions) if subregions is not None else None
 
     paths.eia.mkdir(parents=True, exist_ok=True)
-    panel.write_parquet(paths.eia / "hourly.parquet", compression="zstd")
+    # EIA reports whole megawatts; storing them as 32 bit integers halves the committed file.
+    megawatts = ["demand", "demand_raw", "forecast_operator", "net_generation", "interchange"]
+    panel = panel.with_columns([pl.col(c).round(0).cast(pl.Int32) for c in megawatts]).drop("source_file")
+    # The clean demand is the raw demand with the quarantined hours nulled; load_panel rebuilds it.
+    panel.drop("demand").write_parquet(paths.eia / "hourly.parquet", compression="zstd", compression_level=9)
     quarantined.report.write_parquet(paths.eia / "quarantine.parquet")
     if subregions is not None:
-        subregions.write_parquet(paths.eia / "subregions.parquet", compression="zstd")
+        subregions = subregions.with_columns(pl.col("demand").round(0).cast(pl.Int32)).drop("source_file")
+        subregions.write_parquet(paths.eia / "subregions.parquet", compression="zstd", compression_level=9)
     authorities.with_columns(
         pl.col("first_hour").dt.strftime("%Y-%m-%dT%H:%MZ"),
         pl.col("last_hour").dt.strftime("%Y-%m-%dT%H:%MZ"),
@@ -156,6 +166,41 @@ def _windows(panel: pl.DataFrame, demand_authorities: list[str]) -> dict[str, st
     }
 
 
+MINIMUM_WINDOW_COVERAGE = 0.9
+"""An authority is in the backtest when its clean demand covers this share of the validation and the test hours."""
+
+
+def _eligibility(panel: pl.DataFrame, windows: dict[str, str | int]) -> pl.DataFrame:
+    validation_start = datetime.fromisoformat(str(windows["validation_start"])).replace(tzinfo=UTC)
+    test_start = datetime.fromisoformat(str(windows["test_start"])).replace(tzinfo=UTC)
+    test_end = datetime.fromisoformat(str(windows["test_end"])).replace(tzinfo=UTC) + timedelta(days=1)
+    valid_hours = float((test_start - validation_start).total_seconds() // 3600)
+    test_hours = float((test_end - test_start).total_seconds() // 3600)
+    hour_after = pl.col("utc_hour") - pl.duration(hours=1)
+    return (
+        panel.group_by("authority")
+        .agg(
+            (pl.col("demand").is_not_null() & (hour_after >= validation_start) & (hour_after < test_start))
+            .sum()
+            .alias("validation_hours"),
+            (pl.col("demand").is_not_null() & (hour_after >= test_start) & (hour_after < test_end))
+            .sum()
+            .alias("test_hours"),
+        )
+        .with_columns(
+            (pl.col("validation_hours") / valid_hours).alias("validation_coverage"),
+            (pl.col("test_hours") / test_hours).alias("test_coverage"),
+        )
+        .with_columns(
+            (
+                (pl.col("validation_coverage") >= MINIMUM_WINDOW_COVERAGE)
+                & (pl.col("test_coverage") >= MINIMUM_WINDOW_COVERAGE)
+            ).alias("backtest_eligible")
+        )
+        .select("authority", "validation_coverage", "test_coverage", "backtest_eligible")
+    )
+
+
 def _subregion_gap(panel: pl.DataFrame, subregions: pl.DataFrame) -> pl.DataFrame:
     """Per authority with subregions: how far the subregion total sits from the authority's demand."""
     totals = (
@@ -208,6 +253,12 @@ def _eia_figures(
         ", ".join(authorities.filter(~pl.col("reports_demand"))["authority"].to_list()) or "none",
         "text",
     )
+    eligible = authorities.filter(pl.col("backtest_eligible"))
+    excluded = authorities.filter(pl.col("reports_demand") & ~pl.col("backtest_eligible"))
+    w.put("data.eia.backtest_authorities", eligible.height, "int")
+    w.put("data.eia.backtest_excluded", excluded.height, "int")
+    w.put("data.eia.backtest_excluded_list", ", ".join(excluded["authority"].to_list()) or "none", "text")
+    w.put("data.eia.minimum_window_coverage", MINIMUM_WINDOW_COVERAGE, "pct0")
     w.put("data.eia.panel_rows", panel.height, "int")
     w.put("data.eia.quarantined_rows", int(panel["quarantined"].sum()), "int")
     w.put("data.eia.quarantined_share", float(panel["quarantined"].sum()) / panel.height, "pct3")
@@ -290,13 +341,25 @@ def _eia_figures(
             "yes" if r["reports_demand"] else "no",
             r["hours"],
             r["demand_share"],
+            r["validation_coverage"],
+            r["test_coverage"],
+            "yes" if r["backtest_eligible"] else "no",
         ]
         for r in authorities.sort("authority").iter_rows(named=True)
     ]
     w.table(
         "data.authorities",
-        ["Authority", "Region", "Reports demand", "Hours in files", "Share of hours with demand"],
-        ["text", "text", "text", "int", "pct1"],
+        [
+            "Authority",
+            "Region",
+            "Reports demand",
+            "Hours in files",
+            "Share of its span with demand",
+            "Validation coverage",
+            "Test coverage",
+            "In the backtest",
+        ],
+        ["text", "text", "text", "int", "pct1", "pct1", "pct1", "text"],
         auth_rows,
     )
 
@@ -347,10 +410,20 @@ def load_windows(paths: Paths) -> dict[str, str | int]:
 
 
 def load_panel(paths: Paths) -> pl.DataFrame:
+    """The committed panel with the clean demand column rebuilt from the raw demand and the flags."""
     path = paths.eia / "hourly.parquet"
     if not path.exists():
         raise DataMissing("data/eia930/hourly.parquet is missing; run `make data` first")
-    return pl.read_parquet(path)
+    panel = pl.read_parquet(path)
+    if "demand" not in panel.columns:
+        panel = panel.with_columns(
+            pl.when(pl.col("quarantined"))
+            .then(None)
+            .otherwise(pl.col("demand_raw"))
+            .cast(pl.Float64)
+            .alias("demand")
+        )
+    return panel
 
 
 def load_hierarchy(paths: Paths) -> pl.DataFrame:

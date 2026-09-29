@@ -106,20 +106,21 @@ def ensure_cache(
 def frame_from_json(path: Path, authority: str) -> pl.DataFrame:
     payload = json.loads(path.read_text(encoding="utf-8-sig"))
     hourly = payload["hourly"]
-    times = (
+    starts = (
         pl.Series("start_utc", hourly["time"])
         .str.strptime(pl.Datetime("us"), "%Y-%m-%dT%H:%M")
         .dt.replace_time_zone("UTC")
     )
-    frame = pl.DataFrame(
+    # Open-Meteo stamps the start of the hour; the panel uses EIA's hour ending.
+    ending = starts + timedelta(hours=1)
+    return pl.DataFrame(
         {
-            "authority": [authority] * len(times),
-            "utc_hour": (times + pl.duration(hours=1)),
+            "authority": [authority] * len(ending),
+            "utc_hour": ending,
             "temperature_c": pl.Series(hourly["temperature_2m"], dtype=pl.Float64),
             "humidity_pct": pl.Series(hourly["relative_humidity_2m"], dtype=pl.Float64),
         }
     )
-    return frame
 
 
 def assemble(locations: pl.DataFrame, cache: Path, first: date, last: date) -> pl.DataFrame:

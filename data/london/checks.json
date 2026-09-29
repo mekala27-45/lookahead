@@ -1,0 +1,11 @@
+{
+ "rows": 167932474,
+ "households": 5566,
+ "tou_households": 1123,
+ "std_households": 4443,
+ "first": "2011-11-23 09:00:00",
+ "last": "2014-02-28 00:00:00",
+ "null_readings": 5560,
+ "duplicate_readings": 115453,
+ "missing_half_hours": 506645
+}

@@ -1,0 +1,8 @@
+{
+ "training_start": "2018-07-01",
+ "validation_start": "2024-09-29",
+ "test_start": "2025-09-29",
+ "test_end": "2026-09-28",
+ "test_days": 365,
+ "validation_days": 365
+}

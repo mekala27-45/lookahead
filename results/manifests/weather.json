@@ -1,0 +1,506 @@
+{
+ "as_of": "2026-09-29",
+ "figures": {},
+ "seed": 13,
+ "tables": {
+  "data.weather.locations": {
+   "columns": [
+    "Authority",
+    "Location",
+    "Latitude",
+    "Longitude",
+    "Why this point"
+   ],
+   "formats": [
+    "text",
+    "text",
+    "float2",
+    "float2",
+    "text"
+   ],
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.weather",
+    "population": "one location per demand reporting authority",
+    "seed": null,
+    "seeds": null,
+    "source": "real:open_meteo"
+   },
+   "rows": [
+    [
+     "AECI",
+     "Springfield, MO",
+     37.21,
+     -93.29,
+     "population weighted centroid of the member cooperatives in Missouri and adjoining states"
+    ],
+    [
+     "AVA",
+     "Spokane, WA",
+     47.66,
+     -117.43,
+     "largest load center"
+    ],
+    [
+     "AZPS",
+     "Phoenix, AZ",
+     33.45,
+     -112.07,
+     "largest load center"
+    ],
+    [
+     "BANC",
+     "Sacramento, CA",
+     38.58,
+     -121.49,
+     "largest load center"
+    ],
+    [
+     "BPAT",
+     "Portland, OR",
+     45.52,
+     -122.68,
+     "largest load pocket of a diffuse federal marketing area"
+    ],
+    [
+     "CHPD",
+     "Wenatchee, WA",
+     47.42,
+     -120.31,
+     "largest load center"
+    ],
+    [
+     "CISO",
+     "Los Angeles, CA",
+     34.05,
+     -118.24,
+     "largest load center (the Southern California Edison area around Los Angeles)"
+    ],
+    [
+     "CPLE",
+     "Raleigh, NC",
+     35.78,
+     -78.64,
+     "largest load center"
+    ],
+    [
+     "CPLW",
+     "Asheville, NC",
+     35.6,
+     -82.55,
+     "largest load center"
+    ],
+    [
+     "DOPD",
+     "East Wenatchee, WA",
+     47.42,
+     -120.29,
+     "largest load center"
+    ],
+    [
+     "DUK",
+     "Charlotte, NC",
+     35.23,
+     -80.84,
+     "largest load center"
+    ],
+    [
+     "EPE",
+     "El Paso, TX",
+     31.76,
+     -106.49,
+     "largest load center"
+    ],
+    [
+     "ERCO",
+     "Houston, TX",
+     29.76,
+     -95.37,
+     "largest load center"
+    ],
+    [
+     "FMPP",
+     "Orlando, FL",
+     28.54,
+     -81.38,
+     "largest load center"
+    ],
+    [
+     "FPC",
+     "St. Petersburg, FL",
+     27.77,
+     -82.64,
+     "largest load center"
+    ],
+    [
+     "FPL",
+     "Miami, FL",
+     25.76,
+     -80.19,
+     "largest load center"
+    ],
+    [
+     "GCPD",
+     "Moses Lake, WA",
+     47.13,
+     -119.28,
+     "largest load center"
+    ],
+    [
+     "GVL",
+     "Gainesville, FL",
+     29.65,
+     -82.32,
+     "largest load center"
+    ],
+    [
+     "HST",
+     "Homestead, FL",
+     25.47,
+     -80.48,
+     "largest load center"
+    ],
+    [
+     "IID",
+     "El Centro, CA",
+     32.79,
+     -115.56,
+     "largest load center"
+    ],
+    [
+     "IPCO",
+     "Boise, ID",
+     43.62,
+     -116.2,
+     "largest load center"
+    ],
+    [
+     "ISNE",
+     "Boston, MA",
+     42.36,
+     -71.06,
+     "largest load center"
+    ],
+    [
+     "JEA",
+     "Jacksonville, FL",
+     30.33,
+     -81.66,
+     "largest load center"
+    ],
+    [
+     "LDWP",
+     "Los Angeles, CA",
+     34.05,
+     -118.24,
+     "largest load center"
+    ],
+    [
+     "LGEE",
+     "Louisville, KY",
+     38.25,
+     -85.76,
+     "largest load center"
+    ],
+    [
+     "MISO",
+     "Indianapolis, IN",
+     39.77,
+     -86.16,
+     "population weighted centroid of a fifteen state footprint"
+    ],
+    [
+     "NEVP",
+     "Las Vegas, NV",
+     36.17,
+     -115.14,
+     "largest load center"
+    ],
+    [
+     "NWMT",
+     "Billings, MT",
+     45.78,
+     -108.5,
+     "largest load center"
+    ],
+    [
+     "NYIS",
+     "New York, NY",
+     40.71,
+     -74.01,
+     "largest load center"
+    ],
+    [
+     "PACE",
+     "Salt Lake City, UT",
+     40.76,
+     -111.89,
+     "largest load center"
+    ],
+    [
+     "PACW",
+     "Portland, OR",
+     45.52,
+     -122.68,
+     "largest load center"
+    ],
+    [
+     "PGE",
+     "Portland, OR",
+     45.52,
+     -122.68,
+     "largest load center"
+    ],
+    [
+     "PJM",
+     "Pittsburgh, PA",
+     40.44,
+     -79.99,
+     "population weighted centroid of a thirteen state footprint"
+    ],
+    [
+     "PNM",
+     "Albuquerque, NM",
+     35.08,
+     -106.65,
+     "largest load center"
+    ],
+    [
+     "PSCO",
+     "Denver, CO",
+     39.74,
+     -104.99,
+     "largest load center"
+    ],
+    [
+     "PSEI",
+     "Bellevue, WA",
+     47.61,
+     -122.2,
+     "largest load center"
+    ],
+    [
+     "SC",
+     "Charleston, SC",
+     32.78,
+     -79.93,
+     "largest load center"
+    ],
+    [
+     "SCEG",
+     "Columbia, SC",
+     34.0,
+     -81.03,
+     "largest load center"
+    ],
+    [
+     "SCL",
+     "Seattle, WA",
+     47.61,
+     -122.33,
+     "largest load center"
+    ],
+    [
+     "SEC",
+     "Tampa, FL",
+     27.95,
+     -82.46,
+     "population weighted centroid of the member cooperatives"
+    ],
+    [
+     "SOCO",
+     "Atlanta, GA",
+     33.75,
+     -84.39,
+     "largest load center"
+    ],
+    [
+     "SPA",
+     "Tulsa, OK",
+     36.15,
+     -95.99,
+     "population weighted centroid of a federal marketing area"
+    ],
+    [
+     "SRP",
+     "Phoenix, AZ",
+     33.45,
+     -112.07,
+     "largest load center"
+    ],
+    [
+     "SWPP",
+     "Kansas City, MO",
+     39.1,
+     -94.58,
+     "population weighted centroid of a fourteen state footprint"
+    ],
+    [
+     "TAL",
+     "Tallahassee, FL",
+     30.44,
+     -84.28,
+     "largest load center"
+    ],
+    [
+     "TEC",
+     "Tampa, FL",
+     27.95,
+     -82.46,
+     "largest load center"
+    ],
+    [
+     "TEPC",
+     "Tucson, AZ",
+     32.22,
+     -110.97,
+     "largest load center"
+    ],
+    [
+     "TIDC",
+     "Turlock, CA",
+     37.49,
+     -120.85,
+     "largest load center"
+    ],
+    [
+     "TPWR",
+     "Tacoma, WA",
+     47.25,
+     -122.44,
+     "largest load center"
+    ],
+    [
+     "TVA",
+     "Nashville, TN",
+     36.16,
+     -86.78,
+     "largest load center"
+    ],
+    [
+     "WALC",
+     "Phoenix, AZ",
+     33.45,
+     -112.07,
+     "largest load center"
+    ]
+   ]
+  }
+ },
+ "values": {
+  "data.weather.authorities": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.weather",
+    "population": "one location per demand reporting authority",
+    "seed": null,
+    "seeds": null,
+    "source": "real:open_meteo"
+   },
+   "value": 51
+  },
+  "data.weather.first_hour": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.weather",
+    "population": "one location per demand reporting authority",
+    "seed": null,
+    "seeds": null,
+    "source": "real:open_meteo"
+   },
+   "value": "2018-07-01 01:00:00+00:00"
+  },
+  "data.weather.last_hour": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.weather",
+    "population": "one location per demand reporting authority",
+    "seed": null,
+    "seeds": null,
+    "source": "real:open_meteo"
+   },
+   "value": "2026-09-23 00:00:00+00:00"
+  },
+  "data.weather.null_temperatures": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.weather",
+    "population": "one location per demand reporting authority",
+    "seed": null,
+    "seeds": null,
+    "source": "real:open_meteo"
+   },
+   "value": 0
+  },
+  "data.weather.pulled_this_run": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.weather",
+    "population": "one location per demand reporting authority",
+    "seed": null,
+    "seeds": null,
+    "source": "real:open_meteo"
+   },
+   "value": "no, the cache was complete or the host unreachable"
+  },
+  "data.weather.pulls_cached": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.weather",
+    "population": "one location per demand reporting authority",
+    "seed": null,
+    "seeds": null,
+    "source": "real:open_meteo"
+   },
+   "value": 513
+  },
+  "data.weather.reporters_without_weather": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.weather",
+    "population": "one location per demand reporting authority",
+    "seed": null,
+    "seeds": null,
+    "source": "real:open_meteo"
+   },
+   "value": "AEC, BHBA, NSB, OVEC, SWPW, WACM, WAUW"
+  },
+  "data.weather.rows": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.weather",
+    "population": "one location per demand reporting authority",
+    "seed": null,
+    "seeds": null,
+    "source": "real:open_meteo"
+   },
+   "value": 3679344
+  }
+ }
+}

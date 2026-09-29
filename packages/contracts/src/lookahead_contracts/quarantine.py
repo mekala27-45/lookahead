@@ -88,11 +88,23 @@ def complete_grid(frame: pl.DataFrame) -> pl.DataFrame:
 def apply_rules(balance: pl.DataFrame) -> Quarantined:
     """Run every rule, in order, over the concatenated balance frame."""
     _require(balance, ("authority", "utc_hour", "demand", "forecast_operator", "source_file"))
+    # A NaN is a missing value, not the largest number: it is made null before any rule compares it.
+    balance = balance.with_columns(
+        pl.col("demand").cast(pl.Float64).fill_nan(None),
+        pl.col("forecast_operator").cast(pl.Float64).fill_nan(None),
+    )
     resolved, within, revisions = resolve_revisions(balance)
     duplicated_keys = (
         within.select("authority", "utc_hour").unique().with_columns(pl.lit(True).alias("duplicate_hour"))
     )
     panel = complete_grid(resolved).join(duplicated_keys, on=["authority", "utc_hour"], how="left")
+    if "utc_offset_hours" in panel.columns:
+        panel = panel.with_columns(
+            pl.col("utc_offset_hours")
+            .fill_null(strategy="forward")
+            .fill_null(strategy="backward")
+            .over("authority")
+        )
     window = POLICY.rolling_median_days * 24
     panel = (
         panel.with_columns(pl.col("duplicate_hour").fill_null(False))
