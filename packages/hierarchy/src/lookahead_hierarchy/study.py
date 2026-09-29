@@ -18,7 +18,7 @@ from lookahead_core.config import POLICY
 from lookahead_evaluation.bootstrap import bootstrap_statistic, resample_day_sums
 from lookahead_evaluation.harness import run_backend
 from lookahead_forecast.interface import QUANTILE_COLUMNS, ForecastSpec, PanelData
-from lookahead_forecast.own import OwnForecaster
+from lookahead_forecast.own import OwnForecaster, ValidationRun
 
 from lookahead_hierarchy.reconcile import (
     bottom_up,
@@ -93,8 +93,8 @@ def run_study(
     # validation residuals are the parent's minus the siblings', so bottom up reproduces the
     # authority's own median exactly; they carry no interval of their own and are not scored.
     series = summing.series
-    result = run_backend(_only(data, series), forecaster, spec)
-    keys, base, actual = _aligned(result.scoring, series)
+    scoring, validation = _backtest_in_chunks(data, series, forecaster, spec)
+    keys, base, actual = _aligned(scoring, series)
     base, actual = _with_remainders(base, actual, series, summing)
     finite = np.all(np.isfinite(base), axis=(1, 2))
     keys, base, actual = keys.filter(pl.Series(finite)), base[finite], actual[finite]
@@ -103,10 +103,9 @@ def run_study(
         raise ValueError("no row has a base forecast for every node")
 
     # Validation residuals in megawatts, aligned across nodes, for the MinT covariance.
-    fitted = result.fitted
     residual_frames = []
     for node in series:
-        v = fitted.validation[node]
+        v = validation[node]
         residual_frames.append(
             pl.DataFrame(
                 {
@@ -124,7 +123,7 @@ def run_study(
     leaf_nodes = summing.leaves
     validation_actual = []
     for node in series:
-        v = fitted.validation[node]
+        v = validation[node]
         validation_actual.append(
             pl.DataFrame(
                 {"origin_position": v.origin_position, "horizon": v.horizon, node: v.actual_ratio * v.scale}
@@ -162,8 +161,29 @@ def run_study(
         keys=keys,
         actual=actual,
         origin_day=origin_day,
-        base_scoring=result.scoring,
+        base_scoring=scoring,
     )
+
+
+NODES_PER_CHUNK = 16
+"""The own backend keeps every node's design for every origin in memory while it runs; on the real
+hierarchy that is a hundred and fifty nodes, so the nodes are run in chunks and only the scoring
+rows and the validation runs are kept."""
+
+
+def _backtest_in_chunks(
+    data: PanelData, series: list[str], forecaster: OwnForecaster, spec: ForecastSpec
+) -> tuple[pl.DataFrame, dict[str, ValidationRun]]:
+    parts: list[pl.DataFrame] = []
+    validation: dict[str, ValidationRun] = {}
+    for start in range(0, len(series), NODES_PER_CHUNK):
+        chunk = series[start : start + NODES_PER_CHUNK]
+        result = run_backend(_only(data, chunk), forecaster, spec)
+        parts.append(result.scoring)
+        for node in chunk:
+            validation[node] = result.fitted.validation[node]
+        del result
+    return pl.concat(parts), validation
 
 
 def _only(data: PanelData, names: list[str]) -> PanelData:
