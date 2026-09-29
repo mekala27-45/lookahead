@@ -42,6 +42,8 @@ dev = [
   "ipykernel>=6.29",
   "matplotlib>=3.9",
   "httpx>=0.28",
+  "playwright>=1.49",
+  "pillow>=11.0",
 ]
 
 [tool.uv]
