@@ -132,3 +132,46 @@ def test_reconciled_quantiles_stay_coherent_when_levels_cross() -> None:
     for k in range(5):
         check_coherent(out[:, :, k], summing)
     assert np.all(np.diff(out, axis=2) >= -1e-9), "levels are monotone at every node"
+
+
+def test_a_negative_remainder_is_derived_not_fit_and_bottom_up_keeps_the_authority() -> None:
+    """One real authority's subregions sum to more than its demand, so its remainder node is
+    negative and no ratio model can be fit to it. The study derives the remainder from the parent
+    and the siblings, leaves it out of the accuracy tables, and bottom up then reproduces the
+    authority's own median exactly."""
+    from lookahead_evaluation.recovery import SIM_WINDOWS
+    from lookahead_forecast.interface import PanelData
+    from lookahead_hierarchy.nodes import build_node_panel, eligible_subregions, node_table
+    from lookahead_hierarchy.study import run_study
+    from lookahead_sim.grid import GridSpec, simulate
+
+    grid = simulate(GridSpec(subregion_gap=-0.03), 5)
+    authorities = sorted(grid.panel["authority"].unique().to_list())
+    subs = eligible_subregions(grid.subregions, authorities, SIM_WINDOWS)
+    nodes = node_table(grid.hierarchy, authorities, subs)
+    node_panel = build_node_panel(grid.panel, grid.subregions, None, nodes, authorities)
+    summing = SummingMatrix.from_table(nodes)
+    assert summing.remainders, "the simulated grid has remainder nodes"
+    rest = summing.remainders[0]
+    rest_demand = node_panel.filter(pl.col("authority") == rest)["demand"]
+    assert float(rest_demand.median()) < 0, "the remainder is negative by construction"
+
+    data = PanelData.from_frames(node_panel, None, SIM_WINDOWS, "simulated")
+    study = run_study(data, summing, seed=5)
+    assert study.coherence_gap_mw["bottom_up"] < 1e-3
+    parent = str(summing.parents[rest])
+    j_parent = summing.nodes.index(parent)
+    median = 2
+    np.testing.assert_allclose(
+        study.reconciled["bottom_up"][:, j_parent, median],
+        study.reconciled["base"][:, j_parent, median],
+        atol=1e-6,
+    )
+    j_rest = summing.nodes.index(rest)
+    assert np.allclose(study.reconciled["base"][:, j_rest, 0], study.reconciled["base"][:, j_rest, 4])
+    for score in study.scores:
+        assert rest not in score.mape_by_node
+        if score.level == summing.levels[rest]:
+            assert score.nodes == len(
+                [n for n in summing.nodes_at(score.level) if n not in summing.remainders]
+            )

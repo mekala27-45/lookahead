@@ -127,3 +127,14 @@ tables in the schema (its migration sets the search path with a statement) and t
 logged nothing, which is now also fixed. The engines use SQLAlchemy's `schema_translate_map`
 instead, so every emitted table name carries the schema whatever the connection's search path
 says, and the test resets the search path to `public` before reading the rows back.
+
+## 2026-09-29: remainder nodes are derived, not forecast, and not scored
+
+On the real grid two remainder nodes are near zero and one is negative through the whole
+validation year (the published subregions of that authority sum to more than its demand), so the
+ratio model's calibration had no usable row and the first hierarchy run stopped. A remainder is
+bookkeeping: its median is now the parent's median minus the siblings', its actuals and its
+validation residuals likewise, it carries no interval of its own, and it is left out of the
+accuracy tables at the subregion level. Bottom up therefore reproduces each such authority's own
+median exactly, which a test holds.
+

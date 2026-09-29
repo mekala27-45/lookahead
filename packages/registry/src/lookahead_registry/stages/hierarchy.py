@@ -116,6 +116,7 @@ def run(paths: Paths, as_of: str, seed: int, *, authorities: list[str] | None = 
     w.put("hierarchy.subregions", subs.height, "int")
     w.put("hierarchy.authorities_with_subregions", subs["authority"].n_unique(), "int")
     w.put("hierarchy.remainder_nodes", nodes.filter(pl.col("kind") == "remainder").height, "int")
+    w.put("hierarchy.negative_remainders", _negative_remainders(node_panel, summing, windows), "int")
     w.put("hierarchy.rows", study.rows, "int")
     w.put("hierarchy.origins", study.origins, "int")
     w.put("hierarchy.seconds", seconds, "float1")
@@ -180,3 +181,15 @@ def run(paths: Paths, as_of: str, seed: int, *, authorities: list[str] | None = 
     w.put("hierarchy.helped_list", "; ".join(helped) or "none", "text")
     manifest.save(paths.results / "manifests" / "hierarchy.json")
     return manifest
+
+
+def _negative_remainders(
+    node_panel: pl.DataFrame, summing: SummingMatrix, windows: dict[str, str | int]
+) -> int:
+    """How many remainder nodes have a negative median through the validation year."""
+    start = pl.lit(str(windows["validation_start"])).str.to_datetime(time_zone="UTC")
+    end = pl.lit(str(windows["test_start"])).str.to_datetime(time_zone="UTC")
+    validation = node_panel.filter((pl.col("utc_hour") >= start) & (pl.col("utc_hour") < end))
+    medians = validation.group_by("authority").agg(pl.col("demand").median().alias("median"))
+    negative = medians.filter(pl.col("authority").is_in(summing.remainders) & (pl.col("median") < 0))
+    return int(negative.height)

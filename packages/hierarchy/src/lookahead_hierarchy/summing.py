@@ -8,7 +8,7 @@ own leaf rows, to the megawatt.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 import polars as pl
@@ -24,10 +24,28 @@ class SummingMatrix:
     leaves: list[str]
     matrix: np.ndarray
     levels: dict[str, int]
+    kinds: dict[str, str] = field(default_factory=dict)
+    """Node to kind from the table's ``kind`` column when it has one; ``remainder`` marks the
+    bookkeeping node that holds an authority's difference from its subregions."""
+    parents: dict[str, str | None] = field(default_factory=dict)
 
     @property
     def leaf_index(self) -> list[int]:
         return [self.nodes.index(leaf) for leaf in self.leaves]
+
+    @property
+    def remainders(self) -> list[str]:
+        return [n for n in self.nodes if self.kinds.get(n) == "remainder"]
+
+    @property
+    def series(self) -> list[str]:
+        """The nodes that are forecast as series: every node but the remainders."""
+        return [n for n in self.nodes if self.kinds.get(n) != "remainder"]
+
+    def siblings(self, node: str) -> list[str]:
+        """The other leaves under the node's parent."""
+        parent = self.parents.get(node)
+        return [n for n in self.leaves if n != node and self.parents.get(n) == parent]
 
     @classmethod
     def from_table(cls, hierarchy: pl.DataFrame) -> SummingMatrix:
@@ -44,7 +62,12 @@ class SummingMatrix:
             while node is not None:
                 matrix[nodes.index(node), j] = 1.0
                 node = parents[node]
-        return cls(nodes=nodes, leaves=leaves, matrix=matrix, levels=levels)
+        kinds = (
+            dict(zip(nodes, (str(k) for k in hierarchy["kind"].to_list()), strict=True))
+            if "kind" in hierarchy.columns
+            else {}
+        )
+        return cls(nodes=nodes, leaves=leaves, matrix=matrix, levels=levels, kinds=kinds, parents=parents)
 
     def aggregate(self, leaf_values: np.ndarray) -> np.ndarray:
         """Leaf values (rows by leaves) to every node (rows by nodes)."""

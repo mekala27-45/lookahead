@@ -9,8 +9,11 @@ not exactly match their authority in the source (mean absolute gap
 {{ v('data.subregion_gap.mean_abs_pct') }}, worst {{ v('data.subregion_gap.worst_abs_pct') }} at
 {{ v('data.subregion_gap.worst_authority') }}); nothing is scaled to fit.
 
-Base forecasts come from the own backend at every node, the aggregates forecast directly as well
-as by aggregation. Methods: bottom up; top down by the validation year's historical proportions;
+Base forecasts come from the own backend at every series node, the aggregates forecast directly
+as well as by aggregation. The remainder nodes are bookkeeping, near zero, and
+{{ v('hierarchy.negative_remainders') }} of them negative through the validation year, so no model
+is fit to them: each one's median is its authority's median minus its subregions', it carries no
+interval of its own, and it is left out of the accuracy tables at the subregion level. Methods: bottom up; top down by the validation year's historical proportions;
 MinT with the Schafer and Strimmer shrinkage of the base residual covariance on the validation
 year (intensity {{ v('hierarchy.shrinkage_intensity') }}). Quantile crossing after a linear
 adjustment is removed at the leaves and the upper nodes rebuilt from them, so every reconciled set

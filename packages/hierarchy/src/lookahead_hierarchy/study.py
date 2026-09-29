@@ -10,7 +10,7 @@ days, and the callout says where a method helped and where it hurt.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 import numpy as np
 import polars as pl
@@ -87,9 +87,15 @@ def run_study(
 ) -> StudyResult:
     spec = spec or ForecastSpec(backend="own", seed=seed)
     forecaster = OwnForecaster()
-    result = run_backend(data, forecaster, spec)
     nodes = summing.nodes
-    keys, base, actual = _aligned(result.scoring, nodes)
+    # The remainder nodes hold an authority's difference from its subregions: near zero, at times
+    # negative, so no ratio model is fit to them. Their base median, their actuals and their
+    # validation residuals are the parent's minus the siblings', so bottom up reproduces the
+    # authority's own median exactly; they carry no interval of their own and are not scored.
+    series = summing.series
+    result = run_backend(_only(data, series), forecaster, spec)
+    keys, base, actual = _aligned(result.scoring, series)
+    base, actual = _with_remainders(base, actual, series, summing)
     finite = np.all(np.isfinite(base), axis=(1, 2))
     keys, base, actual = keys.filter(pl.Series(finite)), base[finite], actual[finite]
     rows = base.shape[0]
@@ -99,7 +105,7 @@ def run_study(
     # Validation residuals in megawatts, aligned across nodes, for the MinT covariance.
     fitted = result.fitted
     residual_frames = []
-    for node in nodes:
+    for node in series:
         v = fitted.validation[node]
         residual_frames.append(
             pl.DataFrame(
@@ -110,25 +116,21 @@ def run_study(
                 }
             )
         )
-    aligned = residual_frames[0]
-    for f in residual_frames[1:]:
-        aligned = aligned.join(f, on=["origin_position", "horizon"], how="inner")
+    aligned = _derive_remainders(_join_all(residual_frames), summing)
     residuals = aligned.select(nodes).to_numpy().astype(np.float64)
     covariance, intensity = shrink_covariance(residuals)
 
     # Top down proportions from the validation year's actual leaves.
     leaf_nodes = summing.leaves
     validation_actual = []
-    for node in leaf_nodes:
+    for node in series:
         v = fitted.validation[node]
         validation_actual.append(
             pl.DataFrame(
                 {"origin_position": v.origin_position, "horizon": v.horizon, node: v.actual_ratio * v.scale}
             )
         )
-    leaf_aligned = validation_actual[0]
-    for f in validation_actual[1:]:
-        leaf_aligned = leaf_aligned.join(f, on=["origin_position", "horizon"], how="inner")
+    leaf_aligned = _derive_remainders(_join_all(validation_actual), summing)
     proportions = historical_proportions(leaf_aligned.select(leaf_nodes).to_numpy().astype(np.float64))
 
     reconciled: dict[str, np.ndarray] = {"base": base}
@@ -164,6 +166,60 @@ def run_study(
     )
 
 
+def _only(data: PanelData, names: list[str]) -> PanelData:
+    """The panel restricted to the named nodes."""
+    return replace(
+        data,
+        authorities={n: data.authorities[n] for n in names},
+        truth={n: v for n, v in data.truth.items() if n in names},
+    )
+
+
+def _join_all(frames: list[pl.DataFrame]) -> pl.DataFrame:
+    out = frames[0]
+    for f in frames[1:]:
+        out = out.join(f, on=["origin_position", "horizon"], how="inner")
+    return out
+
+
+def _derive_remainders(frame: pl.DataFrame, summing: SummingMatrix) -> pl.DataFrame:
+    """Add a column per remainder node: the parent's column minus the siblings'."""
+    for node in summing.remainders:
+        parent = summing.parents[node]
+        siblings = summing.siblings(node)
+        expr = pl.col(str(parent))
+        for sibling in siblings:
+            expr = expr - pl.col(sibling)
+        frame = frame.with_columns(expr.alias(node))
+    return frame
+
+
+def _with_remainders(
+    base: np.ndarray, actual: np.ndarray, series: list[str], summing: SummingMatrix
+) -> tuple[np.ndarray, np.ndarray]:
+    """Widen the aligned arrays from the series nodes to every node, deriving each remainder's
+    median and actual as the parent's minus the siblings'. The remainder's five levels all equal
+    its median: a difference of quantiles is not a quantile of the difference, and a bookkeeping
+    node has no interval to publish."""
+    nodes = summing.nodes
+    full_base = np.full((base.shape[0], len(nodes), base.shape[2]), np.nan)
+    full_actual = np.full((actual.shape[0], len(nodes)), np.nan)
+    index = {n: j for j, n in enumerate(series)}
+    for j, node in enumerate(nodes):
+        if node in index:
+            full_base[:, j, :] = base[:, index[node], :]
+            full_actual[:, j] = actual[:, index[node]]
+    for node in summing.remainders:
+        parent = str(summing.parents[node])
+        siblings = summing.siblings(node)
+        j = nodes.index(node)
+        median = QUANTILE_COLUMNS.index("q50")
+        rest = base[:, index[parent], median] - sum(base[:, index[s], median] for s in siblings)
+        full_base[:, j, :] = rest[:, None]
+        full_actual[:, j] = actual[:, index[parent]] - sum(actual[:, index[s]] for s in siblings)
+    return full_base, full_actual
+
+
 def _score(
     reconciled: dict[str, np.ndarray],
     actual: np.ndarray,
@@ -178,8 +234,9 @@ def _score(
     days = np.unique(origin_day)
     day_index = np.searchsorted(days, origin_day)
     for method, q in reconciled.items():
+        remainders = set(summing.remainders)
         for level in sorted(set(summing.levels.values())):
-            cols = [summing.nodes.index(n) for n in summing.nodes_at(level)]
+            cols = [summing.nodes.index(n) for n in summing.nodes_at(level) if n not in remainders]
             if not cols:
                 continue
             pred = q[:, cols, median]
