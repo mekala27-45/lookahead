@@ -1,0 +1,292 @@
+@import "tailwindcss";
+
+/* Every color is a token generated from src/theme/palette.json, which the palette validator
+   checks in both modes. Dark is the default theme of the control room; light is a full theme,
+   not an inversion, and the one the report and the print stylesheet use. Series never borrow a
+   status color. */
+@import "./tokens.css";
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-hairline: var(--hairline);
+  --color-ink: var(--ink);
+  --color-ink2: var(--ink2);
+  --color-control: var(--control);
+  --color-lead: var(--lead);
+  --color-good: var(--good);
+  --color-warning: var(--warning);
+  --color-serious: var(--serious);
+  --color-critical: var(--critical);
+  --font-sans: "Atkinson Hyperlegible Next Variable", system-ui, sans-serif;
+  --font-display: "Space Grotesk Variable", system-ui, sans-serif;
+  --font-mono: "Atkinson Hyperlegible Mono Variable", ui-monospace, monospace;
+}
+
+/* Element defaults sit in the base layer, so a utility class on an element still wins. */
+@layer base {
+  html {
+    background: var(--surface);
+    color: var(--ink);
+  }
+
+  body {
+    background: var(--surface);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    /* 15px on the control room pages, 16px on the report; the memo sets its own size. */
+    font-size: 15px;
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+  }
+  h1,
+  h2 {
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  h3 {
+    font-weight: 560;
+  }
+
+  a {
+    color: inherit;
+    text-underline-offset: 2px;
+  }
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+td.num,
+th.num,
+dd.num {
+  text-align: right;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Running text keeps a readable measure; tables and charts use the full width. */
+.prose {
+  max-width: 70ch;
+}
+.prose p + p {
+  margin-top: 0.75rem;
+}
+
+/* Tables: hairline rules, figures right aligned on tabular numerals. */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+.data-table th,
+.data-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--hairline);
+  vertical-align: top;
+  text-align: left;
+}
+.data-table th {
+  color: var(--ink2);
+  font-weight: 600;
+  font-size: 0.8125rem;
+}
+.data-table th.num,
+.data-table td.num {
+  text-align: right;
+  white-space: nowrap;
+}
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.data-table caption {
+  text-align: left;
+  color: var(--ink2);
+  font-size: 0.8125rem;
+  padding-bottom: 0.4rem;
+}
+/* Dense tables, such as a chart's data, set their figures in the mono face. */
+.data-table.dense {
+  font-size: 0.8125rem;
+}
+.data-table.dense td.num {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+.data-table tr[data-status="warning"] td:first-child {
+  box-shadow: inset 3px 0 0 var(--warning);
+}
+
+.card {
+  background: var(--raised);
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+}
+
+/* A chart's own background: the gap between stacked segments is drawn in it. */
+.chart {
+  --chart-bg: var(--raised);
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--hairline) 0%, var(--surface) 50%, var(--hairline) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+  border-radius: 4px;
+  opacity: 0.7;
+}
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--lead);
+  outline-offset: 2px;
+}
+
+/* The range input: a real control, styled only as far as color and size. */
+input[type="range"] {
+  accent-color: var(--lead);
+  width: 100%;
+  height: 28px;
+}
+
+input[type="number"],
+input[type="password"],
+select {
+  background: var(--raised);
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 0.25rem 0.4rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The operations review: the body face at 16px and a 68 character measure, a sheet on screen,
+   plain paper in print. */
+.memo {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+}
+.memo > p,
+.memo > ul,
+.memo > ol,
+.memo section > p,
+.memo section > ul,
+.memo section > ol,
+.memo h1,
+.memo h2,
+.memo h3 {
+  max-width: 68ch;
+}
+.memo h2 {
+  font-size: 1.5rem;
+  margin: 2.5rem 0 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--hairline);
+}
+.memo p + p {
+  margin-top: 0.75rem;
+}
+.memo ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.memo li + li {
+  margin-top: 0.35rem;
+}
+.memo table {
+  font-family: var(--font-sans);
+}
+
+@media print {
+  @page {
+    margin: 18mm 16mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  nav,
+  .no-print {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+    max-width: none !important;
+  }
+  .memo,
+  .memo * {
+    color: #000 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  /* Each section of the memo starts a page; the first follows the title on page one. */
+  .memo section {
+    break-before: page;
+  }
+  .memo section:first-of-type {
+    break-before: auto;
+  }
+  .memo h2 {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+    break-after: avoid;
+  }
+  .memo table,
+  .memo figure,
+  .memo tr {
+    break-inside: avoid;
+  }
+  .memo [role="region"] {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  .memo .data-table th,
+  .memo .data-table td {
+    border-bottom-color: #999 !important;
+  }
+  .report-sheet {
+    border: none !important;
+    padding: 0 !important;
+  }
+  a {
+    text-decoration: none;
+  }
+}

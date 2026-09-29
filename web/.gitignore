@@ -1,0 +1,8 @@
+node_modules/
+.next/
+out/
+src/app/tokens.css
+public/duckdb/
+test-results/
+playwright-report/
+tsconfig.tsbuildinfo

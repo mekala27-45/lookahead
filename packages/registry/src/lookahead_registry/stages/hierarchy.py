@@ -70,8 +70,7 @@ def run(paths: Paths, as_of: str, seed: int, *, authorities: list[str] | None = 
         ]
     )
     by_node.write_parquet(folder / "scores_by_node.parquet")
-    # The reconciled medians for the site's tree and the authority pages: one row per node and target hour.
-    median = QUANTILE_COLUMNS.index("q50")
+    # The reconciled quantiles for the site's tree and the authority pages: one row per node and target hour.
     rows = []
     for method, q in study.reconciled.items():
         for j, node in enumerate(summing.nodes):
@@ -83,7 +82,7 @@ def run(paths: Paths, as_of: str, seed: int, *, authorities: list[str] | None = 
                         "origin": study.keys["origin"],
                         "horizon": study.keys["horizon"],
                         "target_hour": study.keys["target_hour"],
-                        "q50": q[:, j, median],
+                        **{c: q[:, j, k] for k, c in enumerate(QUANTILE_COLUMNS)},
                         "actual": study.actual[:, j],
                     }
                 )
