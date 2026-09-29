@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# Raw public files are fetched by `make data` or placed by hand, never committed; derived tables are.
+data/external/*
+!data/external/.gitkeep
+.cache/
+
+# Rebuilt by the pipeline
+results/models/**/*.txt
+results/models/**/*.pkl
+results/scratch/
+results/manifest.before-rederive.json
+logs/*
+!logs/.gitkeep
+
+# Web
+web/node_modules/
+web/.next/
+web/out/
+web/test-results/
+web/playwright-report/
+web/tsconfig.tsbuildinfo
+# Written by web/scripts/prepare-assets.mjs on every build: the DuckDB-WASM bundles and the color tokens.
+web/public/duckdb/
+web/src/app/tokens.css
+
+# Local environment and what the deploy scripts write on the machine that runs them
+.env
+deploy/live-url.txt
+deploy/write-token.txt
+deploy/*-log.txt

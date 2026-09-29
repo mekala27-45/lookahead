@@ -1,0 +1,19 @@
+[project]
+name = "lookahead-core"
+version = "0.1.0"
+description = "Shared models, formats, the statement, hashing, paths, seeds and the manifest"
+requires-python = ">=3.12,<3.13"
+license = "Apache-2.0"
+dependencies = [
+  "pydantic>=2.9",
+  "polars>=1.10",
+  "numpy>=1.26",
+  "structlog>=24.4",
+]
+
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/lookahead_core"]

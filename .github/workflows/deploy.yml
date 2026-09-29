@@ -1,0 +1,37 @@
+name: deploy
+
+# Deploys the API to Fly on every push to main that touches it, using the FLY_API_TOKEN
+# repository secret. The Neon connection string and the write token are Fly secrets set once by
+# deploy/deploy.ps1 (or deploy/deploy.sh); this workflow never sees them.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/api/**"
+      - "packages/forecast/**"
+      - "packages/features/**"
+      - "packages/core/**"
+      - "results/models/**"
+      - "results/registry/**"
+      - "Dockerfile.api"
+      - "fly.toml"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  fly:
+    runs-on: ubuntu-latest
+    if: ${{ vars.FLY_DEPLOY_ENABLED == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only --ha=false
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - name: The live API answers from a separate client
+        run: |
+          curl --fail --silent --show-error --max-time 60 https://lookahead-grid-api.fly.dev/v1/health

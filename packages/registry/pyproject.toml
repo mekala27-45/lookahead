@@ -1,0 +1,29 @@
+[project]
+name = "lookahead-registry"
+version = "0.1.0"
+description = "The pipeline stages, the registry gates, the cards and the CLI"
+requires-python = ">=3.12,<3.13"
+license = "Apache-2.0"
+dependencies = [
+  "lookahead-core",
+  "lookahead-contracts",
+  "lookahead-sim",
+  "lookahead-weather",
+  "lookahead-features",
+  "lookahead-forecast",
+  "lookahead-hierarchy",
+  "lookahead-events",
+  "lookahead-meter",
+  "lookahead-evaluation",
+  "lookahead-render",
+  "typer>=0.15",
+  "duckdb>=1.1",
+  "pyarrow>=17",
+]
+
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/lookahead_registry"]

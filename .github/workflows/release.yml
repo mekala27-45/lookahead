@@ -1,0 +1,52 @@
+name: release
+
+# Runs when a v*.*.* tag is pushed after the commits. The tag is a separate git object from
+# the branch push, so the gates run again against the exact tagged commit before the release
+# is created: a release is cut only from a commit that was checked. gh is preinstalled on the
+# runner and authenticated by GITHUB_TOKEN; no third party action and no extra secret.
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run mypy
+      - name: The gates
+        run: |
+          uv run python scripts/check_no_em_dash.py
+          uv run python scripts/check_vocabulary.py
+          uv run python scripts/check_published_numbers.py
+          uv run python scripts/check_statement.py
+          uv run python scripts/scan_for_planted_identifiers.py
+          node scripts/validate_palette.js --config web/src/theme/palette.json
+      - name: Tests without the external services
+        run: uv run pytest -q -p no:cacheprovider
+
+  release:
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create the release from the tagged commit
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            --title "lookahead ${GITHUB_REF_NAME}" \
+            --notes-file docs/release-notes.md \
+            --verify-tag

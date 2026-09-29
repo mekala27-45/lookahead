@@ -1,0 +1,4 @@
+# Tokens the identifier scan must find wherever they appear in anything published.
+# tests/gates plant the first one in a scratch file and expect the scan to fail on it.
+plantedperson_quiddle
+MAC000002
