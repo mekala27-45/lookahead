@@ -373,11 +373,13 @@ def _london(paths: Paths, manifest: Manifest, require: bool) -> None:
     )
     folder = paths.external_london
     checks_path = paths.london / "checks.json"
-    if (
+    raw_present = (
         (folder / london.RAW_ZIP).exists()
         or (folder / london.RAW_CSV).exists()
         or (folder / london.READINGS).exists()
-    ):
+    )
+    if raw_present and not checks_path.exists():
+        # The checks read all 167 million rows once; the result is committed and reused until removed.
         readings = london.to_parquet(folder)
         result = london.checks(readings)
         paths.london.mkdir(parents=True, exist_ok=True)
