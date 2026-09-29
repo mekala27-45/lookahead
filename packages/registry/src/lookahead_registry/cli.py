@@ -107,6 +107,15 @@ def events(
 
 
 @app.command()
+def meter() -> None:
+    """The meter: clusters, the pre-registered time of use analysis, the cluster forecast reconciled."""
+    from lookahead_registry.stages import meter as stage
+
+    manifest = stage.run(paths(), as_of(), DEMONSTRATION_SEED)
+    typer.echo(f"meter: {manifest.counts()}")
+
+
+@app.command()
 def manifest() -> None:
     """Merge every stage manifest into results/manifest.json."""
     from lookahead_registry.stages import assemble

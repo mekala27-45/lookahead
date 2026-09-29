@@ -81,6 +81,21 @@ def fmt_signed_pct1(value: float | int | str | None) -> str:
     return f"{sign}{text}%"
 
 
+def fmt_signed_pct2(value: float | int | str | None) -> str:
+    number = _num(value) * 100.0
+    text = _plain(number, 2)
+    sign = "+" if number > 0 and not _is_zero(text) else ""
+    return f"{sign}{text}%"
+
+
+def fmt_float0(value: float | int | str | None) -> str:
+    return f"{round(_num(value)):,}"
+
+
+def fmt_float6(value: float | int | str | None) -> str:
+    return _plain(_num(value), 6)
+
+
 def fmt_mw(value: float | int | str | None) -> str:
     return f"{round(_num(value)):,} MW"
 
@@ -121,6 +136,9 @@ FORMATS: dict[str, FormatFn] = {
     "pct2": _pct(2),
     "pct3": _pct(3),
     "spct1": fmt_signed_pct1,
+    "spct2": fmt_signed_pct2,
+    "float0": fmt_float0,
+    "float6": fmt_float6,
     "usd0": _usd(0),
     "usd2": _usd(2),
     "usdm": fmt_usd_millions,

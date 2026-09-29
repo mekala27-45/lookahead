@@ -6,7 +6,10 @@ requires-python = ">=3.12,<3.13"
 license = "Apache-2.0"
 dependencies = [
   "lookahead-core",
+  "lookahead-contracts",
+  "lookahead-features",
   "lookahead-forecast",
+  "lookahead-evaluation",
   "lookahead-hierarchy",
   "duckdb>=1.1",
   "polars>=1.10",

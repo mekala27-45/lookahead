@@ -161,7 +161,9 @@ def read_tariffs(folder: Path) -> pl.DataFrame:
     data = [r for r in rows[1:] if r and r[0] is not None]
     frame = pl.DataFrame({header[i]: [r[i] for r in data] for i in range(len(header)) if header[i]})
     time_col = next(c for c in frame.columns if "time" in c.lower() or "date" in c.lower())
-    band_col = next(c for c in frame.columns if "tariff" in c.lower() or "price" in c.lower())
+    # The workbook's columns are TariffDateTime and Tariff: the band column is the one that is
+    # not the time column.
+    band_col = next(c for c in frame.columns if c != time_col)
     out = frame.select(
         pl.col(time_col).alias("ts"), pl.col(band_col).cast(pl.Utf8).str.strip_chars().alias("band")
     )
