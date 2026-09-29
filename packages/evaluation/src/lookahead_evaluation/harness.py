@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Any
 
 import numpy as np
 import polars as pl
@@ -40,9 +41,10 @@ class RunResult:
     scoring: pl.DataFrame
     fit_seconds: float
     predict_seconds: float
+    fitted: Any = None
 
 
-def test_requests(data: PanelData) -> list[Request]:
+def requests_for_test_period(data: PanelData) -> list[Request]:
     requests = []
     for authority in data.names:
         origins = data.origins(data.test_start, data.test_end, authority)
@@ -62,13 +64,14 @@ def run_backend(data: PanelData, forecaster: Forecaster, spec: ForecastSpec) -> 
     fitted = forecaster.fit(data, spec, data.test_start)
     fit_seconds = time.time() - started
     started = time.time()
-    predictions = forecaster.predict(fitted, data, spec, test_requests(data))
+    predictions = forecaster.predict(fitted, data, spec, requests_for_test_period(data))
     predict_seconds = time.time() - started
     return RunResult(
         predictions=predictions,
         scoring=scoring_frame(data, predictions.frame),
         fit_seconds=fit_seconds,
         predict_seconds=predict_seconds,
+        fitted=fitted,
     )
 
 

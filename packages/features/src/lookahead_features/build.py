@@ -63,9 +63,10 @@ def feature_names(spec: FeatureSpec) -> list[str]:
         names += [f"year_sin_{k}", f"year_cos_{k}"]
     if spec.use_weather:
         names += [
-            "obs_temperature",
             "obs_heating_degree",
             "obs_cooling_degree",
+            "obs_heating_change",
+            "obs_cooling_change",
             "obs_humidity",
             "obs_cooling_x_day_sin",
             "obs_cooling_x_day_cos",
@@ -141,8 +142,11 @@ def row_from_frame(
     temperature: float,
     humidity: float,
     spec: FeatureSpec,
+    typical_mw: float | None = None,
+    lag_temperature: float = math.nan,
 ) -> tuple[np.ndarray, float]:
-    """One feature row through the frame, plus the scale. The reference implementation."""
+    """One feature row through the frame, plus the scale. The reference implementation.
+    ``lag_temperature`` is the temperature at the same hour lag (yesterday or the day before)."""
     target = frame.origin + HOUR * horizon
     week = frame.history(SEASONAL_LAG)
     scale = float(np.nanmean(week)) if np.isfinite(week).any() else math.nan
@@ -180,26 +184,39 @@ def row_from_frame(
     values += _fourier(cal.local_day.weekday() * 24 + cal.local_hour, 168.0, spec.fourier_weekly)
     values += _fourier(cal.day_of_year, 365.25, spec.fourier_yearly)
     if spec.use_weather:
-        values += _weather_columns(temperature, humidity, cal.local_hour, spec)
+        scaling = typical_mw / scale if typical_mw else 1.0
+        values += _weather_columns(temperature, humidity, lag_temperature, cal.local_hour, spec, scaling)
     return np.asarray(values, dtype=np.float64), scale
 
 
-def _weather_columns(temperature: float, humidity: float, local_hour: int, spec: FeatureSpec) -> list[float]:
+def _weather_columns(
+    temperature: float,
+    humidity: float,
+    lag_temperature: float,
+    local_hour: int,
+    spec: FeatureSpec,
+    scaling: float = 1.0,
+) -> list[float]:
     missing = math.isnan(temperature)
     t = 0.0 if missing else temperature
     hdh = max(spec.heating_threshold_c - t, 0.0) if not missing else 0.0
     cdh = max(t - spec.cooling_threshold_c, 0.0) if not missing else 0.0
+    lag_ok = not math.isnan(lag_temperature) and not missing
+    lag_hdh = max(spec.heating_threshold_c - lag_temperature, 0.0) if lag_ok else hdh
+    lag_cdh = max(lag_temperature - spec.cooling_threshold_c, 0.0) if lag_ok else cdh
     rh = 0.0 if math.isnan(humidity) else humidity / 100.0
     angle = 2.0 * math.pi * local_hour / 24.0
+    k = scaling
     return [
-        t,
-        hdh,
-        cdh,
+        hdh * k,
+        cdh * k,
+        (hdh - lag_hdh) * k,
+        (cdh - lag_cdh) * k,
         rh,
-        cdh * math.sin(angle),
-        cdh * math.cos(angle),
-        hdh * math.sin(angle),
-        hdh * math.cos(angle),
+        cdh * k * math.sin(angle),
+        cdh * k * math.cos(angle),
+        hdh * k * math.sin(angle),
+        hdh * k * math.cos(angle),
         float(missing),
     ]
 
@@ -218,6 +235,7 @@ class Design:
     usable: np.ndarray
     """False where the origin had no scale; those rows carry no forecast."""
     local_hour: np.ndarray
+    weather_scaling: np.ndarray
 
 
 def design(
@@ -228,6 +246,7 @@ def design(
     temperature: np.ndarray,
     humidity: np.ndarray,
     spec: FeatureSpec,
+    typical_mw: float | None = None,
 ) -> Design:
     """Every (origin, horizon) row at once. ``offsets``, ``temperature`` and ``humidity`` are
     aligned with the series positions. Lags are checked against the horizon before any read."""
@@ -320,8 +339,13 @@ def design(
     for k in range(1, spec.fourier_yearly + 1):
         angle = 2.0 * np.pi * k * cal_rows[:, 4] / 365.25
         columns += [np.sin(angle), np.cos(angle)]
+    # A megawatt per degree response is a fixed ratio coefficient only when the degree columns are
+    # scaled the way the target is: by the origin's scale, relative to the authority's typical level.
+    weather_scaling = (typical_mw / safe_scale) if typical_mw else np.ones(len(t))
     if spec.use_weather:
-        columns += list(weather_block(t, n, local_hour, temperature, humidity, spec).T)
+        columns += list(
+            weather_block(t, n, local_hour, temperature, humidity, spec, weather_scaling, t - same).T
+        )
     x = np.stack(columns, axis=1)
     assert x.shape[1] == len(feature_names(spec))
     return Design(
@@ -332,10 +356,11 @@ def design(
         horizon=h,
         usable=usable,
         local_hour=local_hour,
+        weather_scaling=weather_scaling,
     )
 
 
-WEATHER_COLUMNS = 9
+WEATHER_COLUMNS = 10
 
 
 def weather_block(
@@ -345,28 +370,47 @@ def weather_block(
     temperature: np.ndarray,
     humidity: np.ndarray,
     spec: FeatureSpec,
+    scaling: np.ndarray | None = None,
+    lag_t: np.ndarray | None = None,
 ) -> np.ndarray:
-    """The nine observed weather columns for target positions ``t``; the only columns a threshold changes."""
-    temp = temperature[np.clip(t, 0, n - 1)].astype(np.float64)
-    temp = np.where((t >= 0) & (t < n), temp, np.nan)
-    rh = humidity[np.clip(t, 0, n - 1)].astype(np.float64)
-    rh = np.where((t >= 0) & (t < n), rh, np.nan)
+    """The ten observed weather columns for target positions ``t``; the only columns a threshold changes.
+    ``scaling`` multiplies the degree columns (typical over the origin's scale) so the target ratio and
+    the response share one unit; ``lag_t`` is the position of the same hour lag, for the change columns."""
+
+    def read(position: np.ndarray, values: np.ndarray) -> np.ndarray:
+        out = np.full(len(position), np.nan)
+        ok = (position >= 0) & (position < n)
+        out[ok] = values[position[ok]]
+        return out
+
+    temp = read(t, temperature)
+    rh = read(t, humidity)
     missing = ~np.isfinite(temp)
     tt = np.where(missing, 0.0, temp)
     hdh = np.where(missing, 0.0, np.maximum(spec.heating_threshold_c - tt, 0.0))
     cdh = np.where(missing, 0.0, np.maximum(tt - spec.cooling_threshold_c, 0.0))
+    if lag_t is None:
+        lag_hdh, lag_cdh = hdh, cdh
+    else:
+        lag_temp = read(lag_t, temperature)
+        lag_ok = np.isfinite(lag_temp) & ~missing
+        lag_tt = np.where(lag_ok, lag_temp, 0.0)
+        lag_hdh = np.where(lag_ok, np.maximum(spec.heating_threshold_c - lag_tt, 0.0), hdh)
+        lag_cdh = np.where(lag_ok, np.maximum(lag_tt - spec.cooling_threshold_c, 0.0), cdh)
     rhh = np.where(np.isfinite(rh), rh / 100.0, 0.0)
     angle = 2.0 * np.pi * local_hour / 24.0
+    k = np.ones(len(t)) if scaling is None else scaling
     return np.stack(
         [
-            tt,
-            hdh,
-            cdh,
+            hdh * k,
+            cdh * k,
+            (hdh - lag_hdh) * k,
+            (cdh - lag_cdh) * k,
             rhh,
-            cdh * np.sin(angle),
-            cdh * np.cos(angle),
-            hdh * np.sin(angle),
-            hdh * np.cos(angle),
+            cdh * k * np.sin(angle),
+            cdh * k * np.cos(angle),
+            hdh * k * np.sin(angle),
+            hdh * k * np.cos(angle),
             missing.astype(np.float64),
         ],
         axis=1,
@@ -380,7 +424,17 @@ def with_thresholds(
     if not spec.use_weather:
         return d
     x = d.x.copy()
-    x[:, -WEATHER_COLUMNS:] = weather_block(d.target_position, n, d.local_hour, temperature, humidity, spec)
+    same = 24 * np.ceil(d.horizon / 24).astype(np.int64)
+    x[:, -WEATHER_COLUMNS:] = weather_block(
+        d.target_position,
+        n,
+        d.local_hour,
+        temperature,
+        humidity,
+        spec,
+        d.weather_scaling,
+        d.target_position - same,
+    )
     return Design(
         x=x,
         scale=d.scale,
@@ -389,4 +443,5 @@ def with_thresholds(
         horizon=d.horizon,
         usable=d.usable,
         local_hour=d.local_hour,
+        weather_scaling=d.weather_scaling,
     )

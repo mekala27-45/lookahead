@@ -84,7 +84,7 @@ def test_design_matches_the_frame_row_by_row() -> None:
     spec = FeatureSpec(heating_threshold_c=12.0, cooling_threshold_c=18.0)
     origins = np.array([24 * d - 1 for d in range(30, 110, 7)])
     horizons = np.arange(1, 49)
-    d = design(series, origins, horizons, offsets, temperature, humidity, spec)
+    d = design(series, origins, horizons, offsets, temperature, humidity, spec, 9_000.0)
     assert d.x.shape == (len(origins) * 48, len(feature_names(spec)))
     assert d.usable.all()
     rng = np.random.default_rng(1)
@@ -94,7 +94,10 @@ def test_design_matches_the_frame_row_by_row() -> None:
         frame = PointInTimeFrame(series, origin)
         h = int(d.horizon[i])
         t = int(d.target_position[i])
-        row, scale = row_from_frame(frame, h, -5, float(temperature[t]), float(humidity[t]), spec)
+        lag_t = t - same_hour_lag(h)
+        row, scale = row_from_frame(
+            frame, h, -5, float(temperature[t]), float(humidity[t]), spec, 9_000.0, float(temperature[lag_t])
+        )
         np.testing.assert_allclose(d.x[i], row, rtol=0, atol=1e-9)
         assert d.scale[i] == pytest.approx(scale)
 
