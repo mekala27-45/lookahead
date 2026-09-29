@@ -1,0 +1,151 @@
+{#- The operations review, rendered from results/manifest.json by the claim gate. Every number is a
+    manifest value or table; the prose is the shape a load desk lead brings to the monthly review. -#}
+{%- set b = v('registry.served') if v('registry.served') != 'none' else 'own' -%}
+# Operations review: the forecast against the operator
+
+Load desk, as of {{ manifest.as_of }}. Rendered from `results/manifest.json`; every figure below is
+a manifest value or table and `scripts/check_published_numbers.py` fails CI if this file drifts
+from it.
+
+## 1. Skill against the operator
+
+Over the test year ({{ v('data.windows.test_start') }} to {{ v('data.windows.test_end') }}), at
+horizons 1 to 24, the served backend ({{ b }}) beat the operator's published day ahead forecast in
+{{ v('skill.' ~ b ~ '.h1_24.wins') }} of {{ v('skill.' ~ b ~ '.h1_24.authorities') }} comparable
+balancing authorities ({{ v('skill.' ~ b ~ '.h1_24.wins_lower') }} to
+{{ v('skill.' ~ b ~ '.h1_24.wins_upper') }} across bootstrap replicates of the test days), lost to it
+in {{ v('skill.' ~ b ~ '.h1_24.losses') }} ({{ v('skill.' ~ b ~ '.h1_24.losses_lower') }} to
+{{ v('skill.' ~ b ~ '.h1_24.losses_upper') }}) and tied in {{ v('skill.' ~ b ~ '.h1_24.ties') }},
+after Benjamini-Hochberg across the authorities. Pooled over the comparable hours its MAPE was
+{{ v('skill.' ~ b ~ '.h1_24.model_mape_pooled') }} against the operator's
+{{ v('skill.' ~ b ~ '.h1_24.operator_mape_pooled') }}, a skill of {{ v('skill.' ~ b ~ '.h1_24.skill_pooled') }};
+the median authority's skill was {{ v('skill.' ~ b ~ '.h1_24.median_skill') }}. Over all 48 horizons
+the MAPE was {{ v('backtest.' ~ b ~ '.mape') }} ({{ v('backtest.' ~ b ~ '.mape_lower') }} to
+{{ v('backtest.' ~ b ~ '.mape_upper') }}) against the seasonal naive's {{ v('backtest.' ~ b ~ '.mape_naive') }}.
+At the daily peak the model's absolute error was {{ v('backtest.' ~ b ~ '.peaks.model_peak_abs') }}
+against the operator's {{ v('backtest.' ~ b ~ '.peaks.operator_peak_abs') }}, with a median timing
+error of {{ v('backtest.' ~ b ~ '.peaks.model_timing_median') }} hours against
+{{ v('backtest.' ~ b ~ '.peaks.operator_timing_median') }}.
+
+{{ v('skill.not_comparable_authorities') }} authorities are not counted because the published
+forecast covers a different scope than the demand series: {{ v('skill.not_comparable_list') }}.
+
+{{ table('skill.' ~ b ~ '.h1_24.table') }}
+
+{{ label('skill.' ~ b ~ '.h1_24.table') }}
+
+The cross check: own has the lower error in {{ v('skill.crosscheck.own_better') }} authorities and
+gbm in {{ v('skill.crosscheck.gbm_better') }}; they fall on different sides of the operator in
+{{ v('skill.crosscheck.disagreements') }} of {{ v('skill.crosscheck.authorities') }}. Nothing is averaged.
+
+{{ table('skill.crosscheck') }}
+
+{{ label('skill.crosscheck') }}
+
+## 2. Coverage
+
+The 90 percent bands covered {{ v('backtest.' ~ b ~ '.coverage_90') }} of the test year's hours
+({{ v('backtest.' ~ b ~ '.coverage_90_lower') }} to {{ v('backtest.' ~ b ~ '.coverage_90_upper') }}) and
+the 50 percent bands {{ v('backtest.' ~ b ~ '.coverage_50') }}. On the validation year the calibration
+held {{ v('backtest.' ~ b ~ '.validation_coverage_90') }} at the 90 percent level, inside the gate's
+band of {{ v('policy.coverage_band_90_low') }} to {{ v('policy.coverage_band_90_high') }}. Shares of
+actuals at or below each served level: {{ v('backtest.' ~ b ~ '.reliability.q05') }},
+{{ v('backtest.' ~ b ~ '.reliability.q25') }}, {{ v('backtest.' ~ b ~ '.reliability.q50') }},
+{{ v('backtest.' ~ b ~ '.reliability.q75') }} and {{ v('backtest.' ~ b ~ '.reliability.q95') }} against
+5, 25, 50, 75 and 95 percent; degenerate levels {{ v('backtest.' ~ b ~ '.degenerate_levels') }}.
+
+{{ table('backtest.' ~ b ~ '.by_horizon') }}
+
+{{ label('backtest.' ~ b ~ '.by_horizon') }}
+
+## 3. Where reconciliation helped and where it hurt
+
+{{ v('hierarchy.nodes') }} nodes from the lower 48 to the subregion, every one forecast directly
+and reconciled by bottom up, top down and MinT (shrinkage intensity
+{{ v('hierarchy.shrinkage_intensity') }}); every reconciled set is coherent to within
+{{ v('hierarchy.coherence_gap_mw.mint') }} MW where the base forecasts disagreed by up to
+{{ v('hierarchy.coherence_gap_mw.base') }}. Reconciliation helped at {{ v('hierarchy.helped_list') }}
+and hurt at {{ v('hierarchy.hurt_list') }}; the method with the lowest error summed over levels is
+{{ v('hierarchy.best_method') }}. At the top MinT moved the MAPE from {{ v('hierarchy.base.level0.mape') }}
+to {{ v('hierarchy.mint.level0.mape') }}; at the leaves from {{ v('hierarchy.base.level4.mape') }} to
+{{ v('hierarchy.mint.level4.mape') }}.
+
+{{ table('hierarchy.helped_or_hurt') }}
+
+{{ label('hierarchy.helped_or_hurt') }}
+
+## 4. The events the detector caught and missed
+
+The detector watches the day's own forecast residual, standardized per authority, past
+{{ v('events.threshold') }} for {{ v('events.persistence_hours') }} hours; hours a quarantine rule
+flagged are data defects, never demand events. It detected {{ v('events.known.detected') }} of the
+{{ v('events.known.rows') }} rows of the known events table ({{ v('events.known.recall') }}) with a median
+delay of {{ v('events.known.median_delay_hours') }} hours, and raised {{ v('events.known.false_alarms_outside') }}
+alerts in the {{ v('events.known.hours_outside') }} window hours outside the events. Missed:
+{{ v('events.known.missed_list') }}. Over the real test year it raised {{ v('events.test.alerts') }}
+alerts, {{ v('events.test.demand_events') }} demand events and {{ v('events.test.data_defects') }} data
+defects. On the demonstration grid it recovered {{ v('events.sim.defects_recovered') }} of
+{{ v('events.sim.defects') }} planted defects as defects, {{ v('events.sim.load_sheds_detected') }} of
+{{ v('events.sim.load_sheds') }} planted load sheds, with {{ v('events.sim.false_alarms') }} false alarms.
+
+{{ table('events.known.table') }}
+
+{{ label('events.known.table') }}
+
+## 5. The meter
+
+{{ v('meter.households_profiled') }} London households in {{ v('meter.clusters') }} load shape clusters;
+cluster {{ v('meter.top_peak_cluster') }} ({{ v('meter.top_peak_cluster_shape') }}) carries
+{{ v('meter.top_peak_cluster_share') }} of the weekday evening peak with
+{{ v('meter.top_peak_cluster_household_share') }} of the households. Under the pre-registered plan
+(hash `{{ v('meter.tou.plan_hash_short') }}`), the dynamic time of use group used
+{{ v('meter.tou.response_pct') }} ({{ v('meter.tou.response_pct_lower') }} to
+{{ v('meter.tou.response_pct_upper') }}) during the {{ v('meter.tou.events') }} high price events
+against matched standard households, {{ v('meter.tou.response_kwh') }} kWh per household per event,
+with a rebound of {{ v('meter.tou.rebound_pct') }} afterwards; {{ v('meter.tou.types_rejected') }} of
+{{ v('meter.tou.types') }} event types are distinguishable from zero after correction. The cluster
+forecast, reconciled by MinT, moved the panel total's MAPE from {{ v('meter.forecast.base.level0.mape') }}
+to {{ v('meter.forecast.mint.level0.mape') }} and the clusters' from
+{{ v('meter.forecast.base.level1.mape') }} to {{ v('meter.forecast.mint.level1.mape') }}. A program
+buying peak reduction at {{ v('meter.peak.value_gbp_per_kw') }} pounds per kilowatt would approach
+cluster {{ v('meter.peak.target_cluster') }} first.
+
+{{ table('meter.tou.by_type') }}
+
+{{ label('meter.tou.by_type') }}
+
+{{ table('meter.peak.contribution') }}
+
+{{ label('meter.peak.contribution') }}
+
+## 6. The live log and the registry
+
+The API serves {{ v('registry.served') }}, chosen by {{ v('registry.gates') }} gates
+({{ v('registry.served_reason') }}). The separate client verification is {{ v('deploy.status') }} at
+{{ v('deploy.base_url') }}: {{ v('deploy.forecast_rows_read_back') }} rows read back, audit row before
+the response {{ v('deploy.audit_before_response') }}, unscored share after scoring
+{{ v('deploy.unscored_share') }}. The live browser check {{ v('live.status') }}. Latency: local p99 for
+issuing a forecast {{ v('latency.local.issue.p99_ms') }}.
+
+## 7. Limitations
+
+The models saw observed weather at the target hour; a real day ahead forecast sees a weather
+forecast, so every error figure here is a lower bound on what a live desk would see and every win
+against the operator an upper bound. The operator's forecast is compared only where its scope
+matches the demand series. The hierarchy is EIA's. The detector's threshold was chosen on the
+simulator because the real validation year has no labelled events. The London panel is from 2011
+to 2014, opted in, and the tariff group was not randomized; the meter forecast uses a fixed panel
+of {{ v('meter.forecast.households') }} households and no weather. The live scorecard scores against
+the committed actuals until the refresh job exists.
+
+## What the operator would push back on
+
+You used observed weather, my forecast has a meteorologist behind it, your hierarchy is mine and
+not yours, and your households are a decade old and volunteered. All four are true and each is
+stated where it applies: the weather caveat on every figure that uses it, the comparability rule
+that drops {{ v('skill.not_comparable_authorities') }} authorities rather than counting them, the
+remainder nodes that keep the arithmetic honest without pretending to be control areas, and the
+pre-registered plan that stops the tariff estimate from being tuned. What the build did not do is
+give the model a weather forecast, and it says so first.
+
+{{ statement() }}

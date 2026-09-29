@@ -1,0 +1,51 @@
+# The meter
+
+**Clustering.** Each household's mean weekday and weekend daily profile at half hour resolution
+over {{ v('meter.profile_window_start') }} to {{ v('meter.profile_window_end') }} (the
+{{ v('policy.meter_profile_window_days') }} days before the test period), normalized by the
+household's mean, clustered by k-means with the number of clusters chosen from
+{{ v('policy.meter_cluster_range') }} by the silhouette score on a validation half of the households
+(fit on the even rows of the sorted identifiers, scored on the odd rows). Chosen:
+{{ v('meter.clusters') }} clusters (silhouette {{ v('meter.silhouette_chosen') }}) over
+{{ v('meter.households_profiled') }} households; shapes are named by rule from the weekday profile.
+
+{{ table('meter.clusters') }}
+
+{{ label('meter.clusters') }}
+
+**The time of use analysis.** The dynamic tariff group was recruited, not randomized; this is an
+observational comparison and the plan says so first. The plan is `docs/tou_plan.md`, hashed before
+the readings were examined for this question (SHA-256 `{{ v('meter.tou.plan_hash') }}`). Matching:
+one standard household per dynamic household, same cluster, nearest pre-period mean, without
+replacement; {{ v('meter.tou.pairs') }} pairs, {{ v('meter.tou.dropped') }} dropped. Estimator:
+difference in differences per high price event against the same half hours on comparison days,
+{{ v('meter.tou.replicates') }} block bootstrap replicates over events, Benjamini-Hochberg across
+{{ v('meter.tou.types') }} event types. Result: {{ v('meter.tou.response_pct') }}
+({{ v('meter.tou.response_pct_lower') }} to {{ v('meter.tou.response_pct_upper') }}) during
+{{ v('meter.tou.events') }} events, {{ v('meter.tou.response_kwh') }} kWh per household per event,
+rebound {{ v('meter.tou.rebound_pct') }} in the three hours after.
+
+{{ table('meter.tou.by_type') }}
+
+{{ label('meter.tou.by_type') }}
+
+**Bottom up and reconciliation.** A fixed panel of {{ v('meter.forecast.households') }} households
+reporting through the whole window, summed hourly per cluster and in total (hourly rather than half
+hourly because the forecasting interface is hourly; recorded in `DECISIONS.md`), forecast by the
+gbm backend over {{ v('meter.forecast.test_start') }} to {{ v('meter.forecast.test_end') }} without
+weather, and reconciled by bottom up and MinT with the calibration model's validation residuals.
+
+{{ table('meter.forecast.by_level') }}
+
+{{ label('meter.forecast.by_level') }}
+
+**Peak contribution.** Each cluster's evening kilowatts per household and its share of the panel's
+weekday evening peak, valued at {{ v('meter.peak.value_gbp_per_kw') }} pounds per kilowatt of
+reduction; a program would approach cluster {{ v('meter.peak.target_cluster') }}
+({{ v('meter.peak.target_shape') }}) first.
+
+{{ table('meter.peak.contribution') }}
+
+{{ label('meter.peak.contribution') }}
+
+{{ statement() }}

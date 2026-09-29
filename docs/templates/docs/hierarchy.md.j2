@@ -1,0 +1,38 @@
+# Hierarchy and reconciliation
+
+The summing matrix is built from `data/hierarchy.csv`: the lower 48, the three interconnections,
+{{ v('data.hierarchy.regions') }} regions, {{ v('hierarchy.authorities') }} authorities in the backtest,
+{{ v('hierarchy.subregions') }} eligible subregions and {{ v('hierarchy.remainder_nodes') }} remainder
+nodes, one per authority with subregions, carrying the difference between the authority and its
+published subregions so the leaves sum to the authority to the megawatt. The subregion series do
+not exactly match their authority in the source (mean absolute gap
+{{ v('data.subregion_gap.mean_abs_pct') }}, worst {{ v('data.subregion_gap.worst_abs_pct') }} at
+{{ v('data.subregion_gap.worst_authority') }}); nothing is scaled to fit.
+
+Base forecasts come from the own backend at every node, the aggregates forecast directly as well
+as by aggregation. Methods: bottom up; top down by the validation year's historical proportions;
+MinT with the Schafer and Strimmer shrinkage of the base residual covariance on the validation
+year (intensity {{ v('hierarchy.shrinkage_intensity') }}). Quantile crossing after a linear
+adjustment is removed at the leaves and the upper nodes rebuilt from them, so every reconciled set
+is coherent and monotone in the level.
+
+Coherence gaps: bottom up {{ v('hierarchy.coherence_gap_mw.bottom_up') }} MW, top down
+{{ v('hierarchy.coherence_gap_mw.top_down') }} MW, MinT {{ v('hierarchy.coherence_gap_mw.mint') }} MW;
+the base forecasts disagree by up to {{ v('hierarchy.coherence_gap_mw.base') }}. Accuracy by level:
+
+{{ table('hierarchy.by_level') }}
+
+{{ label('hierarchy.by_level') }}
+
+Helped at {{ v('hierarchy.helped_list') }}; hurt at {{ v('hierarchy.hurt_list') }}. The method with
+the lowest error summed over levels is {{ v('hierarchy.best_method') }}. On the simulator, against
+the truth rather than the observed actuals, MinT's gain at the top on the base condition is
+{{ v('recovery.base.reconciliation.mint_gain_top') }} and at the leaves
+{{ v('recovery.base.reconciliation.mint_gain_leaves') }}.
+
+Tests (`tests/hierarchy`): the summing matrix's rows match the hierarchy table; every method is
+coherent to the megawatt; a base set that does not sum is the deliberate violation; an empty node
+set is refused; a subregion set that does not sum to its authority is reported with its gap and
+never silently scaled; the MinT covariance is estimated on validation only.
+
+{{ statement() }}

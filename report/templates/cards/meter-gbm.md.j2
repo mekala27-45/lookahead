@@ -1,0 +1,57 @@
+{%- set card = 'meter-gbm' -%}
+{%- set title = 'the meter model: gbm over the household clusters, reconciled' -%}
+{% set intended %}
+The meter model forecasts the hourly load of each of the {{ v('meter.clusters') }} load shape clusters
+and of the panel total for a fixed panel of {{ v('meter.forecast.households') }} London households,
+1 to {{ v('policy.horizons') }} hours ahead of a daily origin, reconciled to the total by MinT. It is
+the second hierarchy in the build and is meant to show bottom up forecasting at the meter and what
+reconciliation does to it. It is not meant for any live tariff, for households outside the panel,
+for 2026, or for half hourly settlement.
+{% endset %}
+{% set data %}
+The Low Carbon London release ({{ v('data.london.rows') }} readings, {{ v('data.london.households') }}
+households, {{ v('data.london.first') }} to {{ v('data.london.last') }}), read through DuckDB; the
+{{ v('meter.forecast.households') }} households reporting through the whole forecast window
+({{ v('meter.forecast.household_share') }} of those profiled), summed hourly per cluster and in total.
+No weather. Test period {{ v('meter.forecast.test_start') }} to {{ v('meter.forecast.test_end') }}, the
+year before as validation.
+{% endset %}
+{% set fit %}
+The gbm backend on the cluster panel as if the clusters were authorities: one booster with the
+quantile objective at the five levels, {{ v('meter.forecast.fits') }} fits over
+{{ v('meter.forecast.origins') }} origins, conformalized on the validation year; MinT with the shrunk
+covariance of the calibration model's validation residuals (intensity
+{{ v('meter.forecast.shrinkage_intensity') }}). Hourly rather than half hourly because the
+forecasting interface is hourly (`DECISIONS.md`).
+{% endset %}
+{% set metrics %}
+{{ table('meter.forecast.by_level') }}
+
+{{ label('meter.forecast.by_level') }}
+
+MinT {{ v('meter.forecast.mint_verdict_total') }} at the total ({{ v('meter.forecast.mint_gain_total') }}
+points of MAPE) and {{ v('meter.forecast.mint_verdict_clusters') }} at the clusters
+({{ v('meter.forecast.mint_gain_clusters') }}); coherence gaps bottom up
+{{ v('meter.forecast.coherence_gap.bottom_up') }} kWh and MinT {{ v('meter.forecast.coherence_gap.mint') }} kWh.
+{% endset %}
+{% set contract %}
+- [x] **trained**: {{ v('meter.forecast.fits') }} fits over {{ v('meter.forecast.origins') }} origins.
+- [x] **timed**: part of the meter stage's {{ v('meter.seconds') }} seconds.
+- [x] **calibrated**: conformalized on the validation year; 90 percent coverage {{ v('meter.forecast.base.level0.coverage_90') }} at the total on test.
+- [x] **useful**: MAPE {{ v('meter.forecast.base.level0.mape') }} at the total before reconciliation and {{ v('meter.forecast.mint.level0.mape') }} after.
+- [ ] **fair**: not applicable; the clusters are load shapes, not people, and no household identifier is published.
+- [ ] **gated**: not built; the registry's gates judge the grid backends, and the meter model is not served.
+- [ ] **served**: not applicable; the meter model is an analysis, not an API route.
+- [ ] **integrated**: not applicable, as above.
+- [ ] **monitored**: not applicable; there is no live meter feed.
+- [x] **documented**: this card and `docs/meter.md`.
+- [x] **bounded**: the intended use above; the fixed panel and the hourly resolution are stated.
+- [x] **validated**: coherence to the kilowatt hour and accuracy before and after by level with block bootstrap intervals.
+- [x] **explainable at the decision**: the clusters are described by shape and share; the reconciled total is beside the base one at every origin in `results/meter/forecast_total.parquet`.
+{% endset %}
+{% set limitations %}
+A fixed panel of {{ v('meter.forecast.households') }} households is a stated subsample of the release.
+No weather, so the winter of 2013 to 2014 is forecast from lags and the calendar alone. Hourly, not
+half hourly. Three months of test is a short year. The households opted in a decade ago.
+{% endset %}
+{% include "cards/_card.md.j2" %}

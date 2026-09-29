@@ -1,0 +1,334 @@
+{#- Every figure here is rendered from results/manifest.json by the claim gate; do not edit by hand. -#}
+{%- set b = v('registry.served') if v('registry.served') != 'none' else 'own' -%}
+# Results
+
+Rendered from `results/manifest.json` (as of {{ manifest.as_of }}, demonstration seed
+{{ manifest.seed }}); `scripts/check_published_numbers.py` re-renders this file and fails CI if
+it differs. Stages present in the manifest: {{ v('build.stages_present') }}. Every table names
+its source, model, population, seed count and condition in the line beneath it. The served
+backend is {{ b }}.
+
+{{ statement() }}
+
+## The checklist (Section 20 of the brief)
+
+{% include '_checklist.md.j2' %}
+
+Stretch items, never counted: the refresh job (not done); forecast weather in place of observed
+weather (not done); a neural backend (not done); the published benchmark comparison (not done);
+the models, explore and simulator pages (not done); the pipeline container in CI (not done; Fly
+builds `Dockerfile.api` on deploy).
+
+## The two headline numbers
+
+| | {{ b }}, horizons 1 to 24 | Interval |
+|---|---:|---:|
+| Authorities where the model beat the operator | {{ v('skill.' ~ b ~ '.h1_24.wins') }} of {{ v('skill.' ~ b ~ '.h1_24.authorities') }} | {{ v('skill.' ~ b ~ '.h1_24.wins_lower') }} to {{ v('skill.' ~ b ~ '.h1_24.wins_upper') }} |
+| Authorities where the operator beat the model | {{ v('skill.' ~ b ~ '.h1_24.losses') }} of {{ v('skill.' ~ b ~ '.h1_24.authorities') }} | {{ v('skill.' ~ b ~ '.h1_24.losses_lower') }} to {{ v('skill.' ~ b ~ '.h1_24.losses_upper') }} |
+| Ties after correction | {{ v('skill.' ~ b ~ '.h1_24.ties') }} | |
+| Pooled MAPE, model against operator | {{ v('skill.' ~ b ~ '.h1_24.model_mape_pooled') }} against {{ v('skill.' ~ b ~ '.h1_24.operator_mape_pooled') }} | skill {{ v('skill.' ~ b ~ '.h1_24.skill_pooled') }} |
+| 90 percent coverage on test | {{ v('backtest.' ~ b ~ '.coverage_90') }} | {{ v('backtest.' ~ b ~ '.coverage_90_lower') }} to {{ v('backtest.' ~ b ~ '.coverage_90_upper') }} |
+| 50 percent coverage on test | {{ v('backtest.' ~ b ~ '.coverage_50') }} | {{ v('backtest.' ~ b ~ '.coverage_50_lower') }} to {{ v('backtest.' ~ b ~ '.coverage_50_upper') }} |
+
+{{ label('skill.' ~ b ~ '.h1_24.wins') }}
+
+The {{ v('skill.not_comparable_authorities') }} authorities whose published forecast is not
+comparable in scope are never counted: {{ v('skill.not_comparable_list') }}.
+
+{{ table('skill.not_comparable') }}
+
+{{ label('skill.not_comparable') }}
+
+## The skill table against the operator
+
+Horizons 1 to 24, the headline band; skill is one minus the model's MAPE over the operator's on
+the same target hours, with the paired block bootstrap interval and the Benjamini-Hochberg
+verdict.
+
+{{ table('skill.' ~ b ~ '.h1_24.table') }}
+
+{{ label('skill.' ~ b ~ '.h1_24.table') }}
+
+Horizons 25 to 48: wins {{ v('skill.' ~ b ~ '.h25_48.wins') }}, losses
+{{ v('skill.' ~ b ~ '.h25_48.losses') }}, ties {{ v('skill.' ~ b ~ '.h25_48.ties') }}; the target
+day: wins {{ v('skill.' ~ b ~ '.target_day.wins') }}, losses
+{{ v('skill.' ~ b ~ '.target_day.losses') }}, ties {{ v('skill.' ~ b ~ '.target_day.ties') }}.
+
+{{ table('skill.' ~ b ~ '.target_day.table') }}
+
+{{ label('skill.' ~ b ~ '.target_day.table') }}
+
+## The cross check: own against gbm, both baselines beside them
+
+own has the lower error in {{ v('skill.crosscheck.own_better') }} authorities and gbm in
+{{ v('skill.crosscheck.gbm_better') }}; the two fall on different sides of the operator in
+{{ v('skill.crosscheck.disagreements') }} of {{ v('skill.crosscheck.authorities') }}. Where they
+disagree the table says so; nothing is averaged.
+
+{{ table('skill.crosscheck') }}
+
+{{ label('skill.crosscheck') }}
+
+## The backtest by backend
+
+| | own | gbm | Seasonal naive | Operator (paired hours) |
+|---|---:|---:|---:|---:|
+| MAPE, all horizons | {{ v('backtest.own.mape') }} ({{ v('backtest.own.mape_lower') }} to {{ v('backtest.own.mape_upper') }}) | {{ v('backtest.gbm.mape') }} ({{ v('backtest.gbm.mape_lower') }} to {{ v('backtest.gbm.mape_upper') }}) | {{ v('backtest.own.mape_naive') }} | {{ v('backtest.own.mape_operator') }} |
+| MASE against the weekly naive | {{ v('backtest.own.mase') }} | {{ v('backtest.gbm.mase') }} | | |
+| CRPS, relative | {{ v('backtest.own.crps') }} | {{ v('backtest.gbm.crps') }} | | |
+| 90 percent coverage | {{ v('backtest.own.coverage_90') }} | {{ v('backtest.gbm.coverage_90') }} | | |
+| 50 percent coverage | {{ v('backtest.own.coverage_50') }} | {{ v('backtest.gbm.coverage_50') }} | | |
+| Validation coverage, 90 percent | {{ v('backtest.own.validation_coverage_90') }} | {{ v('backtest.gbm.validation_coverage_90') }} | | |
+| Daily peak error | {{ v('backtest.own.peaks.model_peak_abs') }} | {{ v('backtest.gbm.peaks.model_peak_abs') }} | {{ v('backtest.own.peaks.naive_peak_abs') }} | {{ v('backtest.own.peaks.operator_peak_abs') }} |
+| Median peak timing error | {{ v('backtest.own.peaks.model_timing_median') }} h | {{ v('backtest.gbm.peaks.model_timing_median') }} h | | {{ v('backtest.own.peaks.operator_timing_median') }} h |
+| Morning ramp error | {{ v('backtest.own.peaks.model_morning_abs') }} | {{ v('backtest.gbm.peaks.model_morning_abs') }} | | {{ v('backtest.own.peaks.operator_morning_abs') }} |
+| Evening ramp error | {{ v('backtest.own.peaks.model_evening_abs') }} | {{ v('backtest.gbm.peaks.model_evening_abs') }} | | {{ v('backtest.own.peaks.operator_evening_abs') }} |
+| Origins, fits, run time | {{ v('backtest.own.origins') }}, {{ v('backtest.own.fits') }}, {{ v('backtest.own.run_seconds') }} s | {{ v('backtest.gbm.origins') }}, {{ v('backtest.gbm.fits') }}, {{ v('backtest.gbm.run_seconds') }} s | | |
+| Throughput, origins a minute on CPU | {{ v('backtest.own.origins_per_minute') }} | {{ v('backtest.gbm.origins_per_minute') }} | | |
+
+{{ label('backtest.own.mape') }} {{ label('backtest.gbm.mape') }}
+
+{{ v('backtest.' ~ b ~ '.weather_caveat') }}
+
+### By horizon, {{ b }}
+
+{{ table('backtest.' ~ b ~ '.by_horizon') }}
+
+{{ label('backtest.' ~ b ~ '.by_horizon') }}
+
+### By authority, {{ b }}
+
+{{ table('backtest.' ~ b ~ '.by_authority') }}
+
+{{ label('backtest.' ~ b ~ '.by_authority') }}
+
+### The quantile table and the reliability diagram, {{ b }}
+
+Shares of actuals at or below each served level, against the level itself; degenerate levels
+{{ v('backtest.' ~ b ~ '.degenerate_levels') }}, interior test {{ v('backtest.' ~ b ~ '.levels_interior') }}.
+
+{{ table('backtest.' ~ b ~ '.reliability') }}
+
+{{ label('backtest.' ~ b ~ '.reliability') }}
+
+{{ table('backtest.' ~ b ~ '.interior') }}
+
+{{ label('backtest.' ~ b ~ '.interior') }}
+
+### Peaks and ramps by authority, {{ b }}
+
+{{ table('backtest.' ~ b ~ '.peaks_by_authority') }}
+
+{{ label('backtest.' ~ b ~ '.peaks_by_authority') }}
+
+### The own backend's choices on validation
+
+Thresholds and penalties chosen on the validation year for every authority
+(chosen on validation: {{ v('backtest.own.chosen_on_validation') }};
+{{ v('backtest.own.threshold_candidates') }} candidate pairs, {{ v('backtest.own.search_fits') }} fits).
+
+{{ table('backtest.own.chosen') }}
+
+{{ label('backtest.own.chosen') }}
+
+### The gbm backend's refits and importance
+
+{{ v('backtest.gbm.refits') }} monthly refits ({{ v('backtest.gbm.refit_dates') }}), every
+{{ v('backtest.gbm.origin_day_thinning') }} origin days in training,
+{{ v('backtest.gbm.training_rows_calibration') }} rows in the calibration fit and
+{{ v('backtest.gbm.calibration_rows') }} calibration rows.
+
+{{ table('backtest.gbm.importance') }}
+
+{{ label('backtest.gbm.importance') }}
+
+## The hierarchy: accuracy by level before and after each method
+
+{{ v('hierarchy.nodes') }} nodes ({{ v('hierarchy.authorities') }} authorities,
+{{ v('hierarchy.subregions') }} eligible subregions under
+{{ v('hierarchy.authorities_with_subregions') }} authorities, {{ v('hierarchy.remainder_nodes') }}
+remainder nodes), {{ v('hierarchy.origins') }} origins, shrinkage intensity
+{{ v('hierarchy.shrinkage_intensity') }}. Coherence gaps: bottom up
+{{ v('hierarchy.coherence_gap_mw.bottom_up') }} MW, top down {{ v('hierarchy.coherence_gap_mw.top_down') }} MW,
+MinT {{ v('hierarchy.coherence_gap_mw.mint') }} MW; the base forecasts disagree by up to
+{{ v('hierarchy.coherence_gap_mw.base') }}. Helped at {{ v('hierarchy.helped_list') }}; hurt at
+{{ v('hierarchy.hurt_list') }}; best method summed over levels: {{ v('hierarchy.best_method') }}.
+
+{{ table('hierarchy.by_level') }}
+
+{{ label('hierarchy.by_level') }}
+
+{{ table('hierarchy.helped_or_hurt') }}
+
+{{ label('hierarchy.helped_or_hurt') }}
+
+The subregion series in the source do not exactly match their authority's demand: mean absolute
+gap {{ v('data.subregion_gap.mean_abs_pct') }}, worst {{ v('data.subregion_gap.worst_abs_pct') }}
+({{ v('data.subregion_gap.worst_authority') }}).
+
+{{ table('data.subregion_gap') }}
+
+{{ label('data.subregion_gap.mean_abs_pct') }}
+
+## Events
+
+Threshold {{ v('events.threshold') }} standardized residuals held for
+{{ v('events.persistence_hours') }} hours, chosen on the demonstration grid's validation year at
+a false alarm cost of {{ v('events.false_alarm_cost') }} and a missed event cost of
+{{ v('events.missed_event_cost') }} from the grid {{ v('events.grid_low') }} to {{ v('events.grid_high') }}
+(cost {{ v('events.validation_cost') }}, interior {{ v('events.interior') }}).
+
+{{ table('events.operating_grid') }}
+
+{{ label('events.threshold') }}
+
+On the known events table: {{ v('events.known.detected') }} of {{ v('events.known.rows') }} rows
+detected ({{ v('events.known.recall') }}), median delay {{ v('events.known.median_delay_hours') }}
+hours, {{ v('events.known.false_alarms_outside') }} false alarms in {{ v('events.known.hours_outside') }}
+window hours outside the events ({{ v('events.known.false_alarms_per_1000_hours') }} per thousand
+hours). Missed: {{ v('events.known.missed_list') }}.
+
+{{ table('events.known.table') }}
+
+{{ label('events.known.table') }}
+
+On the demonstration grid's test year: {{ v('events.sim.load_sheds_detected') }} of
+{{ v('events.sim.load_sheds') }} planted load sheds detected ({{ v('events.sim.recall_load_shed') }}),
+{{ v('events.sim.defects_recovered') }} of {{ v('events.sim.defects') }} planted defects recovered as
+defects, {{ v('events.sim.defects_called_events') }} defects reported as demand events,
+{{ v('events.sim.false_alarms') }} false alarms among {{ v('events.sim.demand_alerts') }} demand event
+alerts (precision {{ v('events.sim.precision') }}). By condition and seed, the recovery study table
+below carries the detector's recall and precision.
+
+Over the real test year: {{ v('events.test.alerts') }} alerts across {{ v('events.test.authorities') }}
+authorities, {{ v('events.test.demand_events') }} demand events and {{ v('events.test.data_defects') }}
+data defects, {{ v('events.test.alerts_per_1000_hours') }} per thousand hours.
+
+{{ table('events.test.by_authority') }}
+
+{{ label('events.test.by_authority') }}
+
+{{ table('events.test.largest') }}
+
+{{ label('events.test.largest') }}
+
+## The recovery study on the simulator
+
+{{ v('recovery.conditions') }} conditions with {{ v('recovery.seeds_per_condition') }} seeds each,
+{{ v('recovery.runs') }} runs in {{ v('recovery.seconds') }} seconds; the known skill of the oracle
+forecaster against the synthetic operator is {{ v('recovery.known_skill') }}. The harness is
+furthest from the known skill under {{ v('recovery.worst_condition_for_harness') }}; coverage is
+furthest from nominal under {{ v('recovery.worst_condition_for_coverage') }}.
+
+{{ table('recovery.by_condition') }}
+
+{{ label('recovery.by_condition') }}
+
+Detector by condition (mean over seeds): base recall on load sheds
+{{ v('recovery.base.detector.recall_load_shed') }}, on defects {{ v('recovery.base.detector.recall_defects') }},
+precision {{ v('recovery.base.detector.precision_demand_events') }}, defects called events
+{{ v('recovery.base.detector.defects_called_events') }}; missing 5 percent: recall on load sheds
+{{ v('recovery.missing_high.detector.recall_load_shed') }}, precision
+{{ v('recovery.missing_high.detector.precision_demand_events') }}; noise 3 percent: recall on load
+sheds {{ v('recovery.noise_high.detector.recall_load_shed') }}. Reconciliation by condition: MinT
+gain at the top against the truth {{ v('recovery.base.reconciliation.mint_gain_top') }} (base),
+{{ v('recovery.missing_high.reconciliation.mint_gain_top') }} (missing 5 percent); at the leaves
+{{ v('recovery.base.reconciliation.mint_gain_leaves') }} (base).
+
+## The meter
+
+{{ v('meter.households_profiled') }} of {{ v('meter.households_release') }} households profiled over
+{{ v('meter.profile_window_start') }} to {{ v('meter.profile_window_end') }}; {{ v('meter.clusters') }}
+clusters chosen by the silhouette on {{ v('meter.cluster_validation_households') }} validation
+households ({{ v('meter.silhouette_chosen') }}).
+
+{{ table('meter.silhouette_by_k') }}
+
+{{ label('meter.silhouette_by_k') }}
+
+{{ table('meter.clusters') }}
+
+{{ label('meter.clusters') }}
+
+The time of use analysis, pre-registered in `docs/tou_plan.md` (SHA-256
+`{{ v('meter.tou.plan_hash') }}`): {{ v('meter.tou.pairs') }} matched pairs from
+{{ v('meter.tou.dtou_households') }} dynamic tariff households and {{ v('meter.tou.std_pool') }}
+standard ones ({{ v('meter.tou.dropped') }} dropped), {{ v('meter.tou.events') }} high price events
+averaging {{ v('meter.tou.mean_event_hours') }} hours. Response {{ v('meter.tou.response_pct') }}
+({{ v('meter.tou.response_pct_lower') }} to {{ v('meter.tou.response_pct_upper') }}),
+{{ v('meter.tou.response_kwh') }} kWh per household per event ({{ v('meter.tou.response_kwh_lower') }} to
+{{ v('meter.tou.response_kwh_upper') }}); rebound {{ v('meter.tou.rebound_pct') }}
+({{ v('meter.tou.rebound_pct_lower') }} to {{ v('meter.tou.rebound_pct_upper') }}) in the three hours
+after; {{ v('meter.tou.types_rejected') }} of {{ v('meter.tou.types') }} event types different from
+zero after Benjamini-Hochberg.
+
+{{ table('meter.tou.by_type') }}
+
+{{ label('meter.tou.by_type') }}
+
+The cluster forecast: {{ v('meter.forecast.households') }} households
+({{ v('meter.forecast.household_share') }} of those profiled) over {{ v('meter.forecast.test_start') }}
+to {{ v('meter.forecast.test_end') }}, {{ v('meter.forecast.origins') }} origins, gbm without
+weather, shrinkage intensity {{ v('meter.forecast.shrinkage_intensity') }}; MinT
+{{ v('meter.forecast.mint_verdict_total') }} at the total and {{ v('meter.forecast.mint_verdict_clusters') }}
+at the clusters; coherence gaps bottom up {{ v('meter.forecast.coherence_gap.bottom_up') }} kWh, MinT
+{{ v('meter.forecast.coherence_gap.mint') }} kWh.
+
+{{ table('meter.forecast.by_level') }}
+
+{{ label('meter.forecast.by_level') }}
+
+{{ table('meter.peak.contribution') }}
+
+{{ label('meter.peak.contribution') }}
+
+## The registry and the live log
+
+Served: {{ v('registry.served') }} ({{ v('registry.served_reason') }}); latency source
+{{ v('registry.latency_source') }}.
+
+{{ table('registry.gates') }}
+
+{{ label('registry.gates') }}
+
+Deploy: {{ v('deploy.status') }} at {{ v('deploy.base_url') }}, checked from {{ v('deploy.client') }}
+at {{ v('deploy.checked_at') }}; {{ v('deploy.forecast_rows_read_back') }} rows read back, first hour
+median {{ v('deploy.median_first_hour_mw') }}, {{ v('deploy.scored_now') }} rows scored, unscored share
+{{ v('deploy.unscored_share') }}, {{ v('deploy.audit_entries') }} audit entries, audit before response
+{{ v('deploy.audit_before_response') }}, statement present {{ v('deploy.statement_present') }}.
+Live check: {{ v('live.status') }} at {{ v('live.checked_at') }} in {{ v('live.browser') }},
+{{ v('live.routes_loaded') }} of {{ v('live.routes_total') }} routes, forecast {{ v('live.forecast_id') }},
+first probe {{ v('live.first_probe_status') }}, recorded session shown with the API asleep:
+{{ v('live.asleep_recorded_session_shown') }}. Latency: {{ v('latency.measurements') }} measurement
+files; local p50 {{ v('latency.local.issue.p50_ms') }} and p99 {{ v('latency.local.issue.p99_ms') }}
+for issuing a forecast, p50 {{ v('latency.local.read.p50_ms') }} and p99
+{{ v('latency.local.read.p99_ms') }} for reading one back, over {{ v('latency.local.requests') }}
+requests; live {{ v('latency.live.status') }}.
+
+## Data
+
+{{ table('data.quarantine_by_authority') }}
+
+{{ label('data.quarantine_by_authority') }}
+
+{{ table('data.authorities') }}
+
+{{ label('data.authorities') }}
+
+## Limitations
+
+The weather the models saw is observed weather at the target hour, which a real day ahead
+forecast does not have; every error figure is a lower bound on live error and every win against
+the operator an upper bound for that reason, and the caveat is printed on every figure that uses
+it. The operator's forecast is compared only where its scope matches the demand series;
+{{ v('skill.not_comparable_authorities') }} authorities are excluded rather than counted. The
+hierarchy is EIA's assignment of authorities to regions and interconnections, and the remainder
+nodes are arithmetic devices rather than control areas. The detector's threshold was chosen on
+the simulator because the real validation year has no labelled events; the real test year's
+alerts are reported, not judged. The London panel is from 2011 to 2014, opted in, and the dynamic
+tariff group was recruited, not randomized; the meter forecast uses a fixed panel of
+{{ v('meter.forecast.households') }} households, hourly rather than half hourly because the
+forecasting interface is hourly, and no weather. The live scorecard scores against the committed
+actuals until the refresh job exists. The gbm backend trains on every
+{{ v('backtest.gbm.origin_day_thinning') }} origin days to fit the day's compute. Single machine,
+single region, free tiers throughout.

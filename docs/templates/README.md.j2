@@ -1,0 +1,140 @@
+{%- set b = v('registry.served') if v('registry.served') != 'none' else 'own' -%}
+# lookahead
+
+Demand forecasting for the U.S. power grid and the household meter: hourly demand for every
+balancing authority in the lower 48 with weather, forecast by two backends on one interface out
+to 48 hours with calibrated quantiles, graded by a rolling origin backtest against the seasonal
+naive and the operator's own day ahead forecast, reconciled across the hierarchy from the lower
+48 to the subregion, watched by an anomaly detector that separates demand events from data
+defects and is graded on known events, extended to the meter with five and a half thousand London
+households clustered by load shape and reconciled bottom up, served by a live API that stores
+every forecast it issues and scores it when the actuals arrive, with a registry, model cards, an
+operations review rendered from the manifest, and a control room site.
+
+Every one of the eighteen mandatory steps in the build order is done; the checklist below carries
+one line of evidence per item. Every dataset is used in full: {{ v('data.eia.balance_files') }}
+balance and {{ v('data.eia.subregion_files') }} subregion files from {{ v('data.eia.first_half') }}
+to {{ v('data.eia.latest_half') }}, every authority that reports demand
+({{ v('data.eia.demand_authorities') }} of {{ v('data.eia.authorities_in_files') }};
+{{ v('data.eia.generation_only_authorities') }} generation only authorities are listed and
+excluded by rule), and all {{ v('data.london.households') }} households of the London release.
+Two stated subsamples: the backtest keeps the {{ v('data.eia.backtest_authorities') }} authorities
+with at least {{ v('data.eia.minimum_window_coverage') }} clean demand coverage in both the
+validation and the test year, and the skill against the operator counts the
+{{ v('skill.comparable_authorities') }} of them whose published forecast is comparable in scope
+(median forecast to demand ratio within {{ v('data.eia.operator_ratio_band_low') }} to
+{{ v('data.eia.operator_ratio_band_high') }} in both years); the meter forecast uses the
+{{ v('meter.forecast.households') }} households that report through its whole window. The weather
+the models saw is observed weather, which a real day ahead forecast does not have; every figure
+that uses it says so.
+
+The API is live at {{ v('deploy.base_url') }} and was verified from a separate client
+({{ v('deploy.client') }}): health {{ v('deploy.health_status') }}, database
+{{ v('deploy.health_database') }}, a forecast issued for {{ v('deploy.authority') }} and its
+{{ v('deploy.forecast_rows_read_back') }} rows and scores read back through the API, audit row
+before the response: {{ v('deploy.audit_before_response') }}.
+
+Site: https://mekala27-45.github.io/lookahead/ (the control room, one page per authority,
+backtest, hierarchy, events, households, report). Memo: `report/operations-review.md`. Results
+and the checklist: `RESULTS.md`. Decisions: `DECISIONS.md`. Architecture: `ARCHITECTURE.md`.
+Runbook: `docs/runbook.md`.
+
+{{ statement() }}
+
+## The two numbers
+
+Over the test year, at horizons 1 to 24, the {{ b }} backend beat the operator's published day
+ahead forecast in {{ v('skill.' ~ b ~ '.h1_24.wins') }} of {{ v('skill.' ~ b ~ '.h1_24.authorities') }}
+comparable balancing authorities ({{ v('skill.' ~ b ~ '.h1_24.wins_lower') }} to
+{{ v('skill.' ~ b ~ '.h1_24.wins_upper') }} across bootstrap replicates of the test days) and lost
+to it in {{ v('skill.' ~ b ~ '.h1_24.losses') }} ({{ v('skill.' ~ b ~ '.h1_24.losses_lower') }} to
+{{ v('skill.' ~ b ~ '.h1_24.losses_upper') }}), with {{ v('skill.' ~ b ~ '.h1_24.ties') }} ties,
+after Benjamini-Hochberg across the authorities. Its 90 percent bands covered
+{{ v('backtest.' ~ b ~ '.coverage_90') }} of the hours they claimed and its 50 percent bands
+{{ v('backtest.' ~ b ~ '.coverage_50') }}. The losses are in the table with the wins.
+
+## What is here
+
+- **The grid, the weather and the meter.** EIA-930 hourly demand, the operator's day ahead
+  forecast, net generation and interchange for every balancing authority since
+  {{ v('data.eia.first_hour') }}, quarantined by named rules ({{ v('data.eia.quarantined_share') }}
+  of rows, nothing deleted); Open-Meteo hourly temperature and humidity at one stated location per
+  authority; the Low Carbon London release, {{ v('data.london.rows') }} half hourly readings from
+  {{ v('data.london.households') }} households, read into DuckDB.
+- **A simulator with known truth.** {{ v('sim.authorities') }} authorities in two regions with
+  {{ v('sim.subregions') }} subregions, a known temperature response, calendar effects, planted
+  events and a synthetic operator forecast whose skill is known, so the harness, the
+  reconciliation and the detector were proven on certainty first. The recovery study ran
+  {{ v('recovery.runs') }} runs over {{ v('recovery.conditions') }} conditions.
+- **Two backends on one interface.** `own`, a per authority ridge regression on Fourier terms,
+  heating and cooling degree hours with thresholds chosen on validation, holidays and lags at the
+  horizon's availability, with relative conformal quantiles; `gbm`, one global XGBoost over every
+  authority with quantile objectives and conformalized intervals, refit monthly. Baselines: the
+  seasonal naive at {{ v('policy.seasonal_naive_lag_hours') }} hours and the operator's forecast.
+  own MAPE {{ v('backtest.own.mape') }}, gbm MAPE {{ v('backtest.gbm.mape') }}, seasonal naive
+  {{ v('backtest.own.mape_naive') }}, operator {{ v('backtest.own.mape_operator') }} on the paired hours.
+- **Reconciliation as a product.** {{ v('hierarchy.nodes') }} nodes reconciled by bottom up, top
+  down and MinT with shrinkage, coherence checked to the megawatt; helped at
+  {{ v('hierarchy.helped_list') }}, hurt at {{ v('hierarchy.hurt_list') }}.
+- **Events told apart from defects.** A residual detector with a persistence rule and a threshold
+  chosen by stated costs, graded on {{ v('events.known.events') }} known events
+  ({{ v('events.known.detected') }} of {{ v('events.known.rows') }} rows detected) and on planted
+  events by condition.
+- **The meter.** {{ v('meter.clusters') }} load shape clusters, a pre-registered time of use
+  analysis (response {{ v('meter.tou.response_pct') }} during high price events against matched
+  standard households), a cluster forecast reconciled to the panel total, and the peak
+  contribution table a demand response program would target from.
+- **A forecast log on the live API.** Every forecast issued is stored with its model version and
+  origin and scored when actuals arrive; the scorecard reports the share still unscored.
+
+## The skills matrix
+
+| Skill | Where it lives |
+|---|---|
+| Time series forecasting | `packages/forecast`, the backtest page, notebook 01 |
+| Rolling origin backtesting | `packages/evaluation`, `docs/protocol.md` |
+| Point in time features, leakage control | `packages/features`, `tests/features`, the registry's leakage gate |
+| Probabilistic forecasting and calibration | the quantiles, `packages/forecast/conformal.py`, the reliability diagram |
+| Hierarchical forecasting, reconciliation | `packages/hierarchy`, the hierarchy page, notebook 02 |
+| Benchmarking against a production forecast | the operator skill table, `packages/registry/stages/skill.py` |
+| Weather driven demand modeling | `packages/weather`, the thresholds in `packages/forecast/own.py` |
+| Anomaly detection, event classification | `packages/events`, the events page, notebook 03 |
+| Simulation and known truth validation | `packages/sim`, the recovery study |
+| Clustering and segmentation | `packages/meter/clusters.py`, the load shape clusters |
+| Quasi experimental analysis | the time of use analysis, `docs/tou_plan.md` and its hash |
+| Gradient boosting at scale | the global gbm backend, `packages/forecast/gbm.py` |
+| Statistics | block bootstrap, Benjamini-Hochberg, coverage, `packages/evaluation` |
+| Data quality and quarantine | the quarantine rules and report, `packages/contracts` |
+| SQL and analytics engineering | the marts, DuckDB in `packages/meter/queries.py`, DuckDB-WASM on the site |
+| APIs, persistence, deployment | `packages/api`, `fly.toml`, `scripts/check_persistence.py`, `deploy/` |
+| Registry, gates, model cards | `packages/registry/gates.py`, `report/cards/` |
+| Visualization | `web/`, the validated palette, the tile map |
+| Communication | `report/operations-review.md`, the pushback paragraphs |
+| Data licensing and provenance | `data/PROVENANCE.md`, the three declared sources |
+
+## The checklist
+
+{% include "_checklist.md.j2" %}
+
+Stretch items, never counted toward the checklist: the refresh job (not done), forecast weather
+in place of observed weather (not done), a neural backend (not done), the published benchmark
+comparison (not done), the models, explore and simulator pages (not done), the containers in CI
+(Dockerfile.api is built by the deploy; a pipeline container is not done).
+
+## Running it
+
+`make data` reads the EIA files, the weather cache and the London release from
+`data/external/` (the Makefile prints the paths and the download commands); `make pipeline` runs
+every stage in order and writes `results/manifest.json`; `make render` renders every document from
+it; `make check` runs the gates, lint, types and tests; `make rederive` reruns the pipeline in a
+worktree and compares the manifests. The API runs with `uvicorn lookahead_api.main:app` against
+`DATABASE_URL`; `deploy/deploy.ps1` deploys it to Fly from a Windows machine and
+`deploy/verify.ps1` checks it from there. Writes to the API need the token; this is a
+demonstration, and the statement on every surface says so.
+
+## License
+
+Code under Apache 2.0 (`LICENSE`). Demand data from the U.S. Energy Information Administration
+is U.S. government work in the public domain; weather from Open-Meteo is CC BY 4.0; the Low
+Carbon London household data from UK Power Networks is CC BY 4.0 and is never committed raw.
+`data/PROVENANCE.md` names every file.

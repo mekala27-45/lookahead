@@ -1,0 +1,54 @@
+# Events and anomalies
+
+**Detection.** The residual of the day's own forecast at horizons 1 to 24 against the raw
+demand, as a share of the forecast, standardized per authority by the median and the scaled
+median absolute deviation of the same residual over the validation year (the own backend's
+expanding validation run, exported beside its conformal offsets). An hour is abnormal when the
+standardized residual passes the threshold or when a quarantine rule flagged its raw value. A run
+of at least {{ v('policy.alert_persistence_hours') }} consecutive abnormal hours is an alert; a run
+of flagged hours is an alert at any length, because a feed that reports a zero is a defect however
+short.
+
+**Classification.** A run that is at least half flagged, with normal neighbors, is a data defect;
+a run of unflagged hours past the threshold is a demand event. A zero from a dead feed is never
+a demand collapse (`tests/events`).
+
+**The operating point.** The threshold is chosen on the demonstration grid's validation year,
+where the simulator plants one event of each kind per authority, by the stated costs: a false
+alarm costs {{ v('policy.false_alarm_cost') }}, a missed load shed {{ v('policy.missed_event_cost') }},
+over the grid {{ v('policy.alert_threshold_grid') }}. Chosen: {{ v('events.threshold') }} (cost
+{{ v('events.validation_cost') }}), interior: {{ v('events.interior') }}. The real validation year has
+no labelled events, which is why the choice is made where the truth is known and the standardized
+scale is what carries it to the real grid.
+
+{{ table('events.operating_grid') }}
+
+{{ label('events.threshold') }}
+
+**Grading on the demonstration grid's test year.** Load sheds detected
+{{ v('events.sim.load_sheds_detected') }} of {{ v('events.sim.load_sheds') }}; defects recovered as
+defects {{ v('events.sim.defects_recovered') }} of {{ v('events.sim.defects') }}; defects called events
+{{ v('events.sim.defects_called_events') }}; false alarms {{ v('events.sim.false_alarms') }} among
+{{ v('events.sim.demand_alerts') }} demand event alerts. By condition and seed the recovery study
+repeats the choice and the grading inside each run.
+
+**The known events.** `data/known_events.csv`: {{ v('events.known.events') }} events in
+{{ v('events.known.rows') }} rows, each with an onset, an end and a citation. For each row the own
+backend is fit on the year before a window of ten days either side of the event, so the residuals
+in the window are those of a model that has seen nothing after each origin. Detected
+{{ v('events.known.detected') }} of {{ v('events.known.rows') }} ({{ v('events.known.recall') }}), median
+delay {{ v('events.known.median_delay_hours') }} hours; {{ v('events.known.false_alarms_outside') }}
+false alarms in {{ v('events.known.hours_outside') }} hours outside the events
+({{ v('events.known.false_alarms_per_1000_hours') }} per thousand hours). Missed:
+{{ v('events.known.missed_list') }}.
+
+{{ table('events.known.table') }}
+
+{{ label('events.known.table') }}
+
+**The real test year.** {{ v('events.test.alerts') }} alerts across {{ v('events.test.authorities') }}
+authorities ({{ v('events.test.demand_events') }} demand events, {{ v('events.test.data_defects') }}
+data defects), {{ v('events.test.alerts_per_1000_hours') }} per thousand hours; the median residual
+scale across authorities is {{ v('events.test.residual_scale_median') }}.
+
+{{ statement() }}

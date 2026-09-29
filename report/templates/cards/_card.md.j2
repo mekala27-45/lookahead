@@ -1,0 +1,40 @@
+{#- The shape every model card follows. A card sets `card`, `title` and each section with
+    {% set %}, sets `contract` from m.line calls, and includes this file. A section left unset,
+    or a contract line left out, stops the render: no card is published with a hole in it. -#}
+{% set lines = ['trained', 'timed', 'calibrated', 'useful', 'fair', 'gated', 'served', 'integrated', 'monitored', 'documented', 'bounded', 'validated', 'explainable at the decision'] %}
+{% for name in lines %}
+{% if contract is not defined or ('**' ~ name ~ '**') not in contract %}{{ missing(card ~ ' card: the contract line ' ~ name) }}{% endif %}
+{% endfor %}
+# Model card: {{ title }}
+
+Rendered from `results/manifest.json` by the claim gate; do not edit by hand. The contract below
+is the one `docs/serving.md` sets out, and every figure is a manifest value or table.
+
+## Intended use
+
+{{ (intended if intended is defined else missing(card ~ ' card: intended use'))|trim }}
+
+## Data and population
+
+{{ (data if data is defined else missing(card ~ ' card: data and population'))|trim }}
+
+## How it was fit
+
+{{ (fit if fit is defined else missing(card ~ ' card: how it was fit'))|trim }}
+
+## Metrics
+
+{{ (metrics if metrics is defined else missing(card ~ ' card: metrics'))|trim }}
+
+## The integration contract
+
+A ticked line is met. Any other line names what it is instead: partly met, not built, or not
+applicable, with the reason.
+
+{{ contract|trim }}
+
+## Limitations
+
+{{ (limitations if limitations is defined else missing(card ~ ' card: limitations'))|trim }}
+
+{{ statement() }}

@@ -1,0 +1,18 @@
+{#- The memo as a standalone HTML page: the Markdown form, converted by the markdown filter, in a
+    page that fetches nothing (the stylesheet is inlined and the fonts are a local stack). -#}
+{% set body %}{% include "operations-review.md.j2" %}{% endset %}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>lookahead operations review, as of {{ manifest.as_of }}</title>
+<style>
+{{ inline('report/templates/_memo.css') }}
+</style>
+</head>
+<body>
+<main class="memo">
+{{ body | markdown }}</main>
+</body>
+</html>

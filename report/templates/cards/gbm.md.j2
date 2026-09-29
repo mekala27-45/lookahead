@@ -1,0 +1,72 @@
+{%- set card = 'gbm' -%}
+{%- set title = 'gbm, the global gradient boosted backend' -%}
+{% set intended %}
+The gbm backend forecasts hourly demand for every balancing authority in the backtest with one
+model, 1 to {{ v('policy.horizons') }} hours after a daily origin at {{ v('policy.issue_hour_utc') }}:00
+UTC, with quantiles at {{ v('policy.quantile_levels') }}. It is one of the two candidates the
+registry judges. It is meant for the demonstration of a day ahead process on EIA-930 data. It is
+not meant for grid operations, for authorities outside the backtest, for horizons past two days, or
+for a live desk that has a weather forecast rather than the weather that happened.
+{% endset %}
+{% set data %}
+The same panel as own: EIA-930 hourly demand for the {{ v('data.eia.backtest_authorities') }} backtest
+authorities with Open-Meteo observed weather, training from {{ v('data.windows.training_start') }},
+validation from {{ v('data.windows.validation_start') }}, test {{ v('data.windows.test_start') }} to
+{{ v('data.windows.test_end') }}, with the authority and its region as categorical features.
+{% endset %}
+{% set fit %}
+One XGBoost booster with the quantile objective at the five served levels, on the same ratio target
+and point in time features as own plus the authority and region codes, trained on every
+{{ v('backtest.gbm.origin_day_thinning') }} origin days of the previous {{ v('policy.gbm_training_window_days') }}
+days and refit at the start of every calendar month of the test year ({{ v('backtest.gbm.refits') }}
+refits: {{ v('backtest.gbm.refit_dates') }}; {{ v('backtest.gbm.training_rows_calibration') }} rows in the
+calibration fit). Intervals conformalized per {{ v('policy.conformal_horizon_bucket_hours') }} hour
+bucket on the validation year ({{ v('backtest.gbm.calibration_rows') }} calibration rows). The
+backtest took {{ v('backtest.gbm.run_seconds') }} seconds over {{ v('backtest.gbm.origins') }} origins.
+LightGBM was the brief's choice and the first implementation; its quantile objective refit too
+slowly for the day and XGBoost's vector quantile objective replaced it (`DECISIONS.md`). Version
+`{{ v('registry.gbm.version') }}`.
+{% endset %}
+{% set metrics %}
+| | Value | Interval |
+|---|---:|---:|
+| MAPE, all horizons | {{ v('backtest.gbm.mape') }} | {{ v('backtest.gbm.mape_lower') }} to {{ v('backtest.gbm.mape_upper') }} |
+| Seasonal naive MAPE | {{ v('backtest.gbm.mape_naive') }} | |
+| Operator MAPE, paired hours | {{ v('backtest.gbm.mape_operator') }} | |
+| MASE | {{ v('backtest.gbm.mase') }} | {{ v('backtest.gbm.mase_lower') }} to {{ v('backtest.gbm.mase_upper') }} |
+| CRPS | {{ v('backtest.gbm.crps') }} | {{ v('backtest.gbm.crps_lower') }} to {{ v('backtest.gbm.crps_upper') }} |
+| 90 percent coverage, test | {{ v('backtest.gbm.coverage_90') }} | {{ v('backtest.gbm.coverage_90_lower') }} to {{ v('backtest.gbm.coverage_90_upper') }} |
+| 90 percent coverage, validation | {{ v('backtest.gbm.validation_coverage_90') }} | |
+| Wins against the operator, horizons 1 to 24 | {{ v('skill.gbm.h1_24.wins') }} of {{ v('skill.gbm.h1_24.authorities') }} | {{ v('skill.gbm.h1_24.wins_lower') }} to {{ v('skill.gbm.h1_24.wins_upper') }} |
+| Losses against the operator | {{ v('skill.gbm.h1_24.losses') }} | {{ v('skill.gbm.h1_24.losses_lower') }} to {{ v('skill.gbm.h1_24.losses_upper') }} |
+| Median peak timing error | {{ v('backtest.gbm.peaks.model_timing_median') }} h | |
+
+{{ label('backtest.gbm.mape') }}
+
+{{ table('backtest.gbm.importance') }}
+
+{{ label('backtest.gbm.importance') }}
+{% endset %}
+{% set contract %}
+- [x] **trained**: a calibration fit before the validation year and {{ v('backtest.gbm.refits') }} monthly refits through the test year.
+- [x] **timed**: {{ v('backtest.gbm.run_seconds') }} seconds for the backtest, {{ v('backtest.gbm.origins_per_minute') }} origins a minute on CPU.
+- [x] **calibrated**: conformalized intervals on the validation year; 90 percent coverage {{ v('backtest.gbm.validation_coverage_90') }} on validation and {{ v('backtest.gbm.coverage_90') }} on test.
+- [x] **useful**: MAPE {{ v('backtest.gbm.mape') }} against the seasonal naive's {{ v('backtest.gbm.mape_naive') }}; wins against the operator in {{ v('skill.gbm.h1_24.wins') }} authorities.
+- [ ] **fair**: not applicable in the sense of protected groups; the comparability rule keeps the operator comparison honest per authority.
+- [x] **gated**: {{ v('registry.gbm.gates_passed') }} of {{ v('registry.gates') }} gates passed ({{ v('registry.gbm.passed') }}).
+- [x] **served**: the export `results/models/gbm_model.json` with its booster is what the API loads when the registry names gbm; the registry's choice is {{ v('registry.served') }}.
+- [x] **integrated**: the same `POST /v1/forecasts` route serves whichever export the registry names.
+- [x] **monitored**: the forecast log and scorecard as for own.
+- [x] **documented**: this card, `docs/protocol.md`.
+- [x] **bounded**: the intended use above; every {{ v('backtest.gbm.origin_day_thinning') }} origin days in training, stated.
+- [x] **validated**: the cross check against own on the same rows ({{ v('skill.crosscheck.disagreements') }} disagreements on the operator) and the leakage check shared with own.
+- [x] **explainable at the decision**: the feature importance table above and the per row quantiles stored with every issued forecast.
+{% endset %}
+{% set limitations %}
+Observed weather, as for own. A global model pools authorities that behave differently; the
+authority code is a categorical feature, not a separate model. Training on every
+{{ v('backtest.gbm.origin_day_thinning') }} origin days was a compute decision for the day and is
+stated. The monthly refit is a stated schedule, not a data driven one. The booster is the last
+refit's, so the API forecasts with a model fit at the start of the last test month.
+{% endset %}
+{% include "cards/_card.md.j2" %}

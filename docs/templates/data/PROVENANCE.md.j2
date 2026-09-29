@@ -1,0 +1,55 @@
+# Provenance
+
+Rendered from the manifest; every count below is a manifest value. Three sources, each named
+with its terms; the raw London file is never committed.
+
+## EIA-930, the Hourly Electric Grid Monitor
+
+Publisher: U.S. Energy Information Administration, https://www.eia.gov/electricity/gridmonitor/.
+Files: every six month `EIA930_BALANCE_<year>_<Jan_Jun|Jul_Dec>.csv` and
+`EIA930_SUBREGION_<year>_<Jan_Jun|Jul_Dec>.csv` from {{ v('data.eia.first_half') }} to
+{{ v('data.eia.latest_half') }} ({{ v('data.eia.balance_files') }} balance files,
+{{ v('data.eia.subregion_files') }} subregion files), downloaded from
+`https://www.eia.gov/electricity/gridmonitor/sixMonthFiles/` without a key. Terms: U.S. government
+work in the public domain. Columns used: the balancing authority, the UTC hour, demand, the day
+ahead demand forecast, net generation, total interchange, and the subregion demand. Derived and
+committed: `data/eia930/hourly.parquet` ({{ v('data.eia.panel_rows') }} rows, the raw demand with
+every quarantine flag), `subregions.parquet`, `quarantine.parquet`, `subregion_gap.parquet`,
+`authorities.csv`, `windows.json`, and `data/hierarchy.csv` ({{ v('data.hierarchy.nodes') }} nodes).
+Authorities in the files: {{ v('data.eia.authorities_in_files') }}, of which
+{{ v('data.eia.demand_authorities') }} report demand and {{ v('data.eia.generation_only_authorities') }}
+are generation only ({{ v('data.eia.generation_only_list') }}). Revisions where a later file
+changed an earlier hour: {{ v('data.eia.revisions') }} (the later value kept).
+
+## Open-Meteo historical weather
+
+Publisher: Open-Meteo, https://open-meteo.com/, the historical weather API (ERA5 and its
+successors), pulled once per authority location and year range without a key and cached under
+`data/external/weather/`. Terms: CC BY 4.0, attribution "Weather data by Open-Meteo.com".
+Locations: `data/locations.csv`, one stated location per authority with the reason for the choice.
+Committed: `data/weather/hourly.parquet` ({{ v('data.weather.rows') }} rows for
+{{ v('data.weather.authorities') }} authorities, {{ v('data.weather.first_hour') }} to
+{{ v('data.weather.last_hour') }}, {{ v('data.weather.null_temperatures') }} null temperatures) and
+`data/weather/ATTRIBUTION.md`.
+
+## Low Carbon London
+
+Publisher: UK Power Networks on the London Datastore, "SmartMeter Energy Consumption Data in
+London Households", https://data.london.gov.uk/dataset/smartmeter-energy-use-data-in-london-households.
+Files: the consolidated half hourly CSV (in `LCL-FullData.zip`) and the 2013 dynamic time of use
+tariff schedule (`Tariffs.xlsx`), fetched by `make data` into `data/external/london/` and never
+committed. Terms: CC BY 4.0. Read in full into DuckDB: {{ v('data.london.rows') }} readings from
+{{ v('data.london.households') }} households ({{ v('data.london.tou_households') }} on the dynamic
+tariff, {{ v('data.london.std_households') }} standard), {{ v('data.london.first') }} to
+{{ v('data.london.last') }}; {{ v('data.london.null_readings') }} null readings,
+{{ v('data.london.duplicate_readings') }} duplicated readings and {{ v('data.london.missing_half_hours') }}
+missing half hours found by the checks. Only cluster level, event level and per household count
+tables are committed under `results/meter/`; no household identifier leaves the machine.
+
+## The simulator
+
+`data/sim/` holds the demonstration seed of the synthetic grid: {{ v('sim.authorities') }}
+authorities, {{ v('sim.subregions') }} subregions, {{ v('sim.hours') }} hours, {{ v('sim.planted_events') }}
+planted events, the truth table and the specification. It is generated, not sourced.
+
+{{ statement() }}

@@ -1,0 +1,40 @@
+# The forecasting protocol
+
+Origins daily at {{ v('policy.issue_hour_utc') }}:00 UTC; horizons 1 to {{ v('policy.horizons') }};
+the test period the last {{ v('policy.test_months') }} months, validation the
+{{ v('policy.validation_months') }} before, training everything earlier. `own` expands at every
+origin (an incremental Gram matrix, one solve per origin); `gbm` refits at the start of every
+calendar month of the test year on the previous {{ v('policy.gbm_training_window_days') }} days,
+training on every {{ v('backtest.gbm.origin_day_thinning') }} origin days.
+
+**Features at availability.** Ratios to the scale (the mean of the week ending at the origin):
+the same hour lag at 24 or 48 hours, the week and two week lags, the origin value, the mean of the
+last 24 hours; calendar terms (daily, weekly and yearly Fourier terms, day type, holidays from the
+`holidays` package for the United States); heating and cooling degree hours against thresholds
+chosen per authority on validation from {{ v('policy.heating_thresholds') }} C (heating) and
+{{ v('policy.cooling_thresholds') }} C (cooling), scaled by the authority's typical demand, and the
+change in degree hours against the same hour lag; relative humidity; a missing weather indicator.
+
+**Quantiles.** Levels {{ v('policy.quantile_levels') }}. `own`: relative conformal residual
+quantiles per {{ v('policy.conformal_horizon_bucket_hours') }} hour horizon bucket, calibrated on
+the validation year's expanding run. `gbm`: five quantile outputs from one booster, conformalized
+per bucket on validation. The served levels get the interior test: a level whose empirical
+coverage sits at zero or one hundred on validation is degenerate and the page says so.
+
+**Metrics** per authority, horizon and local hour, aggregated with block bootstrap intervals over
+test days ({{ v('policy.bootstrap_block_days') }} day blocks, {{ v('policy.bootstrap_replicates') }}
+replicates, {{ v('policy.interval_level') }} level) and Benjamini-Hochberg at q {{ v('policy.bh_q') }}
+across authorities in every family.
+
+**Skill against the operator.** Per authority, horizons 1 to 24, the model's MAPE against the
+operator's on the same target hours, the paired bootstrap interval and the block sign flip p value;
+wins, losses and ties after correction. Authorities are comparable only when the median forecast
+to demand ratio sits within {{ v('data.eia.operator_ratio_band_low') }} to
+{{ v('data.eia.operator_ratio_band_high') }} in both the validation and the test year.
+
+**Sort before any seeded step.** Every draw is taken in a stated order
+(`lookahead_core.seeds.rng`), and the manifest is identical under two PYTHONHASHSEED values.
+
+{{ v('backtest.own.weather_caveat') }}
+
+{{ statement() }}

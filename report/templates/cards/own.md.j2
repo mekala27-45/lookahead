@@ -1,0 +1,79 @@
+{%- set card = 'own' -%}
+{%- set title = 'own, the per authority ridge backend' -%}
+{% set intended %}
+The own backend forecasts hourly demand for each of the {{ v('backtest.own.authorities') }} balancing
+authorities in the backtest, 1 to {{ v('policy.horizons') }} hours after a daily origin at
+{{ v('policy.issue_hour_utc') }}:00 UTC, with quantiles at {{ v('policy.quantile_levels') }}. It is one
+of the two candidates the registry judges and the fallback the API serves when no candidate clears
+every gate. It is meant for the demonstration of a day ahead process on EIA-930 data and for the
+detector's residuals. It is not meant for grid operations, for any authority it was not fit on, for
+horizons past two days, or for a live desk that has a weather forecast rather than the weather that
+happened.
+{% endset %}
+{% set data %}
+EIA-930 hourly demand from {{ v('data.eia.first_hour') }} to {{ v('data.eia.last_hour') }} for the
+{{ v('data.eia.backtest_authorities') }} authorities with at least {{ v('data.eia.minimum_window_coverage') }}
+clean coverage in both the validation and the test year, quarantined by named rules
+({{ v('data.eia.quarantined_share') }} of rows), with Open-Meteo hourly temperature and humidity at
+one stated location per authority (observed weather, stated on every figure). Training from
+{{ v('data.windows.training_start') }}, validation from {{ v('data.windows.validation_start') }}, test
+{{ v('data.windows.test_start') }} to {{ v('data.windows.test_end') }}.
+{% endset %}
+{% set fit %}
+Per authority, a ridge regression of the ratio of demand to the scale (the mean of the week ending
+at the origin) on Fourier terms (daily, weekly, yearly), day type and holiday dummies, lags at the
+horizon's availability, heating and cooling degree hours against thresholds chosen on the validation
+year from {{ v('backtest.own.threshold_candidates') }} candidate pairs, and their change against the
+same hour lag, with the ridge penalty chosen on validation from {{ v('policy.ridge_penalties') }}
+({{ v('backtest.own.search_fits') }} static fits in the search); then an expanding fit over every
+origin through an incremental Gram matrix ({{ v('backtest.own.fits') }} solves over
+{{ v('backtest.own.origins') }} origins in {{ v('backtest.own.fit_seconds') }} seconds of fitting and
+{{ v('backtest.own.predict_seconds') }} of prediction). Quantiles by relative conformal residual
+quantiles per {{ v('policy.conformal_horizon_bucket_hours') }} hour horizon bucket, calibrated on the
+validation year. Chosen on validation: {{ v('backtest.own.chosen_on_validation') }}. Version
+`{{ v('registry.own.version') }}`.
+{% endset %}
+{% set metrics %}
+| | Value | Interval |
+|---|---:|---:|
+| MAPE, all horizons | {{ v('backtest.own.mape') }} | {{ v('backtest.own.mape_lower') }} to {{ v('backtest.own.mape_upper') }} |
+| Seasonal naive MAPE | {{ v('backtest.own.mape_naive') }} | |
+| Operator MAPE, paired hours | {{ v('backtest.own.mape_operator') }} | |
+| MASE | {{ v('backtest.own.mase') }} | {{ v('backtest.own.mase_lower') }} to {{ v('backtest.own.mase_upper') }} |
+| CRPS | {{ v('backtest.own.crps') }} | {{ v('backtest.own.crps_lower') }} to {{ v('backtest.own.crps_upper') }} |
+| 90 percent coverage, test | {{ v('backtest.own.coverage_90') }} | {{ v('backtest.own.coverage_90_lower') }} to {{ v('backtest.own.coverage_90_upper') }} |
+| 90 percent coverage, validation | {{ v('backtest.own.validation_coverage_90') }} | |
+| Wins against the operator, horizons 1 to 24 | {{ v('skill.own.h1_24.wins') }} of {{ v('skill.own.h1_24.authorities') }} | {{ v('skill.own.h1_24.wins_lower') }} to {{ v('skill.own.h1_24.wins_upper') }} |
+| Losses against the operator | {{ v('skill.own.h1_24.losses') }} | {{ v('skill.own.h1_24.losses_lower') }} to {{ v('skill.own.h1_24.losses_upper') }} |
+| Median peak timing error | {{ v('backtest.own.peaks.model_timing_median') }} h | |
+
+{{ label('backtest.own.mape') }}
+
+On the simulator with known truth, the heating and cooling thresholds are recovered within 2 C in
+{{ v('recovery.base.own.thresholds_within_2c') }} of authorities on the base condition and the 90
+percent coverage is {{ v('recovery.base.own.coverage_90') }}; the holiday effect's absolute error is
+{{ v('recovery.base.own.holiday_effect_abs_error') }}.
+{% endset %}
+{% set contract %}
+- [x] **trained**: fit through the validation year and refit at every test origin; {{ v('backtest.own.fits') }} solves.
+- [x] **timed**: {{ v('backtest.own.run_seconds') }} seconds for the backtest, {{ v('backtest.own.origins_per_minute') }} origins a minute on CPU.
+- [x] **calibrated**: conformal offsets on the validation year; 90 percent coverage {{ v('backtest.own.validation_coverage_90') }} on validation and {{ v('backtest.own.coverage_90') }} on test.
+- [x] **useful**: beats the seasonal naive ({{ v('backtest.own.mape') }} against {{ v('backtest.own.mape_naive') }}) and the operator in {{ v('skill.own.h1_24.wins') }} authorities.
+- [ ] **fair**: not applicable in the sense of protected groups; the comparability rule keeps the operator comparison honest per authority, which is the fairness this model can offer.
+- [x] **gated**: {{ v('registry.own.gates_passed') }} of {{ v('registry.gates') }} gates passed ({{ v('registry.own.passed') }}); the table is in `RESULTS.md`.
+- [x] **served**: the export `results/models/own_model.json` is what the API loads when the registry names own or when no candidate passes; the registry's choice is {{ v('registry.served') }}.
+- [x] **integrated**: `POST /v1/forecasts` issues from the served export; the site's authority pages issue through it.
+- [x] **monitored**: every issued forecast is stored and scored when actuals arrive; the scorecard reports the unscored share.
+- [x] **documented**: this card, `docs/protocol.md`, `docs/definitions.md`.
+- [x] **bounded**: the intended use above; observed weather, two day horizon, the authorities it was fit on.
+- [x] **validated**: proven on the simulator first (thresholds recovered, coverage against nominal) and on {{ v('recovery.runs') }} recovery runs.
+- [x] **explainable at the decision**: every coefficient is in `results/backtest/own/coefficients.parquet` and the chosen thresholds per authority in the manifest.
+{% endset %}
+{% set limitations %}
+Observed weather at the target hour stands in for a weather forecast, so the error is a lower
+bound on a live desk's and the wins against the operator an upper bound. One model per authority
+learns nothing across authorities. The threshold search is a grid; the temperature response is a
+hinge, not a spline. The conformal offsets are frozen at the end of the validation year and do not
+adapt through the test year. The degenerate level count is {{ v('backtest.own.degenerate_levels') }}.
+{% endset %}
+{% include "cards/_card.md.j2" %}
