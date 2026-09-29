@@ -56,9 +56,10 @@ forecast at or below zero and counts it.
 
 The free Neon allowance is one project. The marginal build's API already lives in it. Rather than
 create a second project or collide on `audit_log`, the deploy uses `DATABASE_URL` with
-`LOOKAHEAD_DB_SCHEMA=lookahead`: Alembic creates the schema and every connection searches it first,
-so the SQL stays unqualified and the two projects never touch each other's tables.
-`LOOKAHEAD_DATABASE_URL`, when set, gives the API a database of its own instead.
+`LOOKAHEAD_DB_SCHEMA=lookahead`: Alembic creates the schema and the API's engines qualify every
+table name with it (see the entry below on why the search path was not enough), so the two
+projects never touch each other's tables. `LOOKAHEAD_DATABASE_URL`, when set, gives the API a
+database of its own instead.
 
 ## 2026-09-29: reversal, the palette moved five slots
 
@@ -116,3 +117,13 @@ build time. The site fetches nothing from any host but its own.
 Each backend's prediction and scoring frames run to tens of megabytes; three backends and a
 rederive would have doubled the repository. The summaries, the manifests, the model exports, the
 serving bundle and the marts are committed; `make backtest` rebuilds the frames.
+
+## 2026-09-29: the schema goes in the SQL, not in the connection's search path
+
+The first deploy set `search_path` through the `options` startup parameter on every connection.
+Locally that works; the hosted database's proxy dropped the parameter, so Alembic created the
+tables in the schema (its migration sets the search path with a statement) and the API, searching
+`public`, answered that `forecasts` did not exist. The health check said only "unreachable" and
+logged nothing, which is now also fixed. The engines use SQLAlchemy's `schema_translate_map`
+instead, so every emitted table name carries the schema whatever the connection's search path
+says, and the test resets the search path to `public` before reading the rows back.

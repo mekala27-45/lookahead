@@ -87,20 +87,24 @@ class AuditEntry(SQLModel, table=True):
     detail: dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
 
 
-def connect_args(schema: str = "") -> dict[str, Any]:
-    """With a schema, every connection searches it first, so the tables live there and the SQL
-    stays unqualified."""
+def schema_options(schema: str = "") -> dict[str, Any]:
+    """With a schema, every table name the engine emits is qualified with it, so the tables live
+    there whatever the connection's search path says. The first deploy set the search path through
+    the `options` startup parameter instead, which the hosted database's proxy dropped: the tables
+    were created in the schema and the API could not see them."""
     if not schema:
         return {}
-    return {"options": f"-c search_path={schema},public"}
+    return {"schema_translate_map": {None: schema}}
 
 
 def make_async_engine(url: str, schema: str = "") -> AsyncEngine:
-    return create_async_engine(url, pool_pre_ping=True, connect_args=connect_args(schema))
+    engine = create_async_engine(url, pool_pre_ping=True)
+    return engine.execution_options(**schema_options(schema)) if schema else engine
 
 
 def make_engine(url: str, schema: str = "") -> Any:
-    return create_engine(url, pool_pre_ping=True, connect_args=connect_args(schema))
+    engine = create_engine(url, pool_pre_ping=True)
+    return engine.execution_options(**schema_options(schema)) if schema else engine
 
 
 def ensure_schema(url: str, schema: str) -> None:

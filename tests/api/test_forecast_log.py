@@ -166,7 +166,7 @@ def test_schema_setting_keeps_the_tables_apart(database_url: str, results: Path)
     """With LOOKAHEAD_DB_SCHEMA the tables live in that schema, so the API can share the one
     free Neon database with another project's tables without touching them."""
     import psycopg
-    from lookahead_api.db import SQLModel, ensure_schema, make_engine
+    from lookahead_api.db import Forecast, SQLModel, ensure_schema, make_engine
     from lookahead_api.settings import Settings
 
     schema = "lookahead_schema_test"
@@ -187,6 +187,18 @@ def test_schema_setting_keeps_the_tables_apart(database_url: str, results: Path)
     with psycopg.connect(plain_url(database_url)) as conn, conn.cursor() as cur:
         cur.execute(f"select count(*) from {schema}.forecasts")
         assert cur.fetchone() == (1,)
+    # The hosted database's proxy drops the `options` startup parameter, so the schema must be in
+    # the SQL itself: a connection whose search path does not name the schema still finds the rows.
+    from sqlalchemy import text
+    from sqlmodel import Session, select
+
+    engine = make_engine(database_url, schema)
+    with Session(engine) as session:
+        session.exec(text("set search_path to public"))  # type: ignore[call-overload]
+        found = session.exec(select(Forecast)).all()
+        assert [f.forecast_id for f in found] == [issued.json()["forecast_id"]]
+    engine.dispose()
+    with psycopg.connect(plain_url(database_url)) as conn, conn.cursor() as cur:
         cur.execute(
             "select table_schema from information_schema.tables where table_name = 'forecasts' order by 1"
         )

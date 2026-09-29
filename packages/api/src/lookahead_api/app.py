@@ -13,6 +13,7 @@ statement. Every write goes: the rows, then the audit row, then commit, then the
 from __future__ import annotations
 
 import json
+import logging
 import uuid
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -35,6 +36,8 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from lookahead_api.db import AuditEntry, Forecast, ForecastRow, ModelRow, Score, make_async_engine
 from lookahead_api.settings import Settings, load_settings
+
+log = logging.getLogger("lookahead_api")
 
 
 def envelope(data: dict[str, Any]) -> dict[str, Any]:
@@ -144,7 +147,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         database = "ok"
         try:
             await session.exec(select(Forecast.id).limit(1))
-        except Exception:
+        except Exception as exc:  # the reason goes to the server log, never to the client
+            log.warning("health: the database is unreachable: %s: %s", type(exc).__name__, exc)
             database = "unreachable"
         return envelope(
             {

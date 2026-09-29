@@ -18,7 +18,9 @@ the planted identifier scan and the claim gate's whole file diff.
 **API.** `uvicorn lookahead_api.main:app` against `DATABASE_URL`; `alembic upgrade head` in
 `packages/api`. Deploy: `deploy/deploy.ps1` from a Windows machine (or `deploy/deploy.sh`), then
 `deploy/verify.ps1` for the separate client check, `deploy/replay.ps1` to fill the log,
-`deploy/reset.ps1` to clear what the checks issued, `deploy/refresh.ps1` after a new backtest.
+`deploy/reset.ps1` to clear what the checks issued, `deploy/refresh.ps1` after a new backtest,
+`deploy/logs.ps1` to read the server's recent log tail (redacted) when the health check says
+the database is unreachable.
 
 **Site.** `cd web && npm ci && npm run build`; `npm run build:e2e && npm run test:e2e` runs
 Playwright against the test server that refuses HEAD and answers a first 503. Pages deploys from

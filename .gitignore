@@ -41,6 +41,7 @@ web/src/app/tokens.css
 deploy/live-url.txt
 deploy/write-token.txt
 deploy/*-log.txt
+deploy/fly-logs.txt
 deploy/reset-result.json
 
 # Backtest prediction and scoring frames: tens of megabytes per backend, rebuilt by `make backtest`;
