@@ -1,0 +1,31 @@
+{%- set b = v('registry.served') if v('registry.served') != 'none' else 'own' -%}
+# lookahead v0.1.0
+
+Demand forecasting for the U.S. power grid and the household meter, built in one working day
+and graded in public against the operator's own day ahead forecast.
+
+- Every balancing authority in the lower 48 that reports demand, {{ v('data.eia.balance_files') }}
+  six month EIA-930 files from {{ v('data.eia.first_half') }} to {{ v('data.eia.latest_half') }},
+  quarantined by named rules; observed weather from Open-Meteo, stated on every figure that uses it.
+- Two backends on one interface, `own` (per authority ridge with conformal quantiles) and `gbm`
+  (one global XGBoost with quantile objectives), graded by a rolling origin backtest with the
+  seasonal naive and the operator in every table. The {{ b }} backend beat the operator in
+  {{ v('skill.' ~ b ~ '.h1_24.wins') }} of {{ v('skill.' ~ b ~ '.h1_24.authorities') }} comparable
+  authorities at horizons 1 to 24 and lost in {{ v('skill.' ~ b ~ '.h1_24.losses') }}; its 90
+  percent bands covered {{ v('backtest.' ~ b ~ '.coverage_90') }} of the hours.
+- {{ v('hierarchy.nodes') }} nodes reconciled by bottom up, top down and MinT, coherent to the
+  megawatt; helped at {{ v('hierarchy.helped_list') }}, hurt at {{ v('hierarchy.hurt_list') }}.
+- A detector that tells demand events from data defects, graded on {{ v('events.known.events') }}
+  known events ({{ v('events.known.detected') }} of {{ v('events.known.rows') }} rows detected) and on
+  planted events by condition.
+- The meter: {{ v('meter.households_profiled') }} London households in {{ v('meter.clusters') }} load
+  shape clusters, a pre-registered time of use analysis (response {{ v('meter.tou.response_pct') }}),
+  and a cluster forecast reconciled to the panel total.
+- A live forecast log on Fly with Neon ({{ v('deploy.base_url') }}), verified from a separate
+  client, and a control room on GitHub Pages that works from a recorded session when the API is
+  asleep. The test server refuses HEAD and answers a first 503, as the hosts do.
+- The recovery study on a simulator with known truth ({{ v('recovery.runs') }} runs), the rederive
+  in a worktree with every published figure compared, and the eighteen step checklist in
+  `RESULTS.md`.
+
+{{ statement() }}
