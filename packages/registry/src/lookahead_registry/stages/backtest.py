@@ -23,6 +23,7 @@ from lookahead_evaluation.summary import Summary, summarise
 from lookahead_forecast.baselines import SeasonalNaiveForecaster
 from lookahead_forecast.interface import QUANTILE_COLUMNS, Forecaster, ForecastSpec, PanelData
 from lookahead_forecast.own import OwnForecaster
+from lookahead_forecast.serve import export_gbm, export_own, write_bundle
 
 from lookahead_registry.stages.data import load_panel, load_windows
 
@@ -145,8 +146,12 @@ def run(
     _write_summary(w, prefix, summary, result, seconds)
     if backend == "own" and result.fitted is not None:
         _own_choices(w, prefix, result.fitted, data, folder)
+        export_own(result.fitted, data, spec, paths.results / "models" / "own_model.json")
     if backend == "gbm" and result.fitted is not None:
         _gbm_details(w, prefix, result.fitted, folder)
+        export_gbm(result.fitted, data, spec, paths.results / "models" / "gbm_model.json")
+    if result.fitted is not None and backend in ("own", "gbm"):
+        write_bundle(data, paths.results / "models" / "serving_bundle.parquet")
     if result.fitted is None and (folder / "details.json").exists():
         _replay_details(w, prefix, folder)
     elif result.fitted is not None:
