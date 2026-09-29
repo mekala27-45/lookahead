@@ -116,6 +116,15 @@ def meter() -> None:
 
 
 @app.command()
+def registry() -> None:
+    """Every candidate backend through the seven gates; the served model chosen."""
+    from lookahead_registry.stages import registry as stage
+
+    manifest = stage.run(paths(), as_of(), DEMONSTRATION_SEED)
+    typer.echo(f"registry: {manifest.counts()}")
+
+
+@app.command()
 def manifest() -> None:
     """Merge every stage manifest into results/manifest.json."""
     from lookahead_registry.stages import assemble
