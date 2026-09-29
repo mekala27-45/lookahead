@@ -39,3 +39,46 @@ def test_check_persistence_starts_a_server_and_reads_back_independently(
     assert proc.returncode == 0, proc.stdout + proc.stderr
     assert "read back from outside the server process" in proc.stdout
     assert '"audit_before_response": true' in proc.stdout
+
+
+def test_migration_into_a_schema_ignores_another_projects_version_table(database_url: str) -> None:
+    """The one free database is shared with another project whose alembic version table sits in
+    public at the same revision id. The migration must keep its own version table in the schema
+    and create the tables there, rather than reading the other project's revision through the
+    search path and doing nothing (which is what the first deploy did)."""
+    import psycopg
+
+    from tests.api.conftest import plain_url
+
+    schema = "lookahead_alembic_test"
+    with psycopg.connect(plain_url(database_url), autocommit=True) as conn, conn.cursor() as cur:
+        cur.execute(f"drop schema if exists {schema} cascade")
+        cur.execute("create table if not exists public.alembic_version (version_num varchar(32) primary key)")
+        cur.execute("delete from public.alembic_version")
+        cur.execute("insert into public.alembic_version (version_num) values ('0001')")
+    env = {**os.environ, "DATABASE_URL": database_url, "LOOKAHEAD_DB_SCHEMA": schema}
+    proc = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "alembic",
+            "-c",
+            str(ROOT / "packages" / "api" / "alembic.ini"),
+            "upgrade",
+            "head",
+        ],
+        cwd=ROOT / "packages" / "api",
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    with psycopg.connect(plain_url(database_url), autocommit=True) as conn, conn.cursor() as cur:
+        cur.execute(
+            "select table_name from information_schema.tables where table_schema = %s order by 1", (schema,)
+        )
+        tables = [r[0] for r in cur.fetchall()]
+        cur.execute("drop table public.alembic_version")
+        cur.execute(f"drop schema {schema} cascade")
+    assert "forecasts" in tables and "alembic_version" in tables, tables

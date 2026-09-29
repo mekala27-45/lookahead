@@ -25,11 +25,16 @@ def run_migrations_online() -> None:
     with connectable.connect() as connection:
         if SCHEMA:
             # The tables and alembic's own version table live in the schema, so another project's
-            # tables in the same database are never touched.
+            # tables in the same database are never touched. The version table is named with the
+            # schema: looked up through the search path it would fall through to another
+            # project's `public.alembic_version`, and a revision id shared between two projects
+            # ("0001") would tell alembic there is nothing to do.
             connection.execute(text(f'create schema if not exists "{SCHEMA}"'))
             connection.execute(text(f'set search_path to "{SCHEMA}", public'))
             connection.commit()
-        context.configure(connection=connection, target_metadata=target_metadata)
+        context.configure(
+            connection=connection, target_metadata=target_metadata, version_table_schema=SCHEMA or None
+        )
         with context.begin_transaction():
             context.run_migrations()
 

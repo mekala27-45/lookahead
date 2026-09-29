@@ -126,7 +126,11 @@ tables in the schema (its migration sets the search path with a statement) and t
 `public`, answered that `forecasts` did not exist. The health check said only "unreachable" and
 logged nothing, which is now also fixed. The engines use SQLAlchemy's `schema_translate_map`
 instead, so every emitted table name carries the schema whatever the connection's search path
-says, and the test resets the search path to `public` before reading the rows back.
+says, and the test resets the search path to `public` before reading the rows back. The second
+deploy then found no tables at all: both projects' first migration is revision `0001`, and
+alembic, looking up its version table through the search path, had read the other project's
+`public.alembic_version` and concluded there was nothing to do. The version table is now named
+with the schema, and a test plants a decoy version table in `public` before migrating.
 
 ## 2026-09-29: remainder nodes are derived, not forecast, and not scored
 
