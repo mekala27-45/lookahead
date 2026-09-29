@@ -211,6 +211,8 @@ class PlantedEvent(StrictModel):
     duration_hours: int
     size_share: float = 0.0
     """For a load shed, the share of demand removed."""
+    window: str = "test"
+    """Which year holds it: test (graded) or validation (where the alert threshold is chosen)."""
 
 
 @dataclass(frozen=True)
@@ -318,9 +320,13 @@ def simulate(spec: GridSpec, seed: int) -> Grid:
             k: np.zeros(hours, dtype=bool)
             for k in ("load_shed", "meter_zero", "duplicate_hour", "skipped_hours")
         }
-        # Planted events in the last year, at stated positions, one of each kind across the grid.
+        # Planted events at stated positions, one of each kind across the grid, in the last year
+        # (the test year, where the detector is graded) and again in the year before it (the
+        # validation year, where the detector's threshold is chosen).
         last_year_start = hours - HOURS_PER_YEAR
-        planted = _plant(a.name, authorities, last_year_start, g)
+        planted = _plant(a.name, authorities, last_year_start, g, "test")
+        if spec.years >= 2:
+            planted += _plant(a.name, authorities, hours - 2 * HOURS_PER_YEAR, g, "validation")
         for event in planted:
             s, e = event.start_hour, event.start_hour + event.duration_hours
             if event.kind == "load_shed":
@@ -396,16 +402,21 @@ def simulate(spec: GridSpec, seed: int) -> Grid:
 
 
 def _plant(
-    name: str, authorities: tuple[AuthoritySpec, ...], last_year_start: int, g: np.random.Generator
+    name: str,
+    authorities: tuple[AuthoritySpec, ...],
+    year_start: int,
+    g: np.random.Generator,
+    window: str,
 ) -> list[PlantedEvent]:
-    """One planted event per authority in the last year, the kind rotating through the four."""
+    """One planted event per authority in the given year, the kind rotating through the four."""
     index = [a.name for a in authorities].index(name)
     kinds = ("load_shed", "meter_zero", "duplicate_hour", "skipped_hours")
     kind = kinds[index % 4]
-    # Events sit in the test year at stated day offsets so every condition and seed plants them
-    # at the same place; the size varies by seed within a stated range.
-    day = 40 + 35 * index
-    start = last_year_start + day * 24 + 17
+    # Events sit at stated day offsets so every condition and seed plants them at the same
+    # place; the size varies by seed within a stated range. The validation year's offsets differ
+    # from the test year's so the two never share a calendar position.
+    day = (40 if window == "test" else 55) + 35 * index
+    start = year_start + day * 24 + 17
     if kind == "load_shed":
         return [
             PlantedEvent(
@@ -414,15 +425,22 @@ def _plant(
                 start_hour=start,
                 duration_hours=int(g.integers(6, 18)),
                 size_share=float(g.uniform(0.12, 0.30)),
+                window=window,
             )
         ]
     if kind == "meter_zero":
         return [
-            PlantedEvent(kind=kind, authority=name, start_hour=start, duration_hours=int(g.integers(3, 9)))
+            PlantedEvent(
+                kind=kind,
+                authority=name,
+                start_hour=start,
+                duration_hours=int(g.integers(3, 9)),
+                window=window,
+            )
         ]
     if kind == "duplicate_hour":
-        return [PlantedEvent(kind=kind, authority=name, start_hour=start, duration_hours=1)]
-    return [PlantedEvent(kind=kind, authority=name, start_hour=start, duration_hours=2)]
+        return [PlantedEvent(kind=kind, authority=name, start_hour=start, duration_hours=1, window=window)]
+    return [PlantedEvent(kind=kind, authority=name, start_hour=start, duration_hours=2, window=window)]
 
 
 def _expected_operator_mape(spec: GridSpec) -> float:
@@ -452,10 +470,10 @@ def events_frame(grid: Grid) -> pl.DataFrame:
     rows = []
     for e in grid.events:
         start = grid.panel["utc_hour"][0] + timedelta(hours=e.start_hour)
-        rows.append([e.kind, e.authority, e.start_hour, start, e.duration_hours, e.size_share])
+        rows.append([e.kind, e.authority, e.start_hour, start, e.duration_hours, e.size_share, e.window])
     return pl.DataFrame(
         rows,
-        schema=["kind", "authority", "start_position", "start_utc", "duration_hours", "size_share"],
+        schema=["kind", "authority", "start_position", "start_utc", "duration_hours", "size_share", "window"],
         orient="row",
     )
 

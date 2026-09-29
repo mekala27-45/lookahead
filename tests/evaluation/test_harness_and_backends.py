@@ -69,8 +69,14 @@ def test_simulator_is_seeded_and_plants_events() -> None:
     assert a.panel["demand_true"].to_list() == b.panel["demand_true"].to_list()
     assert a.panel["demand_true"].to_list() != c.panel["demand_true"].to_list()
     kinds = sorted(e.kind for e in a.events)
-    assert kinds == sorted(["load_shed", "meter_zero", "duplicate_hour", "skipped_hours"] * 2)
-    assert all(e.start_hour >= 2 * 8760 for e in a.events), "events are planted in the last year"
+    assert kinds == sorted(["load_shed", "meter_zero", "duplicate_hour", "skipped_hours"] * 4)
+    test_events = [e for e in a.events if e.window == "test"]
+    validation_events = [e for e in a.events if e.window == "validation"]
+    assert len(test_events) == len(validation_events) == 8
+    assert all(e.start_hour >= 2 * 8760 for e in test_events), "graded events are planted in the last year"
+    assert all(8760 <= e.start_hour < 2 * 8760 for e in validation_events), (
+        "the threshold is chosen on events planted in the validation year"
+    )
 
 
 def test_operator_error_matches_its_stated_structure() -> None:
