@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import time
 
+import lookahead_events  # noqa: F401  (registers the detector in the recovery study on import)
+import lookahead_hierarchy  # noqa: F401  (registers the reconciliation in the recovery study on import)
 import polars as pl
 from lookahead_core.config import POLICY
 from lookahead_core.manifest import Manifest, Scalar, Scribe

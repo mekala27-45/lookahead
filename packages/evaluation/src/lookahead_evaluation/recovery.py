@@ -178,7 +178,12 @@ def run_one(condition: str, seed: int) -> RunRecord:
                     panel,
                     grid.subregions,
                     grid.hierarchy,
-                    {"truth": grid.truth, "events": events_frame(grid), "own_scoring": own_result.scoring},
+                    {
+                        "truth": grid.truth,
+                        "events": events_frame(grid),
+                        "own_scoring": own_result.scoring,
+                        "own_fitted": fitted,
+                    },
                     seed,
                 ).items()
             }

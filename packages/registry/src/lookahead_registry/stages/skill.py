@@ -13,7 +13,6 @@ from __future__ import annotations
 
 import numpy as np
 import polars as pl
-
 from lookahead_core.manifest import Manifest, Scalar, Scribe
 from lookahead_core.paths import Paths
 from lookahead_evaluation.metrics import (
