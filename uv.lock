@@ -930,16 +930,26 @@ name = "lookahead-events"
 version = "0.1.0"
 source = { editable = "packages/events" }
 dependencies = [
+    { name = "lookahead-contracts" },
     { name = "lookahead-core" },
+    { name = "lookahead-evaluation" },
+    { name = "lookahead-features" },
+    { name = "lookahead-forecast" },
+    { name = "lookahead-sim" },
     { name = "numpy" },
     { name = "polars" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "lookahead-contracts", editable = "packages/contracts" },
     { name = "lookahead-core", editable = "packages/core" },
-    { name = "numpy", specifier = ">=1.26" },
-    { name = "polars", specifier = ">=1.10" },
+    { name = "lookahead-evaluation", editable = "packages/evaluation" },
+    { name = "lookahead-features", editable = "packages/features" },
+    { name = "lookahead-forecast", editable = "packages/forecast" },
+    { name = "lookahead-sim", editable = "packages/sim" },
+    { name = "numpy", specifier = ">=2.1" },
+    { name = "polars", specifier = ">=1.20" },
 ]
 
 [[package]]
