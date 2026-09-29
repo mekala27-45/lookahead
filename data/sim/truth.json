@@ -1,0 +1,74 @@
+{
+ "NA1": {
+  "base_mw": 12000.0,
+  "cooling_slope_mw_per_c": 420.0,
+  "cooling_threshold_c": 20.0,
+  "heating_slope_mw_per_c": 260.0,
+  "heating_threshold_c": 14.0,
+  "holiday_effect": -0.08,
+  "operator_mape_expected": 0.02426822129222543
+ },
+ "NA2": {
+  "base_mw": 4500.0,
+  "cooling_slope_mw_per_c": 110.0,
+  "cooling_threshold_c": 22.0,
+  "heating_slope_mw_per_c": 120.0,
+  "heating_threshold_c": 12.0,
+  "holiday_effect": -0.06,
+  "operator_mape_expected": 0.02426822129222543
+ },
+ "NA3": {
+  "base_mw": 800.0,
+  "cooling_slope_mw_per_c": 20.0,
+  "cooling_threshold_c": 18.0,
+  "heating_slope_mw_per_c": 30.0,
+  "heating_threshold_c": 16.0,
+  "holiday_effect": -0.1,
+  "operator_mape_expected": 0.02426822129222543
+ },
+ "NA4": {
+  "base_mw": 2200.0,
+  "cooling_slope_mw_per_c": 60.0,
+  "cooling_threshold_c": 24.0,
+  "heating_slope_mw_per_c": 70.0,
+  "heating_threshold_c": 10.0,
+  "holiday_effect": -0.05,
+  "operator_mape_expected": 0.02426822129222543
+ },
+ "SA1": {
+  "base_mw": 30000.0,
+  "cooling_slope_mw_per_c": 1500.0,
+  "cooling_threshold_c": 18.0,
+  "heating_slope_mw_per_c": 400.0,
+  "heating_threshold_c": 12.0,
+  "holiday_effect": -0.07,
+  "operator_mape_expected": 0.02426822129222543
+ },
+ "SA2": {
+  "base_mw": 6000.0,
+  "cooling_slope_mw_per_c": 300.0,
+  "cooling_threshold_c": 20.0,
+  "heating_slope_mw_per_c": 90.0,
+  "heating_threshold_c": 10.0,
+  "holiday_effect": -0.06,
+  "operator_mape_expected": 0.02426822129222543
+ },
+ "SA3": {
+  "base_mw": 300.0,
+  "cooling_slope_mw_per_c": 18.0,
+  "cooling_threshold_c": 22.0,
+  "heating_slope_mw_per_c": 4.0,
+  "heating_threshold_c": 14.0,
+  "holiday_effect": -0.04,
+  "operator_mape_expected": 0.02426822129222543
+ },
+ "SA4": {
+  "base_mw": 1400.0,
+  "cooling_slope_mw_per_c": 70.0,
+  "cooling_threshold_c": 24.0,
+  "heating_slope_mw_per_c": 20.0,
+  "heating_threshold_c": 8.0,
+  "holiday_effect": -0.09,
+  "operator_mape_expected": 0.02426822129222543
+ }
+}

@@ -1,0 +1,17 @@
+node,parent,level,kind,label
+GRID,,0,lower48,Synthetic grid
+Synthetic,GRID,1,interconnection,Synthetic interconnection
+North,Synthetic,2,region,North
+South,Synthetic,2,region,South
+NA1,North,3,authority,NA1
+NA2,North,3,authority,NA2
+NA3,North,3,authority,NA3
+NA4,North,3,authority,NA4
+SA1,South,3,authority,SA1
+SA2,South,3,authority,SA2
+SA3,South,3,authority,SA3
+SA4,South,3,authority,SA4
+NA1.E,NA1,4,subregion,NA1 E
+NA1.W,NA1,4,subregion,NA1 W
+SA1.C,SA1,4,subregion,SA1 C
+SA1.H,SA1,4,subregion,SA1 H

@@ -1,0 +1,8 @@
+{
+ "training_start": "2023-01-01",
+ "validation_start": "2024-01-01",
+ "test_start": "2025-01-01",
+ "test_end": "2025-12-30",
+ "test_days": 364,
+ "validation_days": 366
+}

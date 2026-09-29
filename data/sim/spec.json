@@ -1,0 +1,15 @@
+{
+ "authorities": [],
+ "cooling_evening_modulation": 0.5,
+ "heating_night_modulation": 0.3,
+ "missing_rate": 0.0,
+ "noise_phi": 0.8,
+ "noise_sigma": 0.01,
+ "operator_bias": 0.005,
+ "operator_error_phi": 0.6,
+ "operator_error_sigma": 0.03,
+ "start": "2023-01-01",
+ "subregion_gap": 0.02,
+ "temperature_sensitivity": 1.0,
+ "years": 3
+}

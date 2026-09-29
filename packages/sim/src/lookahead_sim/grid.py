@@ -59,6 +59,9 @@ class GridSpec(StrictModel):
     operator_bias: float = 0.005
     subregion_gap: float = 0.02
     """The subregion total sits this share below the authority, as in the real source."""
+    cooling_evening_modulation: float = 0.5
+    heating_night_modulation: float = 0.3
+    """How much the temperature response swings with the hour of day; zero makes it a pure V shape."""
     authorities: tuple[AuthoritySpec, ...] = ()
 
 
@@ -302,8 +305,8 @@ def simulate(spec: GridSpec, seed: int) -> Grid:
             * spec.temperature_sensitivity
         )
         # Cooling bites in the afternoon and evening; heating in the morning and night.
-        evening = 1.0 + 0.5 * np.sin(2 * np.pi * (local_hour - 12) / 24)
-        night = 1.0 + 0.3 * np.cos(2 * np.pi * (local_hour - 3) / 24)
+        evening = 1.0 + spec.cooling_evening_modulation * np.sin(2 * np.pi * (local_hour - 12) / 24)
+        night = 1.0 + spec.heating_night_modulation * np.cos(2 * np.pi * (local_hour - 3) / 24)
         noise = _ar1(g, hours, spec.noise_sigma, spec.noise_phi)
         demand_true = (baseline + heating * night + cooling * evening) * (1.0 + noise)
         operator_error = (
@@ -350,6 +353,7 @@ def simulate(spec: GridSpec, seed: int) -> Grid:
             }
         )
         frames.append(frame)
+        share_total = sum(s for _, s in a.subregions) or 1.0
         for sub, share in a.subregions:
             sub_frames.append(
                 pl.DataFrame(
@@ -357,11 +361,9 @@ def simulate(spec: GridSpec, seed: int) -> Grid:
                         "authority": [a.name] * hours,
                         "subregion": [sub] * hours,
                         "utc_hour": stamps,
-                        "demand": demand_true
-                        * share
-                        * (1.0 - spec.subregion_gap)
-                        / max(sum(s for _, s in a.subregions), 1e-9)
-                        * sum(s for _, s in a.subregions),
+                        # The subregions split the authority in their stated proportions and their
+                        # total sits the stated gap below it, as the real source's does.
+                        "demand": demand_true * (share / share_total) * (1.0 - spec.subregion_gap),
                     }
                 )
             )

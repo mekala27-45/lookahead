@@ -73,7 +73,7 @@ class Policy(StrictModel):
     seasonal_naive_lag_hours: int = 168
     """The seasonal naive baseline is demand at the same hour one week earlier."""
 
-    ridge_penalties: tuple[float, ...] = (0.1, 1.0, 10.0, 100.0)
+    ridge_penalties: tuple[float, ...] = (0.1, 1.0, 10.0, 100.0, 1000.0, 10000.0)
     heating_thresholds_c: tuple[float, ...] = (8.0, 10.0, 12.0, 14.0, 16.0, 18.0)
     cooling_thresholds_c: tuple[float, ...] = (16.0, 18.0, 20.0, 22.0, 24.0, 26.0)
     """Candidate thresholds for the heating and cooling degree hours, chosen per authority on validation."""
