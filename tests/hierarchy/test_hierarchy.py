@@ -103,3 +103,32 @@ def test_summing_matrix_has_one_row_per_node() -> None:
     s = SummingMatrix.from_table(_table())
     assert s.matrix.shape[0] == len(s.nodes) == _table().height
     assert all(s.matrix[i].sum() >= 1 for i in range(len(s.nodes)))
+
+
+def test_reconciled_quantiles_stay_coherent_when_levels_cross() -> None:
+    """A linear adjustment can cross a node's quantile levels; removing the crossing must not
+    break coherence, which is what sorting every node on its own would do."""
+    import numpy as np
+    from lookahead_hierarchy.reconcile import reconcile_quantiles
+    from lookahead_hierarchy.summing import SummingMatrix, check_coherent
+
+    nodes = pl.DataFrame(
+        {
+            "node": ["TOP", "A", "B"],
+            "parent": [None, "TOP", "TOP"],
+            "level": [0, 1, 1],
+            "kind": ["lower48", "authority", "authority"],
+            "label": ["top", "a", "b"],
+        }
+    )
+    summing = SummingMatrix.from_table(nodes)
+    rng = np.random.default_rng(0)
+    base = np.empty((5, 3, 5))
+    for k in range(5):
+        base[:, :, k] = rng.uniform(50, 150, size=(5, 3))
+    # A covariance that makes MinT move the nodes by different amounts per level.
+    covariance = np.diag([4.0, 1.0, 9.0])
+    out = reconcile_quantiles(base, summing, "mint", covariance=covariance)
+    for k in range(5):
+        check_coherent(out[:, :, k], summing)
+    assert np.all(np.diff(out, axis=2) >= -1e-9), "levels are monotone at every node"

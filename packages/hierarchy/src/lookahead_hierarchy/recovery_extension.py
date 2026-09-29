@@ -47,7 +47,13 @@ def reconciliation_on_sim(
             series = subregions.filter(
                 (pl.col("authority") == authority) & (pl.col("subregion") == sub)
             ).sort("utc_hour")
-            true_leaf[node] = dict(zip(series["utc_hour"].to_list(), series["demand"].to_list(), strict=True))
+            true_leaf[node] = dict(
+                zip(
+                    series["utc_hour"].to_list(),
+                    series["demand"].cast(pl.Float64).fill_null(float("nan")).to_list(),
+                    strict=True,
+                )
+            )
         elif node.endswith(".rest"):
             authority = node[: -len(".rest")]
             series = panel.filter(pl.col("authority") == authority).sort("utc_hour")
@@ -60,13 +66,19 @@ def reconciliation_on_sim(
             joined = series.select("utc_hour", "demand_true").join(parts, on="utc_hour", how="inner")
             true_leaf[node] = dict(
                 zip(
-                    joined["utc_hour"].to_list(), (joined["demand_true"] - joined["s"]).to_list(), strict=True
+                    joined["utc_hour"].to_list(),
+                    (joined["demand_true"] - joined["s"]).cast(pl.Float64).fill_null(float("nan")).to_list(),
+                    strict=True,
                 )
             )
         else:
             series = panel.filter(pl.col("authority") == node).sort("utc_hour")
             true_leaf[node] = dict(
-                zip(series["utc_hour"].to_list(), series["demand_true"].to_list(), strict=True)
+                zip(
+                    series["utc_hour"].to_list(),
+                    series["demand_true"].cast(pl.Float64).fill_null(float("nan")).to_list(),
+                    strict=True,
+                )
             )
     hours = study.keys["target_hour"].to_list()
     leaf_truth = np.array([[true_leaf[node].get(h, np.nan) for node in summing.leaves] for h in hours])

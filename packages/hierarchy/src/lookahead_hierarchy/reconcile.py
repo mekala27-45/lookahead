@@ -86,7 +86,13 @@ def mint(base: np.ndarray, summing: SummingMatrix, covariance: np.ndarray) -> np
 def reconcile_quantiles(
     quantiles: np.ndarray, summing: SummingMatrix, method: str, **kwargs: object
 ) -> np.ndarray:
-    """Apply a linear method to every quantile column: ``quantiles`` is rows by nodes by levels."""
+    """Apply a linear method to every quantile column: ``quantiles`` is rows by nodes by levels.
+
+    Quantile crossing after a linear adjustment is removed at the leaves, by sorting each leaf's
+    levels, and the upper nodes are rebuilt from the sorted leaves: a sum of ascending sequences
+    is ascending, so the result is both coherent and monotone in the level. Sorting every node
+    on its own would break coherence wherever the crossing differs between a node and its leaves.
+    """
     out = np.empty_like(quantiles)
     for k in range(quantiles.shape[2]):
         if method == "bottom_up":
@@ -97,4 +103,8 @@ def reconcile_quantiles(
             out[:, :, k] = mint(quantiles[:, :, k], summing, kwargs["covariance"])  # type: ignore[arg-type]
         else:
             raise KeyError(method)
-    return np.sort(out, axis=2)
+    leaves = np.sort(out[:, summing.leaf_index, :], axis=2)
+    rebuilt = np.empty_like(out)
+    for k in range(quantiles.shape[2]):
+        rebuilt[:, :, k] = summing.aggregate(leaves[:, :, k])
+    return rebuilt
