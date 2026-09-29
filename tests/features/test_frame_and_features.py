@@ -132,3 +132,17 @@ def test_series_index_refuses_an_incomplete_grid() -> None:
     ).with_columns(pl.col("utc_hour").dt.replace_time_zone("UTC"))
     with pytest.raises(ValueError, match="complete grid"):
         SeriesIndex.from_panel(panel, "A")
+
+
+def test_recomputation_check_is_green_on_clean_data_and_refuses_the_leaky_lag() -> None:
+    from lookahead_features.leakage import recomputation_check
+
+    series, temperature, humidity, offsets = _series()
+    spec = FeatureSpec(heating_threshold_c=12.0, cooling_threshold_c=18.0)
+    origins = np.array([24 * d - 1 for d in range(30, 110, 7)])
+    report = recomputation_check(series, temperature, humidity, offsets, spec, 9_000.0, origins, seed=1)
+    assert report.green and report.rows_checked == 60 and report.max_abs_gap <= 1e-9
+    with pytest.raises(ValueError):
+        recomputation_check(
+            series, temperature, humidity, offsets, spec, 9_000.0, np.array([], dtype=int), seed=1
+        )
