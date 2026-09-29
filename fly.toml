@@ -1,0 +1,35 @@
+# Fly.io, free allowance: one shared CPU machine that stops when idle and starts on the first
+# request. The control room reads the committed results while it wakes and says so.
+app = "lookahead-grid-api"
+primary_region = "ewr"
+
+[build]
+  dockerfile = "Dockerfile.api"
+
+[env]
+  LOOKAHEAD_ENV = "production"
+  LOOKAHEAD_CORS_ORIGINS = "https://mekala27-45.github.io,http://localhost:3000"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [http_service.concurrency]
+    type = "connections"
+    soft_limit = 50
+    hard_limit = 100
+
+[[http_service.checks]]
+  grace_period = "45s"
+  interval = "30s"
+  method = "GET"
+  path = "/v1/health"
+  timeout = "5s"
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1
