@@ -63,6 +63,7 @@ jobs:
       LOOKAHEAD_REQUIRE_POSTGRES: "1"
       LOOKAHEAD_REQUIRE_DERIVED: "1"
       LOOKAHEAD_REQUIRE_XGBOOST: "1"
+      LOOKAHEAD_REQUIRE_MODEL: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
@@ -90,9 +91,10 @@ jobs:
           cache-dependency-path: web/package-lock.json
       - run: npm ci
       - run: npm run typecheck
-      - run: npm run build
+      - name: Build against the test server's mock API, which refuses HEAD and answers a first 503
+        run: npm run build:e2e
       - run: npx playwright install --with-deps chromium
-      - name: Every route, the statement, the tile map, the fan chart, the toggles, phone layouts
+      - name: Every route, the statement, the tile map, the fan chart, the issued forecast, the toggles, phone layouts
         run: npx playwright test
       - uses: astral-sh/setup-uv@v5
         with:
