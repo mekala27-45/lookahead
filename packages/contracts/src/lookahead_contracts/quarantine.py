@@ -20,6 +20,7 @@ RULES: tuple[str, ...] = (
     "duplicate_hour",
     "missing_hour",
     "forecast_missing",
+    "forecast_nonpositive",
     "revision",
 )
 
@@ -126,6 +127,7 @@ def apply_rules(balance: pl.DataFrame) -> Quarantined:
             .fill_null(False)
             .alias("demand_spike"),
             (pl.col("forecast_operator").is_null() & ~pl.col("missing_hour")).alias("forecast_missing"),
+            (pl.col("forecast_operator") <= 0).fill_null(False).alias("forecast_nonpositive"),
         )
     )
     flagged = pl.any_horizontal(
@@ -138,6 +140,11 @@ def apply_rules(balance: pl.DataFrame) -> Quarantined:
     panel = panel.with_columns(
         pl.when(flagged).then(None).otherwise(pl.col("demand_raw")).alias("demand"),
         flagged.alias("quarantined"),
+        # A published forecast at or below zero is treated as not published; the count is kept.
+        pl.when(pl.col("forecast_nonpositive"))
+        .then(None)
+        .otherwise(pl.col("forecast_operator"))
+        .alias("forecast_operator"),
     ).drop("rolling_median")
     report = (
         panel.group_by("authority")

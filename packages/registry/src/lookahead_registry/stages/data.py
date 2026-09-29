@@ -97,6 +97,7 @@ def run(paths: Paths, as_of: str, seed: int, *, require_london: bool = True) -> 
         pl.col("validation_coverage").fill_null(0.0),
         pl.col("test_coverage").fill_null(0.0),
         pl.col("backtest_eligible").fill_null(False),
+        pl.col("operator_comparable").fill_null(False),
     )
     gap = _subregion_gap(panel, subregions) if subregions is not None else None
 
@@ -169,6 +170,11 @@ def _windows(panel: pl.DataFrame, demand_authorities: list[str]) -> dict[str, st
 MINIMUM_WINDOW_COVERAGE = 0.9
 """An authority is in the backtest when its clean demand covers this share of the validation and the test hours."""
 
+OPERATOR_RATIO_BAND = (0.9, 1.1)
+"""The operator's forecast is comparable when its median ratio to demand sits in this band in both the validation
+and the test year; outside it the published forecast covers a different scope than the demand series (a data rule,
+not a model choice), and a comparison would grade the scope, not the forecast."""
+
 
 def _eligibility(panel: pl.DataFrame, windows: dict[str, str | int]) -> pl.DataFrame:
     validation_start = datetime.fromisoformat(str(windows["validation_start"])).replace(tzinfo=UTC)
@@ -177,15 +183,22 @@ def _eligibility(panel: pl.DataFrame, windows: dict[str, str | int]) -> pl.DataF
     valid_hours = float((test_start - validation_start).total_seconds() // 3600)
     test_hours = float((test_end - test_start).total_seconds() // 3600)
     hour_after = pl.col("utc_hour") - pl.duration(hours=1)
+    in_validation = (hour_after >= validation_start) & (hour_after < test_start)
+    ratio = pl.col("forecast_operator") / pl.col("demand")
     return (
         panel.group_by("authority")
         .agg(
-            (pl.col("demand").is_not_null() & (hour_after >= validation_start) & (hour_after < test_start))
-            .sum()
-            .alias("validation_hours"),
+            (pl.col("demand").is_not_null() & in_validation).sum().alias("validation_hours"),
             (pl.col("demand").is_not_null() & (hour_after >= test_start) & (hour_after < test_end))
             .sum()
             .alias("test_hours"),
+            ratio.filter(in_validation & (pl.col("demand") > 0)).median().alias("operator_median_ratio"),
+            ratio.filter((hour_after >= test_start) & (hour_after < test_end) & (pl.col("demand") > 0))
+            .median()
+            .alias("operator_median_ratio_test"),
+            (pl.col("forecast_operator").is_not_null() & in_validation)
+            .sum()
+            .alias("operator_validation_hours"),
         )
         .with_columns(
             (pl.col("validation_hours") / valid_hours).alias("validation_coverage"),
@@ -195,9 +208,26 @@ def _eligibility(panel: pl.DataFrame, windows: dict[str, str | int]) -> pl.DataF
             (
                 (pl.col("validation_coverage") >= MINIMUM_WINDOW_COVERAGE)
                 & (pl.col("test_coverage") >= MINIMUM_WINDOW_COVERAGE)
-            ).alias("backtest_eligible")
+            ).alias("backtest_eligible"),
+            (
+                pl.col("operator_median_ratio").is_between(OPERATOR_RATIO_BAND[0], OPERATOR_RATIO_BAND[1])
+                & pl.col("operator_median_ratio_test").is_between(
+                    OPERATOR_RATIO_BAND[0], OPERATOR_RATIO_BAND[1]
+                )
+                & ((pl.col("operator_validation_hours") / valid_hours) >= MINIMUM_WINDOW_COVERAGE)
+            )
+            .fill_null(False)
+            .alias("operator_comparable"),
         )
-        .select("authority", "validation_coverage", "test_coverage", "backtest_eligible")
+        .select(
+            "authority",
+            "validation_coverage",
+            "test_coverage",
+            "backtest_eligible",
+            "operator_median_ratio",
+            "operator_median_ratio_test",
+            "operator_comparable",
+        )
     )
 
 
@@ -259,6 +289,23 @@ def _eia_figures(
     w.put("data.eia.backtest_excluded", excluded.height, "int")
     w.put("data.eia.backtest_excluded_list", ", ".join(excluded["authority"].to_list()) or "none", "text")
     w.put("data.eia.minimum_window_coverage", MINIMUM_WINDOW_COVERAGE, "pct0")
+    comparable = eligible.filter(pl.col("operator_comparable"))
+    not_comparable = eligible.filter(~pl.col("operator_comparable"))
+    w.put("data.eia.operator_comparable", comparable.height, "int")
+    w.put("data.eia.operator_not_comparable", not_comparable.height, "int")
+    w.put(
+        "data.eia.operator_not_comparable_list",
+        ", ".join(
+            f"{r['authority']} ({r['operator_median_ratio']:.2f} validation, {r['operator_median_ratio_test']:.2f} test)"
+            if r["operator_median_ratio"] is not None and r["operator_median_ratio_test"] is not None
+            else r["authority"]
+            for r in not_comparable.sort("authority").iter_rows(named=True)
+        )
+        or "none",
+        "text",
+    )
+    w.put("data.eia.operator_ratio_band_low", OPERATOR_RATIO_BAND[0], "float2")
+    w.put("data.eia.operator_ratio_band_high", OPERATOR_RATIO_BAND[1], "float2")
     w.put("data.eia.panel_rows", panel.height, "int")
     w.put("data.eia.quarantined_rows", int(panel["quarantined"].sum()), "int")
     w.put("data.eia.quarantined_share", float(panel["quarantined"].sum()) / panel.height, "pct3")
@@ -344,6 +391,9 @@ def _eia_figures(
             r["validation_coverage"],
             r["test_coverage"],
             "yes" if r["backtest_eligible"] else "no",
+            r["operator_median_ratio"],
+            r["operator_median_ratio_test"],
+            "yes" if r["operator_comparable"] else "no",
         ]
         for r in authorities.sort("authority").iter_rows(named=True)
     ]
@@ -358,8 +408,11 @@ def _eia_figures(
             "Validation coverage",
             "Test coverage",
             "In the backtest",
+            "Operator forecast to demand, validation median",
+            "Operator forecast to demand, test median",
+            "Operator comparable",
         ],
-        ["text", "text", "text", "int", "pct1", "pct1", "pct1", "text"],
+        ["text", "text", "text", "int", "pct1", "pct1", "pct1", "text", "float2", "float2", "text"],
         auth_rows,
     )
 

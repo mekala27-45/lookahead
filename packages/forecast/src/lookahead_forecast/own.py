@@ -77,6 +77,17 @@ class OwnFitted:
     chosen: dict[str, dict[str, float]] = field(default_factory=dict)
     search: dict[str, list[dict[str, float]]] = field(default_factory=dict)
     fits: int = 0
+    validation: dict[str, ValidationRun] = field(default_factory=dict)
+    """The expanding run over the validation year per authority: what the conformal offsets and MinT read."""
+
+
+@dataclass
+class ValidationRun:
+    origin_position: np.ndarray
+    horizon: np.ndarray
+    pred_ratio: np.ndarray
+    actual_ratio: np.ndarray
+    scale: np.ndarray
 
 
 @dataclass
@@ -237,6 +248,7 @@ class OwnForecaster:
         designs: dict[str, DesignCache] = {}
         chosen: dict[str, dict[str, float]] = {}
         search: dict[str, list[dict[str, float]]] = {}
+        validation: dict[str, ValidationRun] = {}
         fits = 0
         chosen_window = choose_on("validation")
         for authority in data.names:
@@ -285,6 +297,13 @@ class OwnForecaster:
             conformal[authority] = calibrate_relative(
                 pred, actual, horizons, spec.levels, spec.conformal_bucket_hours
             )
+            validation[authority] = ValidationRun(
+                origin_position=cache.origin_position[rows],
+                horizon=horizons,
+                pred_ratio=pred,
+                actual_ratio=actual,
+                scale=cache.scale[rows],
+            )
             states[authority] = state
             designs[authority] = cache
             chosen[authority] = {
@@ -304,6 +323,7 @@ class OwnForecaster:
             chosen=chosen,
             search=search,
             fits=fits,
+            validation=validation,
         )
 
     def predict(

@@ -64,6 +64,7 @@ def run(
     *,
     data: PanelData | None = None,
     authorities: list[str] | None = None,
+    rescore: bool = False,
 ) -> Manifest:
     data = data or load_data(paths)
     if authorities:
@@ -77,13 +78,54 @@ def run(
             truth=data.truth,
         )
     spec = ForecastSpec(backend=backend, seed=seed)
-    forecaster = make_forecaster(backend)
-    started = time.time()
-    result = run_backend(data, forecaster, spec)
-    seconds = time.time() - started
     folder = paths.results / "backtest" / backend
     folder.mkdir(parents=True, exist_ok=True)
-    result.predictions.frame.write_parquet(folder / "predictions.parquet", compression="zstd")
+    started = time.time()
+    if rescore:
+        # The saved predictions scored again against the current panel; nothing is refit.
+        from lookahead_evaluation.harness import scoring_frame
+        from lookahead_forecast.interface import Predictions
+
+        saved = pl.read_parquet(folder / "predictions.parquet")
+        timing = (
+            json.loads((folder / "timing.json").read_text(encoding="utf-8"))
+            if (folder / "timing.json").exists()
+            else {}
+        )
+        predictions = Predictions(
+            frame=saved,
+            backend=backend,
+            spec_hash=spec.spec_hash,
+            data_source=data.data_source,
+            fits=int(timing.get("fits", 0)),
+            origins=int(saved.select("authority", "origin").unique().height),
+        )
+        result = RunResult(
+            predictions=predictions,
+            scoring=scoring_frame(data, saved),
+            fit_seconds=float(timing.get("fit_seconds", 0.0)),
+            predict_seconds=float(timing.get("predict_seconds", 0.0)),
+            fitted=None,
+        )
+        seconds = float(timing.get("run_seconds", 0.0))
+    else:
+        forecaster = make_forecaster(backend)
+        result = run_backend(data, forecaster, spec)
+        seconds = time.time() - started
+        result.predictions.frame.write_parquet(folder / "predictions.parquet", compression="zstd")
+        (folder / "timing.json").write_text(
+            json.dumps(
+                {
+                    "fits": result.predictions.fits,
+                    "fit_seconds": result.fit_seconds,
+                    "predict_seconds": result.predict_seconds,
+                    "run_seconds": seconds,
+                },
+                indent=1,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
     result.scoring.write_parquet(folder / "scoring.parquet", compression="zstd")
     summary = summarise(result.scoring, seed, backend)
     (folder / "summary.json").write_text(
@@ -101,10 +143,14 @@ def run(
     )
     prefix = f"backtest.{backend}"
     _write_summary(w, prefix, summary, result, seconds)
-    if backend == "own":
+    if backend == "own" and result.fitted is not None:
         _own_choices(w, prefix, result.fitted, data, folder)
-    if backend == "gbm":
+    if backend == "gbm" and result.fitted is not None:
         _gbm_details(w, prefix, result.fitted, folder)
+    if result.fitted is None and (folder / "details.json").exists():
+        _replay_details(w, prefix, folder)
+    elif result.fitted is not None:
+        _keep_details(manifest, prefix, folder)
     manifest.save(paths.results / "manifests" / f"backtest_{backend}.json")
     return manifest
 
@@ -395,3 +441,43 @@ def _gbm_details(w: Scribe, prefix: str, fitted: Any, folder: object) -> None:
     pl.DataFrame(
         {"feature": [n for n, _ in importance], "share_of_gain": [g for _, g in importance]}
     ).write_parquet(Path(str(folder)) / "importance.parquet")
+
+
+def _keep_details(manifest: Manifest, prefix: str, folder: object) -> None:
+    """The backend specific entries (choices, importance) saved beside the predictions so a rescore keeps them."""
+    from pathlib import Path
+
+    details = {
+        "values": {
+            k: v.model_dump(mode="json")
+            for k, v in manifest.values.items()
+            if k.startswith(f"{prefix}.chosen")
+            or k.startswith(f"{prefix}.threshold")
+            or k.startswith(f"{prefix}.search")
+            or k.startswith(f"{prefix}.refit")
+            or k.startswith(f"{prefix}.origin_day")
+            or k.startswith(f"{prefix}.calibration")
+            or k.startswith(f"{prefix}.training")
+        },
+        "tables": {
+            k: v.model_dump(mode="json")
+            for k, v in manifest.tables.items()
+            if k in (f"{prefix}.chosen", f"{prefix}.importance")
+        },
+    }
+    (Path(str(folder)) / "details.json").write_text(
+        json.dumps(details, indent=1, sort_keys=True) + "\n", encoding="utf-8"
+    )
+
+
+def _replay_details(w: Scribe, prefix: str, folder: object) -> None:
+    from pathlib import Path
+
+    from lookahead_core.manifest import TableEntry, ValueEntry
+
+    details = json.loads((Path(str(folder)) / "details.json").read_text(encoding="utf-8"))
+    for key, payload in details["values"].items():
+        entry = ValueEntry.model_validate(payload)
+        w.manifest.values[key] = entry
+    for key, payload in details["tables"].items():
+        w.manifest.tables[key] = TableEntry.model_validate(payload)

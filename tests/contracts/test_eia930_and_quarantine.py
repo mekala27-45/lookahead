@@ -77,6 +77,7 @@ def test_clean_panel_has_no_quarantined_rows(tmp_path: Path) -> None:
         ("duplicate", "duplicate_hour"),
         ("skip", "missing_hour"),
         ("forecast_missing", "forecast_missing"),
+        ("forecast_negative", "forecast_nonpositive"),
     ],
 )
 def test_each_rule_catches_its_defect(tmp_path: Path, defect: str, rule: str) -> None:
@@ -86,9 +87,11 @@ def test_each_rule_catches_its_defect(tmp_path: Path, defect: str, rule: str) ->
     assert hit.height == 1
     assert hit["authority"][0] == "PJM"
     assert hit["utc_hour"][0] == START + timedelta(hours=24 * 20 + 1)
-    if rule != "forecast_missing":
+    if rule not in ("forecast_missing", "forecast_nonpositive"):
         assert hit["demand"][0] is None, "the clean demand is null where a rule fired"
-    if rule not in ("missing_hour", "forecast_missing"):
+    if rule == "forecast_nonpositive":
+        assert hit["forecast_operator"][0] is None, "a forecast at or below zero is treated as unpublished"
+    if rule not in ("missing_hour", "forecast_missing", "forecast_nonpositive"):
         assert int(result.report.filter(pl.col("authority") == "PJM")[rule][0]) == 1
     quarantine.check_report_matches_panel(result.panel, result.report)
 

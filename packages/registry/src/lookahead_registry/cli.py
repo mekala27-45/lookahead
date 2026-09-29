@@ -66,13 +66,33 @@ def recovery(
 def backtest(
     backend: str = typer.Option("own", help="own, gbm or seasonal_naive"),
     authorities: str = typer.Option("", help="comma separated subset, for a quick run"),
+    rescore: bool = typer.Option(False, help="score the saved predictions again without refitting"),
 ) -> None:
     """The rolling origin backtest of one backend on the real grid."""
     from lookahead_registry.stages import backtest as stage
 
     chosen = [a.strip() for a in authorities.split(",") if a.strip()] or None
-    manifest = stage.run(paths(), as_of(), DEMONSTRATION_SEED, backend, authorities=chosen)
+    manifest = stage.run(paths(), as_of(), DEMONSTRATION_SEED, backend, authorities=chosen, rescore=rescore)
     typer.echo(f"backtest {backend}: {manifest.counts()}")
+
+
+@app.command()
+def skill() -> None:
+    """Skill against the operator with wins, losses and ties, and the cross check table."""
+    from lookahead_registry.stages import skill as stage
+
+    manifest = stage.run(paths(), as_of(), DEMONSTRATION_SEED)
+    typer.echo(f"skill: {manifest.counts()}")
+
+
+@app.command()
+def hierarchy(authorities: str = typer.Option("", help="comma separated subset, for a quick run")) -> None:
+    """Reconciliation across the hierarchy with coherence tests and accuracy by level."""
+    from lookahead_registry.stages import hierarchy as stage
+
+    chosen = [a.strip() for a in authorities.split(",") if a.strip()] or None
+    manifest = stage.run(paths(), as_of(), DEMONSTRATION_SEED, authorities=chosen)
+    typer.echo(f"hierarchy: {manifest.counts()}")
 
 
 @app.command()

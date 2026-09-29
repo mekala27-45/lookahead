@@ -61,6 +61,8 @@ def write_balance(
                 demand = base * 12.0
             elif kind == "forecast_missing":
                 forecast = None
+            elif kind == "forecast_negative":
+                forecast = -40.0
             local = stamp - timedelta(hours=5)
             row = (
                 f"{authority},{local:%m/%d/%Y},{(i % 24) + 1},{local.strftime(time_format)},{stamp.strftime(time_format)},"
