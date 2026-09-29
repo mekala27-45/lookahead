@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
-from typing import Protocol
+from typing import Any, Protocol
 
 import numpy as np
 import polars as pl
@@ -32,10 +32,10 @@ class ForecastSpec(StrictModel):
     horizons: int = POLICY.horizons
     levels: tuple[float, ...] = QUANTILE_LEVELS
     conformal_bucket_hours: int = POLICY.conformal_horizon_bucket_hours
-    gbm_rounds: int = 400
-    gbm_leaves: int = 63
-    gbm_learning_rate: float = 0.05
-    gbm_min_data_in_leaf: int = 200
+    gbm_rounds: int = 250
+    gbm_depth: int = 7
+    gbm_learning_rate: float = 0.08
+    gbm_min_child_weight: int = 50
     gbm_training_window_days: int = POLICY.gbm_training_window_days
     gbm_refit_months: int = POLICY.gbm_refit_months
     seed: int = 13
@@ -54,6 +54,8 @@ class AuthorityData:
     operator: np.ndarray
     """The operator's published day ahead forecast aligned with the series positions, NaN where missing."""
     region: str
+    typical_mw: float = 1.0
+    """The mean demand over the training window; a per authority constant the weather columns are scaled to."""
 
 
 @dataclass(frozen=True)
@@ -67,6 +69,8 @@ class PanelData:
     test_start: datetime
     test_end: datetime
     """Inclusive: the last day of the test period."""
+    truth: dict[str, np.ndarray] = field(default_factory=dict)
+    """The simulator's true demand per authority, aligned with the series; empty on real data."""
 
     @property
     def names(self) -> list[str]:
@@ -96,6 +100,7 @@ class PanelData:
     ) -> PanelData:
         authorities: dict[str, AuthorityData] = {}
         columns = set(panel.columns)
+        validation_start = datetime.fromisoformat(str(windows["validation_start"])).replace(tzinfo=UTC)
         for name in sorted(panel["authority"].unique().to_list()):
             rows = panel.filter(pl.col("authority") == name).sort("utc_hour")
             series = SeriesIndex.from_panel(rows, name)
@@ -127,6 +132,9 @@ class PanelData:
                 else np.full(n, np.nan)
             )
             region = str(rows["region"][0]) if "region" in columns else "none"
+            training_rows = rows.filter(pl.col("utc_hour") < validation_start)
+            typical = training_rows["demand"].mean()
+            typical_mw = float(typical) if isinstance(typical, int | float) and typical > 0 else 1.0
             authorities[name] = AuthorityData(
                 series=series,
                 temperature=np.asarray(temperature, dtype=np.float64),
@@ -134,12 +142,18 @@ class PanelData:
                 offsets=np.asarray(offsets, dtype=np.int64),
                 operator=np.asarray(operator, dtype=np.float64),
                 region=region,
+                typical_mw=typical_mw,
             )
 
         def day(key: str) -> datetime:
             value = str(windows[key])
             return datetime.fromisoformat(value).replace(tzinfo=UTC)
 
+        truth: dict[str, np.ndarray] = {}
+        if "demand_true" in columns:
+            for name in authorities:
+                rows = panel.filter(pl.col("authority") == name).sort("utc_hour")
+                truth[name] = rows["demand_true"].cast(pl.Float64).fill_null(float("nan")).to_numpy()
         return cls(
             authorities=authorities,
             data_source=data_source,
@@ -147,6 +161,7 @@ class PanelData:
             validation_start=day("validation_start"),
             test_start=day("test_start"),
             test_end=day("test_end"),
+            truth=truth,
         )
 
 
@@ -170,17 +185,16 @@ class Predictions:
     notes: dict[str, float] = field(default_factory=dict)
 
 
-class Fitted(Protocol):
-    backend: str
-
-
 class Forecaster(Protocol):
+    """``fit`` returns the backend's own fitted object; ``predict`` takes it back. Each backend's
+    fitted type carries ``backend`` and ``spec_hash`` so a prediction can never lose its provenance."""
+
     name: str
 
-    def fit(self, data: PanelData, spec: ForecastSpec, train_end: datetime) -> Fitted: ...
+    def fit(self, data: PanelData, spec: ForecastSpec, train_end: datetime) -> Any: ...
 
     def predict(
-        self, fitted: Fitted, data: PanelData, spec: ForecastSpec, requests: list[Request]
+        self, fitted: Any, data: PanelData, spec: ForecastSpec, requests: list[Request]
     ) -> Predictions: ...
 
 

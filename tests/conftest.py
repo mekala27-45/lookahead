@@ -30,7 +30,7 @@ def _derived_ready() -> bool:
 def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
     external_ready = _external_ready()
     derived_ready = _derived_ready()
-    lgbm_ready = _importable("lightgbm")
+    xgb_ready = _importable("xgboost")
     for item in items:
         if "external" in item.keywords and not external_ready:
             if os.environ.get("LOOKAHEAD_REQUIRE_EXTERNAL"):
@@ -40,10 +40,10 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
             if os.environ.get("LOOKAHEAD_REQUIRE_DERIVED"):
                 pytest.fail("LOOKAHEAD_REQUIRE_DERIVED is set but the derived tables are missing")
             item.add_marker(pytest.mark.skip(reason="the derived tables under data/ are missing"))
-        if "lightgbm" in item.keywords and not lgbm_ready:
-            if os.environ.get("LOOKAHEAD_REQUIRE_LIGHTGBM"):
-                pytest.fail("LOOKAHEAD_REQUIRE_LIGHTGBM is set but lightgbm does not import")
-            item.add_marker(pytest.mark.skip(reason="lightgbm is not importable"))
+        if "xgboost" in item.keywords and not xgb_ready:
+            if os.environ.get("LOOKAHEAD_REQUIRE_XGBOOST"):
+                pytest.fail("LOOKAHEAD_REQUIRE_XGBOOST is set but xgboost does not import")
+            item.add_marker(pytest.mark.skip(reason="xgboost is not importable"))
 
 
 @pytest.fixture(scope="session")

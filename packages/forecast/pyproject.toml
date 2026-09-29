@@ -10,7 +10,7 @@ dependencies = [
   "numpy>=1.26",
   "polars>=1.10",
   "scipy>=1.14",
-  "lightgbm>=4.5",
+  "xgboost>=2.1",
 ]
 
 [build-system]

@@ -101,7 +101,7 @@ def build_cache(
     a: AuthorityData, origins: np.ndarray, spec: ForecastSpec, features: FeatureSpec
 ) -> DesignCache:
     horizons = np.arange(1, spec.horizons + 1)
-    d = design(a.series, origins, horizons, a.offsets, a.temperature, a.humidity, features)
+    d = design(a.series, origins, horizons, a.offsets, a.temperature, a.humidity, features, a.typical_mw)
     return cache_from_design(a, d)
 
 
@@ -214,6 +214,18 @@ def _static_validation_mapes(
     return out
 
 
+class ProtocolError(ValueError):
+    """A choice that the protocol reserves for the validation year was asked of another window."""
+
+
+def choose_on(window: str) -> str:
+    """Every threshold, penalty and conformal offset is chosen on validation; asking for the test
+    window is the deliberate violation the protocol test plants."""
+    if window != "validation":
+        raise ProtocolError(f"the protocol chooses thresholds and penalties on validation, not on {window}")
+    return window
+
+
 class OwnForecaster:
     name = "own"
 
@@ -226,6 +238,7 @@ class OwnForecaster:
         chosen: dict[str, dict[str, float]] = {}
         search: dict[str, list[dict[str, float]]] = {}
         fits = 0
+        chosen_window = choose_on("validation")
         for authority in data.names:
             a = data.authorities[authority]
             origins = _all_origins(data, authority)
@@ -237,7 +250,7 @@ class OwnForecaster:
             base_features = spec.features
             horizons = np.arange(1, spec.horizons + 1)
             base_design = design(
-                a.series, origins, horizons, a.offsets, a.temperature, a.humidity, base_features
+                a.series, origins, horizons, a.offsets, a.temperature, a.humidity, base_features, a.typical_mw
             )
             n_hours = len(a.series.values)
             for th in POLICY.heating_thresholds_c:
@@ -279,6 +292,7 @@ class OwnForecaster:
                 "cooling_threshold_c": tc,
                 "ridge_penalty": penalty,
                 "validation_mape": best[0],
+                "chosen_on_validation": 1.0 if chosen_window == "validation" else 0.0,
             }
             search[authority] = grid
         return OwnFitted(

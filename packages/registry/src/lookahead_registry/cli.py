@@ -38,6 +38,44 @@ def weather(no_pull: bool = typer.Option(False, help="use the cache only, never 
 
 
 @app.command()
+def simulate() -> None:
+    """The synthetic grid with known truth for the demonstration seed."""
+    from lookahead_registry.stages import simulate as stage
+
+    manifest = stage.run(paths(), as_of(), DEMONSTRATION_SEED)
+    typer.echo(f"simulate: {manifest.counts()}")
+
+
+@app.command()
+def recovery(
+    seeds: int = typer.Option(0, help="seeds per condition; 0 means the policy's twenty"),
+    conditions: str = typer.Option("", help="comma separated condition names; empty means all"),
+    workers: int = typer.Option(2, help="worker processes"),
+) -> None:
+    """The recovery study over conditions and seeds on the simulator."""
+    from lookahead_registry.stages import recovery as stage
+
+    chosen = [c.strip() for c in conditions.split(",") if c.strip()] or None
+    manifest = stage.run(
+        paths(), as_of(), DEMONSTRATION_SEED, seeds=seeds or None, conditions=chosen, workers=workers
+    )
+    typer.echo(f"recovery: {manifest.counts()}")
+
+
+@app.command()
+def backtest(
+    backend: str = typer.Option("own", help="own, gbm or seasonal_naive"),
+    authorities: str = typer.Option("", help="comma separated subset, for a quick run"),
+) -> None:
+    """The rolling origin backtest of one backend on the real grid."""
+    from lookahead_registry.stages import backtest as stage
+
+    chosen = [a.strip() for a in authorities.split(",") if a.strip()] or None
+    manifest = stage.run(paths(), as_of(), DEMONSTRATION_SEED, backend, authorities=chosen)
+    typer.echo(f"backtest {backend}: {manifest.counts()}")
+
+
+@app.command()
 def manifest() -> None:
     """Merge every stage manifest into results/manifest.json."""
     from lookahead_registry.stages import assemble

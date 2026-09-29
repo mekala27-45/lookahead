@@ -62,7 +62,7 @@ jobs:
       LOOKAHEAD_TEST_DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/lookahead_test
       LOOKAHEAD_REQUIRE_POSTGRES: "1"
       LOOKAHEAD_REQUIRE_DERIVED: "1"
-      LOOKAHEAD_REQUIRE_LIGHTGBM: "1"
+      LOOKAHEAD_REQUIRE_XGBOOST: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5

@@ -100,7 +100,7 @@ markers = [
   "postgres: needs a reachable Postgres (LOOKAHEAD_TEST_DATABASE_URL or local binaries)",
   "external: needs the raw public files under data/external",
   "derived: needs the derived data under data/eia930, data/weather and data/london",
-  "lightgbm: needs LightGBM importable",
+  "xgboost: needs XGBoost importable",
   "slow: full pipeline verification",
   "loadtest: runs the load test against a live server",
 ]
