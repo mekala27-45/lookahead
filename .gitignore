@@ -41,3 +41,11 @@ web/src/app/tokens.css
 deploy/live-url.txt
 deploy/write-token.txt
 deploy/*-log.txt
+deploy/reset-result.json
+
+# Backtest prediction and scoring frames: tens of megabytes per backend, rebuilt by `make backtest`;
+# the summaries, manifests, marts and model exports beside them are committed.
+results/backtest/*/predictions.parquet
+results/backtest/*/scoring.parquet
+results/hierarchy/predictions.parquet
+results/hierarchy/scoring.parquet
