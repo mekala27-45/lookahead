@@ -96,6 +96,17 @@ def hierarchy(authorities: str = typer.Option("", help="comma separated subset, 
 
 
 @app.command()
+def events(
+    known: bool = typer.Option(True, help="grade the known events table (fits a window per row)"),
+) -> None:
+    """Anomaly detection with its operating point, graded on the known events."""
+    from lookahead_registry.stages import events as stage
+
+    manifest = stage.run(paths(), as_of(), DEMONSTRATION_SEED, known=known)
+    typer.echo(f"events: {manifest.counts()}")
+
+
+@app.command()
 def manifest() -> None:
     """Merge every stage manifest into results/manifest.json."""
     from lookahead_registry.stages import assemble
