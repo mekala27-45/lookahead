@@ -88,7 +88,8 @@ def export_gbm(fitted: Any, data: Any, spec: ForecastSpec, path: Path) -> dict[s
     refits = [k for k in fitted.boosters if k != "calibration"]
     key = refits[-1] if refits else "calibration"
     booster = fitted.boosters[key][0]
-    booster_path = path.with_suffix(".booster.json")
+    # The universal binary format: a fifth the size of the JSON form for the same trees.
+    booster_path = path.with_suffix(".booster.ubj")
     path.parent.mkdir(parents=True, exist_ok=True)
     booster.save_model(str(booster_path))
     codes = {a: i for i, a in enumerate(data.names)}
