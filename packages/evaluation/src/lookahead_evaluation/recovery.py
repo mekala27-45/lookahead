@@ -136,7 +136,7 @@ def run_one(condition: str, seed: int) -> RunRecord:
     figures["own.coverage_50"] = float(stat_coverage_50(totals)[0])
     figures["own.coverage_90"] = float(stat_coverage_90(totals)[0])
     figures["own.fits"] = float(own_result.predictions.fits)
-    fitted = own.fit(data, ForecastSpec(backend="own"), data.test_start)
+    fitted = own_result.fitted  # the fit the backtest already made; a second search doubled the run
     heat_err: list[float] = []
     cool_err: list[float] = []
     holiday_err: list[float] = []

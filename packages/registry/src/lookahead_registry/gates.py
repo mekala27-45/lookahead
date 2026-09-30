@@ -170,4 +170,6 @@ def choose_served(candidates: Mapping[str, tuple[list[GateResult], float]]) -> t
     if not passing:
         return None, "no candidate cleared every gate"
     best = max(sorted(passing), key=lambda b: passing[b])
-    return best, f"{best} cleared every gate with the best headline ({passing[best]:.4f})"
+    headline = passing[best]
+    shown = f"{headline:+.0f}" if float(headline).is_integer() else f"{headline:.4f}"
+    return best, f"{best} cleared every gate with the best headline (wins minus losses {shown})"
