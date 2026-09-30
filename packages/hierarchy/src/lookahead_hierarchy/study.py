@@ -10,7 +10,10 @@ days, and the callout says where a method helped and where it hurt.
 
 from __future__ import annotations
 
+import hashlib
+import os
 from dataclasses import dataclass, field, replace
+from pathlib import Path
 
 import numpy as np
 import polars as pl
@@ -102,20 +105,14 @@ def run_study(
     if rows == 0:
         raise ValueError("no row has a base forecast for every node")
 
-    # Validation residuals in megawatts, aligned across nodes, for the MinT covariance.
+    # Validation residuals in megawatts, aligned across nodes on the origin hour (a position is
+    # relative to each node's own series, and the subregion series start later than their
+    # authorities'), for the MinT covariance.
     residual_frames = []
     for node in series:
         v = validation[node]
-        residual_frames.append(
-            pl.DataFrame(
-                {
-                    "origin_position": v.origin_position,
-                    "horizon": v.horizon,
-                    node: (v.actual_ratio - v.pred_ratio) * v.scale,
-                }
-            )
-        )
-    aligned = _derive_remainders(_join_all(residual_frames), summing)
+        residual_frames.append(_validation_frame(node, v, data, (v.actual_ratio - v.pred_ratio) * v.scale))
+    aligned = _derive_remainders(_join_all(residual_frames, series), summing)
     residuals = aligned.select(nodes).to_numpy().astype(np.float64)
     covariance, intensity = shrink_covariance(residuals)
 
@@ -124,12 +121,8 @@ def run_study(
     validation_actual = []
     for node in series:
         v = validation[node]
-        validation_actual.append(
-            pl.DataFrame(
-                {"origin_position": v.origin_position, "horizon": v.horizon, node: v.actual_ratio * v.scale}
-            )
-        )
-    leaf_aligned = _derive_remainders(_join_all(validation_actual), summing)
+        validation_actual.append(_validation_frame(node, v, data, v.actual_ratio * v.scale))
+    leaf_aligned = _derive_remainders(_join_all(validation_actual, series), summing)
     proportions = historical_proportions(leaf_aligned.select(leaf_nodes).to_numpy().astype(np.float64))
 
     reconciled: dict[str, np.ndarray] = {"base": base}
@@ -171,6 +164,23 @@ hierarchy that is a hundred and fifty nodes, so the nodes are run in chunks and 
 rows and the validation runs are kept."""
 
 
+CHECKPOINT_ENV = "LOOKAHEAD_HIERARCHY_CHECKPOINTS"
+"""A directory; when set, every finished chunk's scoring rows and validation runs are written
+there under the spec hash and the chunk's nodes, and a rerun reads them back instead of fitting
+the chunk again. The build machine restarts without notice. The rederive never sets it."""
+
+VALIDATION_FIELDS = ("origin_position", "horizon", "pred_ratio", "actual_ratio", "scale")
+
+
+def _chunk_paths(chunk: list[str], spec: ForecastSpec) -> tuple[Path, Path] | None:
+    folder = os.environ.get(CHECKPOINT_ENV, "").strip()
+    if not folder:
+        return None
+    key = hashlib.sha256(("|".join(chunk) + "#" + spec.spec_hash).encode()).hexdigest()[:16]
+    base = Path(folder) / key
+    return base.with_suffix(".scoring.parquet"), base.with_suffix(".validation.npz")
+
+
 def _backtest_in_chunks(
     data: PanelData, series: list[str], forecaster: OwnForecaster, spec: ForecastSpec
 ) -> tuple[pl.DataFrame, dict[str, ValidationRun]]:
@@ -178,10 +188,24 @@ def _backtest_in_chunks(
     validation: dict[str, ValidationRun] = {}
     for start in range(0, len(series), NODES_PER_CHUNK):
         chunk = series[start : start + NODES_PER_CHUNK]
+        paths = _chunk_paths(chunk, spec)
+        if paths is not None and paths[0].exists() and paths[1].exists():
+            parts.append(pl.read_parquet(paths[0]))
+            with np.load(paths[1]) as saved:
+                for node in chunk:
+                    validation[node] = ValidationRun(**{f: saved[f"{node}/{f}"] for f in VALIDATION_FIELDS})
+            continue
         result = run_backend(_only(data, chunk), forecaster, spec)
         parts.append(result.scoring)
         for node in chunk:
             validation[node] = result.fitted.validation[node]
+        if paths is not None:
+            paths[0].parent.mkdir(parents=True, exist_ok=True)
+            result.scoring.write_parquet(paths[0])
+            arrays = {
+                f"{node}/{f}": getattr(validation[node], f) for node in chunk for f in VALIDATION_FIELDS
+            }
+            np.savez(paths[1], **arrays)
         del result
     return pl.concat(parts), validation
 
@@ -195,10 +219,21 @@ def _only(data: PanelData, names: list[str]) -> PanelData:
     )
 
 
-def _join_all(frames: list[pl.DataFrame]) -> pl.DataFrame:
+def _validation_frame(node: str, v: ValidationRun, data: PanelData, values: np.ndarray) -> pl.DataFrame:
+    """One node's validation rows keyed by the absolute origin hour and the horizon."""
+    first = np.datetime64(data.authorities[node].series.first_hour.replace(tzinfo=None), "h")
+    origin_hour = (first + v.origin_position.astype("timedelta64[h]")).astype("datetime64[ms]")
+    return pl.DataFrame({"origin_hour": origin_hour, "horizon": v.horizon, node: values})
+
+
+def _join_all(frames: list[pl.DataFrame], names: list[str]) -> pl.DataFrame:
     out = frames[0]
     for f in frames[1:]:
-        out = out.join(f, on=["origin_position", "horizon"], how="inner")
+        out = out.join(f, on=["origin_hour", "horizon"], how="inner")
+    if out.height == 0:
+        counts = sorted((f.height, n) for f, n in zip(frames, names, strict=True))
+        fewest = ", ".join(f"{n} ({h} rows)" for h, n in counts[:5])
+        raise ValueError(f"no validation row is shared by every node; the fewest rows: {fewest}")
     return out
 
 

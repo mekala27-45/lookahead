@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import polars as pl
 import pytest
@@ -134,7 +136,9 @@ def test_reconciled_quantiles_stay_coherent_when_levels_cross() -> None:
     assert np.all(np.diff(out, axis=2) >= -1e-9), "levels are monotone at every node"
 
 
-def test_a_negative_remainder_is_derived_not_fit_and_bottom_up_keeps_the_authority() -> None:
+def test_a_negative_remainder_is_derived_not_fit_and_bottom_up_keeps_the_authority(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """One real authority's subregions sum to more than its demand, so its remainder node is
     negative and no ratio model can be fit to it. The study derives the remainder from the parent
     and the siblings, leaves it out of the accuracy tables, and bottom up then reproduces the
@@ -157,7 +161,13 @@ def test_a_negative_remainder_is_derived_not_fit_and_bottom_up_keeps_the_authori
     assert float(rest_demand.median()) < 0, "the remainder is negative by construction"
 
     data = PanelData.from_frames(node_panel, None, SIM_WINDOWS, "simulated")
+    from lookahead_hierarchy.study import CHECKPOINT_ENV
+
+    monkeypatch.setenv(CHECKPOINT_ENV, str(tmp_path))
     study = run_study(data, summing, seed=5)
+    assert list(tmp_path.glob("*.scoring.parquet")), "each chunk's rows were checkpointed"
+    again = run_study(data, summing, seed=5)  # read back from the checkpoints
+    assert [s.mape for s in again.scores] == [s.mape for s in study.scores]
     assert study.coherence_gap_mw["bottom_up"] < 1e-3
     parent = str(summing.parents[rest])
     j_parent = summing.nodes.index(parent)
