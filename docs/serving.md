@@ -15,7 +15,7 @@ audit row, then commit, then the response; `test_audit_precedes_response` holds 
 Deployed at https://lookahead-grid-api.fly.dev on Fly.io's free allowance (one shared CPU machine that
 stops when idle and starts on the first request, which is why the site probes twice) with Neon
 Postgres; the tables live in the `lookahead` schema when the database is shared with another
-project. Verified from a separate client (AJAY, Windows, PowerShell 5.1.26100.9444) at 2026-09-29T23:59:24.0034369Z:
+project. Verified from a separate client (AJAY, Windows, PowerShell 5.1.26100.9444) at 2026-09-30T22:21:51.1458679Z:
 deployed, 48 rows read back, audit before
 response yes. Latency from `scripts/load_test.py`:
 2 measurement files (local p99 for issuing

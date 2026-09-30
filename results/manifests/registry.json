@@ -75,9 +75,9 @@
      "own",
      "p99_latency",
      "pass",
-     287.2,
+     143.3,
      "2000.0",
-     "p99 of POST /v1/forecasts 287 ms (live, 40 requests)"
+     "p99 of POST /v1/forecasts 143 ms (live, 40 requests)"
     ],
     [
      "own",
@@ -131,9 +131,9 @@
      "gbm",
      "p99_latency",
      "pass",
-     287.2,
+     143.3,
      "2000.0",
-     "p99 of POST /v1/forecasts 287 ms (live, 40 requests)"
+     "p99 of POST /v1/forecasts 143 ms (live, 40 requests)"
     ],
     [
      "gbm",
@@ -341,7 +341,7 @@
     "seeds": null,
     "source": "real:eia930"
    },
-   "value": 287.2
+   "value": 143.3
   },
   "registry.gbm.passed": {
    "fmt": "text",
@@ -593,7 +593,7 @@
     "seeds": null,
     "source": "real:eia930"
    },
-   "value": 287.2
+   "value": 143.3
   },
   "registry.own.passed": {
    "fmt": "text",
@@ -691,7 +691,7 @@
     "seeds": null,
     "source": "real:eia930"
    },
-   "value": 2.038151503
+   "value": 17.44073009
   },
   "registry.served": {
    "fmt": "text",

@@ -1,23 +1,23 @@
 {
  "authorities": 51,
  "base_url": "https://lookahead-grid-api.fly.dev",
- "burst_issue_max_ms": 307.6,
+ "burst_issue_max_ms": 364.9,
  "concurrency": 6,
  "errors": 0,
- "first_request_ms": 159.1,
+ "first_request_ms": 165,
  "issue": {
-  "max_ms": 287.2,
-  "mean_ms": 114.4,
-  "p50_ms": 99.7,
-  "p99_ms": 287.2
+  "max_ms": 143.3,
+  "mean_ms": 107.1,
+  "p50_ms": 103.8,
+  "p99_ms": 143.3
  },
- "measured_at": "2026-09-30T00:00:04.9778826Z",
+ "measured_at": "2026-09-30T22:22:51.1738192Z",
  "note": "sequential requests after one warming request from a Windows client; the burst is concurrent issues",
  "read": {
-  "max_ms": 182.7,
-  "mean_ms": 76.2,
-  "p50_ms": 67.7,
-  "p99_ms": 182.7
+  "max_ms": 74.5,
+  "mean_ms": 60.7,
+  "p50_ms": 59.8,
+  "p99_ms": 74.5
  },
  "requests": 40
 }

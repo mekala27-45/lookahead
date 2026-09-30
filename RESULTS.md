@@ -18,7 +18,7 @@ backend is gbm.
 | 4 | Baselines and the own backend with conformal quantiles; the recovery study on every condition with at least twenty seeds each | done | `own` over 18,615 origins, MAPE 5.65% against the naive's 11.66%; the recovery study ran 120 runs over 6 conditions with 20 seeds each (`results/recovery/`). |
 | 5 | The gbm backend with quantile objectives and conformal; the cross check table with both baselines | done | `gbm` (XGBoost, quantile objective at the five levels, conformalized intervals) over 18,615 origins with 13 monthly refits, MAPE 5.48%; the cross check table in `RESULTS.md` (own better in 4, gbm in 40, disagreements on the operator 8). |
 | 6 | The skill table against the operator: wins, losses and ties across the authorities with intervals; the two headline numbers | done | gbm beat the operator in 18 of 44 comparable authorities (13 to 24) and lost in 17 (12 to 22); `results/skill/skill_rows.parquet`. |
-| 7 | API deployed on Fly with Neon; live URL in the README; verified from a separate client, with the client's response printed | done | https://lookahead-grid-api.fly.dev, checked from AJAY, Windows, PowerShell 5.1.26100.9444 at 2026-09-29T23:59:24.0034369Z: passed yes, 48 rows read back, audit before response yes; `results/deploy/verification.json`. |
+| 7 | API deployed on Fly with Neon; live URL in the README; verified from a separate client, with the client's response printed | done | https://lookahead-grid-api.fly.dev, checked from AJAY, Windows, PowerShell 5.1.26100.9444 at 2026-09-30T22:21:51.1458679Z: passed yes, 48 rows read back, audit before response yes; `results/deploy/verification.json`. |
 | 8 | Forecasts and scores observed from an independent connection; audit before response; the out of process check | done | `tests/api/test_forecast_log.py` (`test_forecast_is_committed`, `test_scores_are_committed`, `test_audit_precedes_response`) and `scripts/check_persistence.py --start-server` in CI. |
 | 9 | Quantile coverage and the reliability diagram per horizon; the served levels with their interior test | done | gbm 90 percent coverage 89.1% and 50 percent 49.0% on test, 90.0% on validation; degenerate levels none, interior yes; the reliability table in `RESULTS.md`. |
 | 10 | Hierarchy reconciliation by three methods with coherence tests; accuracy by level before and after with intervals | done | 159 nodes, coherence gaps 0.0000 MW (bottom up), 0.0000 MW (top down), 0.0000 MW (MinT); helped at bottom_up at the lower 48 level; bottom_up at the interconnection level; bottom_up at the region level; mint at the lower 48 level; mint at the interconnection level; mint at the region level; hurt at top_down at the interconnection level; top_down at the region level; top_down at the authority level; top_down at the subregion level; mint at the authority level; mint at the subregion level. |
@@ -855,22 +855,22 @@ live, 40 requests.
 | own | coverage_90_on_validation | pass | 0.9008 | 0.85 to 0.95 | empirical 90 percent coverage on the validation year 0.901 |
 | own | peak_timing_median | pass | 1.0000 | 2.0 | median absolute peak timing error 1.0 hours over the test year |
 | own | coherence_exact | pass | 0.0000 | 0.001 | largest gap after reconciliation bottom_up 0.000000 MW, mint 0.000000 MW, top_down 0.000000 MW |
-| own | p99_latency | pass | 287.2000 | 2000.0 | p99 of POST /v1/forecasts 287 ms (live, 40 requests) |
+| own | p99_latency | pass | 143.3000 | 2000.0 | p99 of POST /v1/forecasts 143 ms (live, 40 requests) |
 | own | leakage_check_green | pass | 0.0000 | 1e-09 | AECI: 60 design rows recomputed at their origin, largest gap 0.00e+00; the leaky lag was refused |
 | gbm | mape_not_worse_than_naive | pass | 0.0000 | 0.0 | 51 authorities; worse than the naive in 0 |
 | gbm | skill_not_significantly_negative | pass | 0.0000 | 0.5 | significantly worse than the operator in 0 of 44 comparable authorities |
 | gbm | coverage_90_on_validation | pass | 0.9003 | 0.85 to 0.95 | empirical 90 percent coverage on the validation year 0.900 |
 | gbm | peak_timing_median | pass | 1.0000 | 2.0 | median absolute peak timing error 1.0 hours over the test year |
 | gbm | coherence_exact | pass | 0.0000 | 0.001 | largest gap after reconciliation bottom_up 0.000000 MW, mint 0.000000 MW, top_down 0.000000 MW |
-| gbm | p99_latency | pass | 287.2000 | 2000.0 | p99 of POST /v1/forecasts 287 ms (live, 40 requests) |
+| gbm | p99_latency | pass | 143.3000 | 2000.0 | p99 of POST /v1/forecasts 143 ms (live, 40 requests) |
 | gbm | leakage_check_green | pass | 0.0000 | 1e-09 | AECI: 60 design rows recomputed at their origin, largest gap 0.00e+00; the leaky lag was refused |
 
 Source: real:eia930, model both, the candidate backends over the test year, as of 2026-09-29.
 
 Deploy: deployed at https://lookahead-grid-api.fly.dev, checked from AJAY, Windows, PowerShell 5.1.26100.9444
-at 2026-09-29T23:59:24.0034369Z; 48 rows read back, first hour
-median 2,908 MW, 48 rows scored, unscored share
-0.0%, 2 audit entries, audit before response
+at 2026-09-30T22:21:51.1458679Z; 48 rows read back, first hour
+median 3,131 MW, 2,303 rows scored, unscored share
+0.0%, 50 audit entries, audit before response
 yes, statement present yes.
 Live check: not checked at not yet in no browser yet,
 0 of 0 routes, forecast none,

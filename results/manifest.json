@@ -8738,9 +8738,9 @@
      "own",
      "p99_latency",
      "pass",
-     287.2,
+     143.3,
      "2000.0",
-     "p99 of POST /v1/forecasts 287 ms (live, 40 requests)"
+     "p99 of POST /v1/forecasts 143 ms (live, 40 requests)"
     ],
     [
      "own",
@@ -8794,9 +8794,9 @@
      "gbm",
      "p99_latency",
      "pass",
-     287.2,
+     143.3,
      "2000.0",
-     "p99 of POST /v1/forecasts 287 ms (live, 40 requests)"
+     "p99 of POST /v1/forecasts 143 ms (live, 40 requests)"
     ],
     [
      "gbm",
@@ -17672,7 +17672,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": 2
+   "value": 50
   },
   "deploy.authority": {
    "fmt": "text",
@@ -17700,7 +17700,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": "own"
+   "value": "gbm"
   },
   "deploy.base_url": {
    "fmt": "text",
@@ -17728,7 +17728,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": "2026-09-29T23:59:24.0034369Z"
+   "value": "2026-09-30T22:21:51.1458679Z"
   },
   "deploy.client": {
    "fmt": "text",
@@ -17756,7 +17756,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": "40836a69-f0ae-4c72-b581-d2441c401d90"
+   "value": "8256f9ea-efd4-43c2-a000-18421764ce82"
   },
   "deploy.forecast_rows_read_back": {
    "fmt": "int",
@@ -17812,7 +17812,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": 2908.306533
+   "value": 3131.260402
   },
   "deploy.model_version": {
    "fmt": "text",
@@ -17826,7 +17826,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": "own-a6c87a9b"
+   "value": "gbm-c39d958f"
   },
   "deploy.origin": {
    "fmt": "text",
@@ -17868,7 +17868,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": 48
+   "value": 2303
   },
   "deploy.statement_present": {
    "fmt": "text",
@@ -17910,7 +17910,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": 0.0
+   "value": 0.000425170068
   },
   "events.false_alarm_cost": {
    "fmt": "float1",
@@ -20066,7 +20066,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": 307.6
+   "value": 364.9
   },
   "latency.live.concurrency": {
    "fmt": "int",
@@ -20094,7 +20094,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": 159.1
+   "value": 165.0
   },
   "latency.live.issue.max_ms": {
    "fmt": "ms",
@@ -20108,7 +20108,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": 287.2
+   "value": 143.3
   },
   "latency.live.issue.p50_ms": {
    "fmt": "ms",
@@ -20122,7 +20122,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": 99.7
+   "value": 103.8
   },
   "latency.live.issue.p99_ms": {
    "fmt": "ms",
@@ -20136,7 +20136,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": 287.2
+   "value": 143.3
   },
   "latency.live.measured_at": {
    "fmt": "text",
@@ -20150,7 +20150,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": "2026-09-30T00:00:04.9778826Z"
+   "value": "2026-09-30T22:22:51.1738192Z"
   },
   "latency.live.read.max_ms": {
    "fmt": "ms",
@@ -20164,7 +20164,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": 182.7
+   "value": 74.5
   },
   "latency.live.read.p50_ms": {
    "fmt": "ms",
@@ -20178,7 +20178,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": 67.7
+   "value": 59.8
   },
   "latency.live.read.p99_ms": {
    "fmt": "ms",
@@ -20192,7 +20192,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": 182.7
+   "value": 74.5
   },
   "latency.live.requests": {
    "fmt": "int",
@@ -34766,7 +34766,7 @@
     "seeds": null,
     "source": "real:eia930"
    },
-   "value": 287.2
+   "value": 143.3
   },
   "registry.gbm.passed": {
    "fmt": "text",
@@ -35018,7 +35018,7 @@
     "seeds": null,
     "source": "real:eia930"
    },
-   "value": 287.2
+   "value": 143.3
   },
   "registry.own.passed": {
    "fmt": "text",
@@ -35116,7 +35116,7 @@
     "seeds": null,
     "source": "real:eia930"
    },
-   "value": 2.038151503
+   "value": 17.44073009
   },
   "registry.served": {
    "fmt": "text",

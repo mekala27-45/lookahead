@@ -1,5 +1,5 @@
 {
- "chosen_at": "2026-09-30T05:39:27.005475+00:00",
+ "chosen_at": "2026-09-30T22:24:55.426508+00:00",
  "as_of": "2026-09-29",
  "served": "gbm",
  "reason": "gbm cleared every gate with the best headline (wins minus losses +1)",
@@ -58,9 +58,9 @@
     "p99_latency": {
      "name": "p99_latency",
      "passed": true,
-     "value": 287.2,
+     "value": 143.3,
      "threshold": 2000.0,
-     "evidence": "p99 of POST /v1/forecasts 287 ms (live, 40 requests)"
+     "evidence": "p99 of POST /v1/forecasts 143 ms (live, 40 requests)"
     },
     "leakage_check_green": {
      "name": "leakage_check_green",
@@ -118,9 +118,9 @@
     "p99_latency": {
      "name": "p99_latency",
      "passed": true,
-     "value": 287.2,
+     "value": 143.3,
      "threshold": 2000.0,
-     "evidence": "p99 of POST /v1/forecasts 287 ms (live, 40 requests)"
+     "evidence": "p99 of POST /v1/forecasts 143 ms (live, 40 requests)"
     },
     "leakage_check_green": {
      "name": "leakage_check_green",
