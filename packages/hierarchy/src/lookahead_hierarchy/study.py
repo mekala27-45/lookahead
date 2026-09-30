@@ -158,10 +158,10 @@ def run_study(
     )
 
 
-NODES_PER_CHUNK = 16
-"""The own backend keeps every node's design for every origin in memory while it runs; on the real
-hierarchy that is a hundred and fifty nodes, so the nodes are run in chunks and only the scoring
-rows and the validation runs are kept."""
+NODES_PER_CHUNK = 8
+"""The own backend keeps every node's design for every origin in memory while it runs, about a
+fifth of a gigabyte a node; on the real hierarchy that is a hundred and fifty nodes, so the nodes
+are run in chunks of eight and only the scoring rows and the validation runs are kept."""
 
 
 CHECKPOINT_ENV = "LOOKAHEAD_HIERARCHY_CHECKPOINTS"
@@ -198,7 +198,9 @@ def _backtest_in_chunks(
         result = run_backend(_only(data, chunk), forecaster, spec)
         parts.append(result.scoring)
         for node in chunk:
-            validation[node] = result.fitted.validation[node]
+            # Copies, so no validation array keeps a whole design alive as a view of it.
+            run = result.fitted.validation[node]
+            validation[node] = ValidationRun(**{f: np.array(getattr(run, f)) for f in VALIDATION_FIELDS})
         if paths is not None:
             paths[0].parent.mkdir(parents=True, exist_ok=True)
             result.scoring.write_parquet(paths[0])

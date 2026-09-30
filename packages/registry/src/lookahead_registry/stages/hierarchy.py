@@ -39,6 +39,9 @@ def run(paths: Paths, as_of: str, seed: int, *, authorities: list[str] | None = 
     node_panel = build_node_panel(panel, subregions, weather, nodes, eligible)
     data = PanelData.from_frames(node_panel, None, windows, "real:eia930")
     summing = SummingMatrix.from_table(nodes)
+    negative_remainders = _negative_remainders(node_panel, summing, windows)
+    # The frames are not needed past this point and the study needs the memory.
+    del panel, node_panel, weather, subregions
     study = run_study(data, summing, seed)
     seconds = time.time() - started
 
@@ -116,7 +119,7 @@ def run(paths: Paths, as_of: str, seed: int, *, authorities: list[str] | None = 
     w.put("hierarchy.subregions", subs.height, "int")
     w.put("hierarchy.authorities_with_subregions", subs["authority"].n_unique(), "int")
     w.put("hierarchy.remainder_nodes", nodes.filter(pl.col("kind") == "remainder").height, "int")
-    w.put("hierarchy.negative_remainders", _negative_remainders(node_panel, summing, windows), "int")
+    w.put("hierarchy.negative_remainders", negative_remainders, "int")
     w.put("hierarchy.rows", study.rows, "int")
     w.put("hierarchy.origins", study.origins, "int")
     w.put("hierarchy.seconds", seconds, "float1")
