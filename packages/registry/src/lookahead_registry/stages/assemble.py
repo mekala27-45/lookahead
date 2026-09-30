@@ -182,17 +182,18 @@ def _live_check(manifest: Manifest, path: Path) -> None:
         population="the live site and API in a real browser",
         origin="scripts/live_check.py",
     )
+    # Before the check has run the keys still exist, so every document renders and says so.
+    seen = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
     if not path.exists():
         w.put("live.status", "not checked", "text")
-        return
-    seen = json.loads(path.read_text(encoding="utf-8"))
-    w.put("live.status", "passed" if seen.get("passed") else "failed", "text")
-    w.put("live.checked_at", str(seen.get("checked_at", "")), "text")
-    w.put("live.browser", str(seen.get("browser", "")), "text")
+    else:
+        w.put("live.status", "passed" if seen.get("passed") else "failed", "text")
+    w.put("live.checked_at", str(seen.get("checked_at", "")) or "not yet", "text")
+    w.put("live.browser", str(seen.get("browser", "")) or "no browser yet", "text")
     w.put("live.site_url", str(seen.get("site_url", "")), "text")
     w.put("live.routes_loaded", int(seen.get("routes_loaded", 0)), "int")
     w.put("live.routes_total", int(seen.get("routes_total", 0)), "int")
-    w.put("live.forecast_id", str(seen.get("forecast_id", "")), "text")
+    w.put("live.forecast_id", str(seen.get("forecast_id", "")) or "none", "text")
     w.put(
         "live.asleep_recorded_session_shown",
         "yes" if seen.get("asleep_recorded_session_shown") else "no",

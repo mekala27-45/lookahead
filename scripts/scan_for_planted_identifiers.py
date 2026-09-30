@@ -22,7 +22,10 @@ if __package__ in {None, ""}:
 SSN = re.compile(r"(?<!\d)(?!000|666|9\d\d)\d{3}-(?!00)\d{2}-(?!0000)\d{4}(?!\d)")
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 # A run of digits after a decimal point is the fraction of a number, not a card.
-PAN = re.compile(r"(?<![\d.])(?:\d[ -]?){13,19}(?!\d)")
+# A run of 13 to 19 digits with optional separators, not inside a longer token: a UUID's last
+# groups ("8d53-367165456046") are hexadecimal and can pass Luhn by chance, so a run that is
+# preceded or followed by a word character or a hyphen is part of an identifier, not a card.
+PAN = re.compile(r"(?<![\w.-])(?:\d[ -]?){13,19}(?![\w-])")
 RAW_HEADERS = {
     "london raw header": "LCLid,stdorToU,DateTime,KWH/hh (per half hour)",
     "eia balance raw header": "Balancing Authority,Data Date,Hour Number,Local Time at End of Hour,UTC Time at End of Hour,Demand Forecast (MW),Demand (MW),Net Generation (MW),Total Interchange (MW)",

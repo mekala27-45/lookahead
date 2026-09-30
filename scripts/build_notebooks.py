@@ -169,7 +169,7 @@ print("nodes", len(summing.nodes), "leaves", len(summing.leaves), "matrix", summ
         """coherence = json.loads((ROOT / "results" / "hierarchy" / "coherence.json").read_text())
 print("coherence gaps in MW:", coherence["gaps_mw"])
 scores = pl.read_parquet(ROOT / "results" / "hierarchy" / "scores_by_level.parquet")
-print(scores.select("method", "level_name", "mape", "mape_lower", "mape_upper", "coverage_90").sort(["level", "method"]))""",
+print(scores.select("method", "level", "level_name", "mape", "mape_lower", "mape_upper", "coverage_90").sort(["level", "method"]))""",
     ),
     (
         "markdown",
