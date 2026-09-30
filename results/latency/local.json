@@ -1,0 +1,23 @@
+{
+ "authorities": 51,
+ "base_url": "http://127.0.0.1:8794",
+ "burst_issue_max_ms": 235.2,
+ "concurrency": 8,
+ "errors": 0,
+ "first_request_ms": 245.0,
+ "issue": {
+  "max_ms": 146.6,
+  "mean_ms": 28.7,
+  "p50_ms": 25.3,
+  "p99_ms": 42.5
+ },
+ "measured_at": "2026-09-30T05:39:13.927371+00:00",
+ "note": "sequential requests after one warming request; the burst is concurrent issues",
+ "read": {
+  "max_ms": 21.8,
+  "mean_ms": 6.6,
+  "p50_ms": 6.1,
+  "p99_ms": 11.2
+ },
+ "requests": 60
+}

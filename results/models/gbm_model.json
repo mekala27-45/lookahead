@@ -1,0 +1,396 @@
+{
+ "authorities": {
+  "AECI": {
+   "region": "MIDW",
+   "typical_mw": 2694.895407883681
+  },
+  "AVA": {
+   "region": "NW",
+   "typical_mw": 1448.3710496510905
+  },
+  "AZPS": {
+   "region": "SW",
+   "typical_mw": 3674.056916215821
+  },
+  "BANC": {
+   "region": "CAL",
+   "typical_mw": 1992.724027713626
+  },
+  "BPAT": {
+   "region": "NW",
+   "typical_mw": 6455.921767713659
+  },
+  "CHPD": {
+   "region": "NW",
+   "typical_mw": 214.35988659228096
+  },
+  "CISO": {
+   "region": "CAL",
+   "typical_mw": 25226.2160083312
+  },
+  "CPLE": {
+   "region": "CAR",
+   "typical_mw": 6986.959739404143
+  },
+  "CPLW": {
+   "region": "CAR",
+   "typical_mw": 571.5022499451233
+  },
+  "DOPD": {
+   "region": "NW",
+   "typical_mw": 229.79799157514668
+  },
+  "DUK": {
+   "region": "CAR",
+   "typical_mw": 12101.602904640116
+  },
+  "EPE": {
+   "region": "SW",
+   "typical_mw": 1015.6457363066864
+  },
+  "ERCO": {
+   "region": "TEX",
+   "typical_mw": 47184.19782409947
+  },
+  "FMPP": {
+   "region": "FLA",
+   "typical_mw": 2121.6241712757774
+  },
+  "FPC": {
+   "region": "FLA",
+   "typical_mw": 6418.277357594358
+  },
+  "FPL": {
+   "region": "FLA",
+   "typical_mw": 15510.360838875817
+  },
+  "GCPD": {
+   "region": "NW",
+   "typical_mw": 668.9875454263226
+  },
+  "GVL": {
+   "region": "FLA",
+   "typical_mw": 238.14994775339602
+  },
+  "HST": {
+   "region": "FLA",
+   "typical_mw": 70.0422859650085
+  },
+  "IID": {
+   "region": "CAL",
+   "typical_mw": 443.0422185886719
+  },
+  "IPCO": {
+   "region": "NW",
+   "typical_mw": 2066.089718772827
+  },
+  "ISNE": {
+   "region": "NE",
+   "typical_mw": 13342.178204262002
+  },
+  "JEA": {
+   "region": "FLA",
+   "typical_mw": 1517.495043506994
+  },
+  "LDWP": {
+   "region": "CAL",
+   "typical_mw": 2936.7248582787306
+  },
+  "LGEE": {
+   "region": "MIDW",
+   "typical_mw": 4092.4363912915996
+  },
+  "MISO": {
+   "region": "MIDW",
+   "typical_mw": 73753.59825311552
+  },
+  "NEVP": {
+   "region": "NW",
+   "typical_mw": 4458.446593960651
+  },
+  "NWMT": {
+   "region": "NW",
+   "typical_mw": 1365.7029372985644
+  },
+  "NYIS": {
+   "region": "NY",
+   "typical_mw": 17468.50724055441
+  },
+  "PACE": {
+   "region": "NW",
+   "typical_mw": 5699.586013551769
+  },
+  "PACW": {
+   "region": "NW",
+   "typical_mw": 2394.2926383841336
+  },
+  "PGE": {
+   "region": "NW",
+   "typical_mw": 2458.527819411442
+  },
+  "PJM": {
+   "region": "MIDA",
+   "typical_mw": 91323.4360644937
+  },
+  "PNM": {
+   "region": "SW",
+   "typical_mw": 1625.3703026758299
+  },
+  "PSCO": {
+   "region": "NW",
+   "typical_mw": 5304.313257195066
+  },
+  "PSEI": {
+   "region": "NW",
+   "typical_mw": 2943.4795230440727
+  },
+  "SC": {
+   "region": "CAR",
+   "typical_mw": 2801.4129957156983
+  },
+  "SCEG": {
+   "region": "CAR",
+   "typical_mw": 2801.6714249112406
+  },
+  "SCL": {
+   "region": "NW",
+   "typical_mw": 1074.5008037116868
+  },
+  "SEC": {
+   "region": "FLA",
+   "typical_mw": 247.63476623088854
+  },
+  "SOCO": {
+   "region": "SE",
+   "typical_mw": 26988.520287095358
+  },
+  "SPA": {
+   "region": "CENT",
+   "typical_mw": 59.74370394809194
+  },
+  "SRP": {
+   "region": "SW",
+   "typical_mw": 3734.6019064574757
+  },
+  "SWPP": {
+   "region": "CENT",
+   "typical_mw": 31314.890817322124
+  },
+  "TAL": {
+   "region": "FLA",
+   "typical_mw": 319.9628258978961
+  },
+  "TEC": {
+   "region": "FLA",
+   "typical_mw": 2522.9367067773674
+  },
+  "TEPC": {
+   "region": "SW",
+   "typical_mw": 1542.82348875439
+  },
+  "TIDC": {
+   "region": "CAL",
+   "typical_mw": 328.41336247268185
+  },
+  "TPWR": {
+   "region": "NW",
+   "typical_mw": 547.9511687363039
+  },
+  "TVA": {
+   "region": "TEN",
+   "typical_mw": 18326.5770198749
+  },
+  "WALC": {
+   "region": "SW",
+   "typical_mw": 1075.3174193784412
+  }
+ },
+ "backend": "gbm",
+ "booster": "gbm_model.booster.ubj",
+ "bucket_hours": 6,
+ "codes": {
+  "AECI": 0,
+  "AVA": 1,
+  "AZPS": 2,
+  "BANC": 3,
+  "BPAT": 4,
+  "CHPD": 5,
+  "CISO": 6,
+  "CPLE": 7,
+  "CPLW": 8,
+  "DOPD": 9,
+  "DUK": 10,
+  "EPE": 11,
+  "ERCO": 12,
+  "FMPP": 13,
+  "FPC": 14,
+  "FPL": 15,
+  "GCPD": 16,
+  "GVL": 17,
+  "HST": 18,
+  "IID": 19,
+  "IPCO": 20,
+  "ISNE": 21,
+  "JEA": 22,
+  "LDWP": 23,
+  "LGEE": 24,
+  "MISO": 25,
+  "NEVP": 26,
+  "NWMT": 27,
+  "NYIS": 28,
+  "PACE": 29,
+  "PACW": 30,
+  "PGE": 31,
+  "PJM": 32,
+  "PNM": 33,
+  "PSCO": 34,
+  "PSEI": 35,
+  "SC": 36,
+  "SCEG": 37,
+  "SCL": 38,
+  "SEC": 39,
+  "SOCO": 40,
+  "SPA": 41,
+  "SRP": 42,
+  "SWPP": 43,
+  "TAL": 44,
+  "TEC": 45,
+  "TEPC": 46,
+  "TIDC": 47,
+  "TPWR": 48,
+  "TVA": 49,
+  "WALC": 50
+ },
+ "data_source": "real:eia930",
+ "fitted_through": "2026-09-01",
+ "levels": [
+  0.05,
+  0.25,
+  0.5,
+  0.75,
+  0.95
+ ],
+ "names": [
+  "intercept",
+  "r_same_hour",
+  "r_same_hour_prev",
+  "r_week",
+  "r_two_weeks",
+  "r_origin",
+  "r_mean_24",
+  "same_hour_missing",
+  "week_missing",
+  "horizon_over_24",
+  "horizon_share",
+  "weekend",
+  "holiday",
+  "day_sin_1",
+  "day_cos_1",
+  "day_sin_2",
+  "day_cos_2",
+  "day_sin_3",
+  "day_cos_3",
+  "week_sin_1",
+  "week_cos_1",
+  "week_sin_2",
+  "week_cos_2",
+  "year_sin_1",
+  "year_cos_1",
+  "year_sin_2",
+  "year_cos_2",
+  "obs_heating_degree",
+  "obs_cooling_degree",
+  "obs_heating_change",
+  "obs_cooling_change",
+  "obs_humidity",
+  "obs_cooling_x_day_sin",
+  "obs_cooling_x_day_cos",
+  "obs_heating_x_day_sin",
+  "obs_heating_x_day_cos",
+  "obs_weather_missing",
+  "authority_code",
+  "region_code",
+  "log_typical_mw",
+  "obs_temperature_scaled"
+ ],
+ "region_codes": {
+  "CAL": 0,
+  "CAR": 1,
+  "CENT": 2,
+  "FLA": 3,
+  "MIDA": 4,
+  "MIDW": 5,
+  "NE": 6,
+  "NW": 7,
+  "NY": 8,
+  "SE": 9,
+  "SW": 10,
+  "TEN": 11,
+  "TEX": 12
+ },
+ "spec": {
+  "backend": "gbm",
+  "conformal_bucket_hours": 6,
+  "features": {
+   "cooling_threshold_c": 20.0,
+   "country": "US",
+   "fourier_daily": 3,
+   "fourier_weekly": 2,
+   "fourier_yearly": 2,
+   "heating_threshold_c": 14.0,
+   "use_weather": true
+  },
+  "gbm_depth": 7,
+  "gbm_learning_rate": 0.08,
+  "gbm_min_child_weight": 50,
+  "gbm_refit_months": 1,
+  "gbm_rounds": 250,
+  "gbm_training_window_days": 1096,
+  "horizons": 48,
+  "levels": [
+   0.05,
+   0.25,
+   0.5,
+   0.75,
+   0.95
+  ],
+  "ridge_penalty": 1.0,
+  "seed": 13
+ },
+ "spec_hash": "c39d958f82ab0d8e",
+ "version": "gbm-c39d958f",
+ "widening": [
+  [
+   -0.01295332993237641,
+   -0.0006379808653105246
+  ],
+  [
+   -0.01176069609321551,
+   0.0004509580512717883
+  ],
+  [
+   -0.011221117255202712,
+   -0.0006116674377729826
+  ],
+  [
+   -0.005845717279275431,
+   0.0006933022544520407
+  ],
+  [
+   -0.004643194267346472,
+   0.0005870554401887712
+  ],
+  [
+   -0.006568766458683892,
+   0.0015721521142607893
+  ],
+  [
+   -0.00572891477890405,
+   0.00036225029088184346
+  ],
+  [
+   -0.0008550197277225595,
+   0.0011857171018989031
+  ]
+ ]
+}

@@ -1,0 +1,725 @@
+{
+ "as_of": "2026-09-29",
+ "figures": {},
+ "seed": 13,
+ "tables": {
+  "registry.gates": {
+   "columns": [
+    "Backend",
+    "Gate",
+    "Result",
+    "Value",
+    "Threshold",
+    "Evidence"
+   ],
+   "formats": [
+    "text",
+    "text",
+    "text",
+    "float4",
+    "text",
+    "text"
+   ],
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "rows": [
+    [
+     "own",
+     "mape_not_worse_than_naive",
+     "pass",
+     0.0,
+     "0.0",
+     "51 authorities; worse than the naive in 0"
+    ],
+    [
+     "own",
+     "skill_not_significantly_negative",
+     "pass",
+     0.0,
+     "0.5",
+     "significantly worse than the operator in 0 of 44 comparable authorities"
+    ],
+    [
+     "own",
+     "coverage_90_on_validation",
+     "pass",
+     0.9008341846,
+     "0.85 to 0.95",
+     "empirical 90 percent coverage on the validation year 0.901"
+    ],
+    [
+     "own",
+     "peak_timing_median",
+     "pass",
+     1.0,
+     "2.0",
+     "median absolute peak timing error 1.0 hours over the test year"
+    ],
+    [
+     "own",
+     "coherence_exact",
+     "pass",
+     0.0,
+     "0.001",
+     "largest gap after reconciliation bottom_up 0.000000 MW, mint 0.000000 MW, top_down 0.000000 MW"
+    ],
+    [
+     "own",
+     "p99_latency",
+     "pass",
+     287.2,
+     "2000.0",
+     "p99 of POST /v1/forecasts 287 ms (live, 40 requests)"
+    ],
+    [
+     "own",
+     "leakage_check_green",
+     "pass",
+     0.0,
+     "1e-09",
+     "AECI: 60 design rows recomputed at their origin, largest gap 0.00e+00; the leaky lag was refused"
+    ],
+    [
+     "gbm",
+     "mape_not_worse_than_naive",
+     "pass",
+     0.0,
+     "0.0",
+     "51 authorities; worse than the naive in 0"
+    ],
+    [
+     "gbm",
+     "skill_not_significantly_negative",
+     "pass",
+     0.0,
+     "0.5",
+     "significantly worse than the operator in 0 of 44 comparable authorities"
+    ],
+    [
+     "gbm",
+     "coverage_90_on_validation",
+     "pass",
+     0.9002656518,
+     "0.85 to 0.95",
+     "empirical 90 percent coverage on the validation year 0.900"
+    ],
+    [
+     "gbm",
+     "peak_timing_median",
+     "pass",
+     1.0,
+     "2.0",
+     "median absolute peak timing error 1.0 hours over the test year"
+    ],
+    [
+     "gbm",
+     "coherence_exact",
+     "pass",
+     0.0,
+     "0.001",
+     "largest gap after reconciliation bottom_up 0.000000 MW, mint 0.000000 MW, top_down 0.000000 MW"
+    ],
+    [
+     "gbm",
+     "p99_latency",
+     "pass",
+     287.2,
+     "2000.0",
+     "p99 of POST /v1/forecasts 287 ms (live, 40 requests)"
+    ],
+    [
+     "gbm",
+     "leakage_check_green",
+     "pass",
+     0.0,
+     "1e-09",
+     "AECI: 60 design rows recomputed at their origin, largest gap 0.00e+00; the leaky lag was refused"
+    ]
+   ]
+  }
+ },
+ "values": {
+  "registry.candidates": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 2
+  },
+  "registry.fallback_backend": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "own"
+  },
+  "registry.gates": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 7
+  },
+  "registry.gbm.coherence_exact": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "pass"
+  },
+  "registry.gbm.coherence_exact.value": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0
+  },
+  "registry.gbm.coverage_90_on_validation": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "pass"
+  },
+  "registry.gbm.coverage_90_on_validation.value": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.9002656518
+  },
+  "registry.gbm.gates_passed": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 7
+  },
+  "registry.gbm.leakage_check_green": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "pass"
+  },
+  "registry.gbm.leakage_check_green.value": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0
+  },
+  "registry.gbm.mape_not_worse_than_naive": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "pass"
+  },
+  "registry.gbm.mape_not_worse_than_naive.value": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0
+  },
+  "registry.gbm.p99_latency": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "pass"
+  },
+  "registry.gbm.p99_latency.value": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 287.2
+  },
+  "registry.gbm.passed": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "yes"
+  },
+  "registry.gbm.peak_timing_median": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "pass"
+  },
+  "registry.gbm.peak_timing_median.value": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 1.0
+  },
+  "registry.gbm.skill_not_significantly_negative": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "pass"
+  },
+  "registry.gbm.skill_not_significantly_negative.value": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0
+  },
+  "registry.gbm.version": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "gbm-c39d958f"
+  },
+  "registry.latency_source": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "live, 40 requests"
+  },
+  "registry.own.coherence_exact": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "pass"
+  },
+  "registry.own.coherence_exact.value": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0
+  },
+  "registry.own.coverage_90_on_validation": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "pass"
+  },
+  "registry.own.coverage_90_on_validation.value": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.9008341846
+  },
+  "registry.own.gates_passed": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 7
+  },
+  "registry.own.leakage_check_green": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "pass"
+  },
+  "registry.own.leakage_check_green.value": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0
+  },
+  "registry.own.mape_not_worse_than_naive": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "pass"
+  },
+  "registry.own.mape_not_worse_than_naive.value": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0
+  },
+  "registry.own.p99_latency": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "pass"
+  },
+  "registry.own.p99_latency.value": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 287.2
+  },
+  "registry.own.passed": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "yes"
+  },
+  "registry.own.peak_timing_median": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "pass"
+  },
+  "registry.own.peak_timing_median.value": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 1.0
+  },
+  "registry.own.skill_not_significantly_negative": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "pass"
+  },
+  "registry.own.skill_not_significantly_negative.value": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0
+  },
+  "registry.own.version": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "own-a6c87a9b"
+  },
+  "registry.seconds": {
+   "fmt": "float1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 2.038151503
+  },
+  "registry.served": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "gbm"
+  },
+  "registry.served_reason": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "both",
+    "origin": "lookahead_registry.stages.registry",
+    "population": "the candidate backends over the test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "gbm cleared every gate with the best headline (wins minus losses +1)"
+  }
+ }
+}

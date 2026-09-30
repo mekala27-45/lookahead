@@ -1,0 +1,172 @@
+{
+ "tables": {
+  "backtest.gbm.importance": {
+   "columns": [
+    "Feature",
+    "Share of gain"
+   ],
+   "formats": [
+    "text",
+    "pct1"
+   ],
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.backtest",
+    "population": "51 authorities in the backtest, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "rows": [
+    [
+     "r_same_hour",
+     0.5005148642
+    ],
+    [
+     "r_week",
+     0.07205012569
+    ],
+    [
+     "authority_code",
+     0.05854923789
+    ],
+    [
+     "r_two_weeks",
+     0.04995096909
+    ],
+    [
+     "obs_cooling_change",
+     0.04166487033
+    ],
+    [
+     "obs_temperature_scaled",
+     0.03804304966
+    ],
+    [
+     "obs_heating_change",
+     0.03777953119
+    ],
+    [
+     "r_same_hour_prev",
+     0.03037094329
+    ],
+    [
+     "r_origin",
+     0.02512104203
+    ],
+    [
+     "obs_cooling_degree",
+     0.02299432534
+    ],
+    [
+     "obs_cooling_x_day_sin",
+     0.02225263493
+    ],
+    [
+     "obs_heating_degree",
+     0.01928618756
+    ],
+    [
+     "week_sin_1",
+     0.01681135068
+    ],
+    [
+     "weekend",
+     0.009046095257
+    ],
+    [
+     "r_mean_24",
+     0.008262609426
+    ]
+   ]
+  }
+ },
+ "values": {
+  "backtest.gbm.calibration_rows": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.backtest",
+    "population": "51 authorities in the backtest, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 891769
+  },
+  "backtest.gbm.origin_day_thinning": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.backtest",
+    "population": "51 authorities in the backtest, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 3
+  },
+  "backtest.gbm.refit_dates": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.backtest",
+    "population": "51 authorities in the backtest, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "2025-09-01, 2025-10-01, 2025-11-01, 2025-12-01, 2026-01-01, 2026-02-01, 2026-03-01, 2026-04-01, 2026-05-01, 2026-06-01, 2026-07-01, 2026-08-01, 2026-09-01"
+  },
+  "backtest.gbm.refits": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.backtest",
+    "population": "51 authorities in the backtest, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 13
+  },
+  "backtest.gbm.training_rows_calibration": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.backtest",
+    "population": "51 authorities in the backtest, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 2677186
+  },
+  "backtest.gbm.training_rows_first_refit": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.backtest",
+    "population": "51 authorities in the backtest, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 2677794
+  }
+ }
+}

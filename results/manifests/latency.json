@@ -1,0 +1,386 @@
+{
+ "as_of": "2026-09-29",
+ "figures": {},
+ "seed": 13,
+ "tables": {},
+ "values": {
+  "latency.live.base_url": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the live API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": "https://lookahead-grid-api.fly.dev"
+  },
+  "latency.live.burst_issue_max_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the live API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 307.6
+  },
+  "latency.live.concurrency": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the live API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 6
+  },
+  "latency.live.first_request_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the live API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 159.1
+  },
+  "latency.live.issue.max_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the live API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 287.2
+  },
+  "latency.live.issue.p50_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the live API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 99.7
+  },
+  "latency.live.issue.p99_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the live API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 287.2
+  },
+  "latency.live.measured_at": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the live API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": "2026-09-30T00:00:04.9778826Z"
+  },
+  "latency.live.read.max_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the live API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 182.7
+  },
+  "latency.live.read.p50_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the live API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 67.7
+  },
+  "latency.live.read.p99_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the live API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 182.7
+  },
+  "latency.live.requests": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the live API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 40
+  },
+  "latency.live.status": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the live API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": "measured"
+  },
+  "latency.local.base_url": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the local API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": "http://127.0.0.1:8794"
+  },
+  "latency.local.burst_issue_max_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the local API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 235.2
+  },
+  "latency.local.concurrency": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the local API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 8
+  },
+  "latency.local.first_request_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the local API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 245.0
+  },
+  "latency.local.issue.max_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the local API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 146.6
+  },
+  "latency.local.issue.p50_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the local API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 25.3
+  },
+  "latency.local.issue.p99_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the local API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 42.5
+  },
+  "latency.local.measured_at": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the local API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": "2026-09-30T05:39:13.927371+00:00"
+  },
+  "latency.local.read.max_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the local API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 21.8
+  },
+  "latency.local.read.p50_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the local API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 6.1
+  },
+  "latency.local.read.p99_ms": {
+   "fmt": "ms",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the local API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 11.2
+  },
+  "latency.local.requests": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the local API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 60
+  },
+  "latency.local.status": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "scripts/load_test.py",
+    "population": "the local API under scripts/load_test.py",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": "measured"
+  },
+  "latency.measurements": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.latency",
+    "population": "the load test files found",
+    "seed": null,
+    "seeds": null,
+    "source": "recorded"
+   },
+   "value": 2
+  }
+ }
+}

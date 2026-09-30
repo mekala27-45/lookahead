@@ -1,0 +1,9 @@
+{
+ "plan": "docs/tou_plan.md",
+ "sha256": "b1c595ba7016ae13bf893e84d62b3e83418606b0e52e1b76e5cac9f2bce64c5f",
+ "events": 69,
+ "treated": 1088,
+ "pairs": 1088,
+ "dropped": 0,
+ "replicates": 500
+}

@@ -1,0 +1,1499 @@
+{
+ "as_of": "2026-09-29",
+ "figures": {},
+ "seed": 13,
+ "tables": {
+  "meter.clusters": {
+   "columns": [
+    "Cluster",
+    "Shape",
+    "Households",
+    "Mean kWh per half hour",
+    "Share of evening peak",
+    "dToU share"
+   ],
+   "formats": [
+    "int",
+    "text",
+    "int",
+    "float3",
+    "pct1",
+    "pct1"
+   ],
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "rows": [
+    [
+     0,
+     "evening peak",
+     2502,
+     0.2062926313,
+     0.4876431871,
+     0.2022382094
+    ],
+    [
+     1,
+     "evening peak",
+     2802,
+     0.2134446511,
+     0.5045677669,
+     0.2084225553
+    ],
+    [
+     2,
+     "night heavy",
+     54,
+     0.4050251694,
+     0.007789045984,
+     0.0
+    ]
+   ]
+  },
+  "meter.forecast.by_level": {
+   "columns": [
+    "Level",
+    "Method",
+    "MAPE",
+    "lower",
+    "upper",
+    "90 pct coverage"
+   ],
+   "formats": [
+    "text",
+    "text",
+    "pct2",
+    "pct2",
+    "pct2",
+    "pct1"
+   ],
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "rows": [
+    [
+     "panel total",
+     "base",
+     0.04301425758,
+     0.03758512802,
+     0.05045159376,
+     0.9855587121
+    ],
+    [
+     "panel total",
+     "bottom_up",
+     0.04272334621,
+     0.03730581116,
+     0.04915180496,
+     0.9886363636
+    ],
+    [
+     "panel total",
+     "mint",
+     0.04255782394,
+     0.03726438648,
+     0.04891379859,
+     0.9881628788
+    ],
+    [
+     "clusters",
+     "base",
+     0.0678099127,
+     0.05936216672,
+     0.07607755379,
+     0.9777462121
+    ],
+    [
+     "clusters",
+     "bottom_up",
+     0.0678099127,
+     0.05839811343,
+     0.075942211,
+     0.9777462121
+    ],
+    [
+     "clusters",
+     "mint",
+     0.09121698973,
+     0.07464511498,
+     0.1072521648,
+     0.9262941919
+    ]
+   ]
+  },
+  "meter.peak.contribution": {
+   "columns": [
+    "Cluster",
+    "Shape",
+    "Households",
+    "Evening kW per household",
+    "Share of the evening peak",
+    "Value of a 10 pct cut, GBP per household"
+   ],
+   "formats": [
+    "text",
+    "text",
+    "int",
+    "float2",
+    "pct1",
+    "float1"
+   ],
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "rows": [
+    [
+     "1",
+     "evening peak",
+     2802,
+     0.5810521261,
+     0.5045677669,
+     3.486312756
+    ],
+    [
+     "0",
+     "evening peak",
+     2502,
+     0.6288956316,
+     0.4876431871,
+     3.77337379
+    ],
+    [
+     "2",
+     "night heavy",
+     54,
+     0.4654298471,
+     0.007789045984,
+     2.792579083
+    ]
+   ]
+  },
+  "meter.silhouette_by_k": {
+   "columns": [
+    "Clusters",
+    "Validation silhouette"
+   ],
+   "formats": [
+    "int",
+    "float3"
+   ],
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "rows": [
+    [
+     3,
+     0.1286879155
+    ],
+    [
+     4,
+     0.1213892686
+    ],
+    [
+     5,
+     0.1213440159
+    ],
+    [
+     6,
+     0.09686567723
+    ],
+    [
+     7,
+     0.09627392961
+    ],
+    [
+     8,
+     0.07038290268
+    ]
+   ]
+  },
+  "meter.tou.by_type": {
+   "columns": [
+    "Event type",
+    "Events",
+    "Response",
+    "lower",
+    "upper",
+    "p value",
+    "After correction"
+   ],
+   "formats": [
+    "text",
+    "int",
+    "spct1",
+    "spct1",
+    "spct1",
+    "float3",
+    "text"
+   ],
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "rows": [
+    [
+     "night",
+     11,
+     -0.05955623223,
+     -0.07882973097,
+     -0.03335677877,
+     0.0,
+     "different from zero"
+    ],
+    [
+     "morning",
+     15,
+     -0.09425858185,
+     -0.106183594,
+     -0.08036949633,
+     0.0,
+     "different from zero"
+    ],
+    [
+     "afternoon",
+     3,
+     -0.06487175777,
+     -0.06487175777,
+     -0.06487175777,
+     0.0,
+     "different from zero"
+    ],
+    [
+     "evening",
+     40,
+     -0.04761467526,
+     -0.06045455404,
+     -0.03431876458,
+     0.0,
+     "different from zero"
+    ]
+   ]
+  }
+ },
+ "values": {
+  "meter.cluster.0.households": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 2502
+  },
+  "meter.cluster.0.peak_share": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.4876431871
+  },
+  "meter.cluster.0.shape": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": "evening peak"
+  },
+  "meter.cluster.1.households": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 2802
+  },
+  "meter.cluster.1.peak_share": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.5045677669
+  },
+  "meter.cluster.1.shape": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": "evening peak"
+  },
+  "meter.cluster.2.households": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 54
+  },
+  "meter.cluster.2.peak_share": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.007789045984
+  },
+  "meter.cluster.2.shape": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": "night heavy"
+  },
+  "meter.cluster_validation_households": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 2679
+  },
+  "meter.clusters": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 3
+  },
+  "meter.forecast.base.level0.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.9855587121
+  },
+  "meter.forecast.base.level0.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.04301425758
+  },
+  "meter.forecast.base.level0.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.03758512802
+  },
+  "meter.forecast.base.level0.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.05045159376
+  },
+  "meter.forecast.base.level1.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.9777462121
+  },
+  "meter.forecast.base.level1.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.0678099127
+  },
+  "meter.forecast.base.level1.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.05936216672
+  },
+  "meter.forecast.base.level1.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.07607755379
+  },
+  "meter.forecast.bottom_up.level0.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.9886363636
+  },
+  "meter.forecast.bottom_up.level0.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.04272334621
+  },
+  "meter.forecast.bottom_up.level0.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.03730581116
+  },
+  "meter.forecast.bottom_up.level0.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.04915180496
+  },
+  "meter.forecast.bottom_up.level1.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.9777462121
+  },
+  "meter.forecast.bottom_up.level1.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.0678099127
+  },
+  "meter.forecast.bottom_up.level1.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.05839811343
+  },
+  "meter.forecast.bottom_up.level1.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.075942211
+  },
+  "meter.forecast.coherence_gap.base": {
+   "fmt": "float6",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 171.9753756
+  },
+  "meter.forecast.coherence_gap.bottom_up": {
+   "fmt": "float6",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.0
+  },
+  "meter.forecast.coherence_gap.mint": {
+   "fmt": "float6",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.0
+  },
+  "meter.forecast.fits": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 4
+  },
+  "meter.forecast.household_share": {
+   "fmt": "pct0",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.8370660694
+  },
+  "meter.forecast.households": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 4485
+  },
+  "meter.forecast.mint.level0.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.9881628788
+  },
+  "meter.forecast.mint.level0.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.04255782394
+  },
+  "meter.forecast.mint.level0.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.03726438648
+  },
+  "meter.forecast.mint.level0.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.04891379859
+  },
+  "meter.forecast.mint.level1.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.9262941919
+  },
+  "meter.forecast.mint.level1.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.09121698973
+  },
+  "meter.forecast.mint.level1.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.07464511498
+  },
+  "meter.forecast.mint.level1.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.1072521648
+  },
+  "meter.forecast.mint_gain_clusters": {
+   "fmt": "spct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": -0.02340707703
+  },
+  "meter.forecast.mint_gain_total": {
+   "fmt": "spct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.0004564336409
+  },
+  "meter.forecast.mint_verdict_clusters": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": "hurt"
+  },
+  "meter.forecast.mint_verdict_total": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": "helped"
+  },
+  "meter.forecast.origins": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 352
+  },
+  "meter.forecast.rows": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 4224
+  },
+  "meter.forecast.shrinkage_intensity": {
+   "fmt": "float2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.0006200100276
+  },
+  "meter.forecast.test_end": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": "2014-02-28"
+  },
+  "meter.forecast.test_start": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": "2013-12-01"
+  },
+  "meter.households_profiled": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 5358
+  },
+  "meter.households_release": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 5550
+  },
+  "meter.peak.target_cluster": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": "0"
+  },
+  "meter.peak.target_kw_per_household": {
+   "fmt": "float2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.6288956316
+  },
+  "meter.peak.target_shape": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": "evening peak"
+  },
+  "meter.peak.total_kw": {
+   "fmt": "float0",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 3226.738139
+  },
+  "meter.peak.value_gbp_per_kw": {
+   "fmt": "float0",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 60.0
+  },
+  "meter.profile_window_end": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": "2013-12-01"
+  },
+  "meter.profile_window_start": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": "2012-12-01"
+  },
+  "meter.seconds": {
+   "fmt": "float1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "gbm",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "4485 households reporting through the whole forecast window, 352 origins",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 98.09025836
+  },
+  "meter.silhouette_chosen": {
+   "fmt": "float3",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.1286879155
+  },
+  "meter.top_peak_cluster": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 1
+  },
+  "meter.top_peak_cluster_household_share": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.522956327
+  },
+  "meter.top_peak_cluster_shape": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": "evening peak"
+  },
+  "meter.top_peak_cluster_share": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "5358 households with a full profile over the year before the test period",
+    "seed": null,
+    "seeds": null,
+    "source": "real:lcl"
+   },
+   "value": 0.5045677669
+  },
+  "meter.tou.dropped": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": 0
+  },
+  "meter.tou.dtou_households": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": 1088
+  },
+  "meter.tou.events": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": 69
+  },
+  "meter.tou.mean_event_hours": {
+   "fmt": "float1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": 5.710144928
+  },
+  "meter.tou.pairs": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": 1088
+  },
+  "meter.tou.plan_hash": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": "b1c595ba7016ae13bf893e84d62b3e83418606b0e52e1b76e5cac9f2bce64c5f"
+  },
+  "meter.tou.plan_hash_short": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": "b1c595ba7016"
+  },
+  "meter.tou.rebound_pct": {
+   "fmt": "spct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": 0.001698849392
+  },
+  "meter.tou.rebound_pct_lower": {
+   "fmt": "spct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": -0.006518314401
+  },
+  "meter.tou.rebound_pct_upper": {
+   "fmt": "spct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": 0.009766429272
+  },
+  "meter.tou.replicates": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": 500
+  },
+  "meter.tou.response_kwh": {
+   "fmt": "float3",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": -0.1600341446
+  },
+  "meter.tou.response_kwh_lower": {
+   "fmt": "float3",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": -0.2020263972
+  },
+  "meter.tou.response_kwh_upper": {
+   "fmt": "float3",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": -0.1237010911
+  },
+  "meter.tou.response_pct": {
+   "fmt": "spct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": -0.05834141365
+  },
+  "meter.tou.response_pct_lower": {
+   "fmt": "spct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": -0.07032386327
+  },
+  "meter.tou.response_pct_upper": {
+   "fmt": "spct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": -0.04702245078
+  },
+  "meter.tou.std_pool": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": 4243
+  },
+  "meter.tou.types": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": 4
+  },
+  "meter.tou.types_rejected": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "none",
+    "origin": "lookahead_registry.stages.meter",
+    "population": "1088 matched pairs over 69 high price events of 2013",
+    "seed": null,
+    "seeds": 500,
+    "source": "real:lcl"
+   },
+   "value": 4
+  }
+ }
+}

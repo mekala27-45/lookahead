@@ -1,0 +1,137 @@
+{
+ "chosen_at": "2026-09-30T05:39:27.005475+00:00",
+ "as_of": "2026-09-29",
+ "served": "gbm",
+ "reason": "gbm cleared every gate with the best headline (wins minus losses +1)",
+ "gates": [
+  "mape_not_worse_than_naive",
+  "skill_not_significantly_negative",
+  "coverage_90_on_validation",
+  "peak_timing_median",
+  "coherence_exact",
+  "p99_latency",
+  "leakage_check_green"
+ ],
+ "models": [
+  {
+   "backend": "own",
+   "version": "own-a6c87a9b",
+   "spec_hash": "a6c87a9b7819141c",
+   "served": false,
+   "ran": true,
+   "gates": {
+    "mape_not_worse_than_naive": {
+     "name": "mape_not_worse_than_naive",
+     "passed": true,
+     "value": 0.0,
+     "threshold": 0.0,
+     "evidence": "51 authorities; worse than the naive in 0"
+    },
+    "skill_not_significantly_negative": {
+     "name": "skill_not_significantly_negative",
+     "passed": true,
+     "value": 0.0,
+     "threshold": 0.5,
+     "evidence": "significantly worse than the operator in 0 of 44 comparable authorities"
+    },
+    "coverage_90_on_validation": {
+     "name": "coverage_90_on_validation",
+     "passed": true,
+     "value": 0.9008341846,
+     "threshold": "0.85 to 0.95",
+     "evidence": "empirical 90 percent coverage on the validation year 0.901"
+    },
+    "peak_timing_median": {
+     "name": "peak_timing_median",
+     "passed": true,
+     "value": 1.0,
+     "threshold": 2.0,
+     "evidence": "median absolute peak timing error 1.0 hours over the test year"
+    },
+    "coherence_exact": {
+     "name": "coherence_exact",
+     "passed": true,
+     "value": 0.0,
+     "threshold": 0.001,
+     "evidence": "largest gap after reconciliation bottom_up 0.000000 MW, mint 0.000000 MW, top_down 0.000000 MW"
+    },
+    "p99_latency": {
+     "name": "p99_latency",
+     "passed": true,
+     "value": 287.2,
+     "threshold": 2000.0,
+     "evidence": "p99 of POST /v1/forecasts 287 ms (live, 40 requests)"
+    },
+    "leakage_check_green": {
+     "name": "leakage_check_green",
+     "passed": true,
+     "value": 0.0,
+     "threshold": 1e-09,
+     "evidence": "AECI: 60 design rows recomputed at their origin, largest gap 0.00e+00; the leaky lag was refused"
+    }
+   },
+   "passed": true,
+   "headline_wins_minus_losses": -7.0
+  },
+  {
+   "backend": "gbm",
+   "version": "gbm-c39d958f",
+   "spec_hash": "c39d958f82ab0d8e",
+   "served": true,
+   "ran": true,
+   "gates": {
+    "mape_not_worse_than_naive": {
+     "name": "mape_not_worse_than_naive",
+     "passed": true,
+     "value": 0.0,
+     "threshold": 0.0,
+     "evidence": "51 authorities; worse than the naive in 0"
+    },
+    "skill_not_significantly_negative": {
+     "name": "skill_not_significantly_negative",
+     "passed": true,
+     "value": 0.0,
+     "threshold": 0.5,
+     "evidence": "significantly worse than the operator in 0 of 44 comparable authorities"
+    },
+    "coverage_90_on_validation": {
+     "name": "coverage_90_on_validation",
+     "passed": true,
+     "value": 0.9002656518,
+     "threshold": "0.85 to 0.95",
+     "evidence": "empirical 90 percent coverage on the validation year 0.900"
+    },
+    "peak_timing_median": {
+     "name": "peak_timing_median",
+     "passed": true,
+     "value": 1.0,
+     "threshold": 2.0,
+     "evidence": "median absolute peak timing error 1.0 hours over the test year"
+    },
+    "coherence_exact": {
+     "name": "coherence_exact",
+     "passed": true,
+     "value": 0.0,
+     "threshold": 0.001,
+     "evidence": "largest gap after reconciliation bottom_up 0.000000 MW, mint 0.000000 MW, top_down 0.000000 MW"
+    },
+    "p99_latency": {
+     "name": "p99_latency",
+     "passed": true,
+     "value": 287.2,
+     "threshold": 2000.0,
+     "evidence": "p99 of POST /v1/forecasts 287 ms (live, 40 requests)"
+    },
+    "leakage_check_green": {
+     "name": "leakage_check_green",
+     "passed": true,
+     "value": 0.0,
+     "threshold": 1e-09,
+     "evidence": "AECI: 60 design rows recomputed at their origin, largest gap 0.00e+00; the leaky lag was refused"
+    }
+   },
+   "passed": true,
+   "headline_wins_minus_losses": 1.0
+  }
+ ]
+}
