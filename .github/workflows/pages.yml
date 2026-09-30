@@ -51,6 +51,11 @@ jobs:
           name: playwright-report
           path: web/playwright-report
           retention-days: 7
+      # Enables Pages with the workflow as its source on the first run, so no setting has to be
+      # clicked in the repository before the site can deploy.
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web/out
