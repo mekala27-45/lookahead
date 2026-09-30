@@ -139,6 +139,13 @@ dd.num {
   background: var(--raised);
   border: 1px solid var(--hairline);
   border-radius: 6px;
+  /* A card never widens the page: a wide table or the tile grid scrolls inside it instead. */
+  min-width: 0;
+  max-width: 100%;
+}
+
+main {
+  overflow-x: clip;
 }
 
 /* A chart's own background: the gap between stacked segments is drawn in it. */

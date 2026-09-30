@@ -63,10 +63,18 @@ export async function ready(page: Page): Promise<void> {
 }
 
 /** Console errors and uncaught exceptions, collected from the moment this is called. */
+/** The browser reports the first probe's 503 as a resource error; that answer is the API waking up
+ * and the site handles it by probing again, so it is the one console line the check accepts. */
+function isWakeUpProbe(text: string, url: string): boolean {
+  return text.includes("status of 503") && /\/v1\/health$/.test(url);
+}
+
 export function collectErrors(page: Page): string[] {
   const errors: string[] = [];
   page.on("console", (msg) => {
-    if (msg.type() === "error") errors.push(`${msg.text()} (${msg.location().url})`);
+    if (msg.type() !== "error") return;
+    if (isWakeUpProbe(msg.text(), msg.location().url)) return;
+    errors.push(`${msg.text()} (${msg.location().url})`);
   });
   page.on("pageerror", (err) => errors.push(err.message));
   return errors;

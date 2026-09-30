@@ -47,7 +47,7 @@ export function TileMap({ tiles, authorities, regions }: { tiles: Tile[]; author
         <SourceChip source="precomputed" text={backend ? `${backend} backend, last test origin` : "loading"} />
       </div>
       {error ? <p className="text-sm text-ink2">The tiles could not load: {error}</p> : null}
-      <div className="overflow-x-auto pb-2" role="list" aria-label="Balancing authorities">
+      <div className="overflow-x-auto pb-2 [contain:paint]" role="list" aria-label="Balancing authorities">
         <div
           className="grid gap-1.5"
           style={{ gridTemplateRows: `repeat(${maxRow}, 44px)`, gridTemplateColumns: `repeat(${maxCol}, 56px)`, minWidth: `${maxCol * 62}px` }}

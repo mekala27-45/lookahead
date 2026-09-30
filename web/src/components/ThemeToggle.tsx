@@ -54,4 +54,4 @@ export function ThemeToggle() {
 
 /** Runs first in <body>, before anything paints: a stored choice wins; otherwise the control room
  * is dark and the report is light. */
-export const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem("${THEME_KEY}");if(t!=="light"&&t!=="dark"){t=/\/report\/?$/.test(location.pathname)?"light":"dark";}document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();`;
+export const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem("${THEME_KEY}");if(t!=="light"&&t!=="dark"){t=(location.pathname.replace(/[/]+$/,"").slice(-7)==="/report")?"light":"dark";}document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();`;
