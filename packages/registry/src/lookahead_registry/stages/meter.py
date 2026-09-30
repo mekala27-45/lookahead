@@ -81,7 +81,7 @@ def run(paths: Paths, as_of: str, seed: int) -> Manifest:
     cluster_table.write_parquet(folder / "clusters.parquet")
     w = Scribe(
         manifest,
-        source="real:london",
+        source="real:lcl",
         model="none",
         population=f"{clustering.households} households with a full profile over the year before the test period",
         origin="lookahead_registry.stages.meter",
@@ -186,7 +186,7 @@ def run(paths: Paths, as_of: str, seed: int) -> Manifest:
     tou.by_type.write_parquet(folder / "tou_by_type.parquet")
     w = Scribe(
         manifest,
-        source="real:london",
+        source="real:lcl",
         model="none",
         population=f"{tou.pairs} matched pairs over {tou.events} high price events of 2013",
         origin="lookahead_registry.stages.meter",
@@ -245,7 +245,7 @@ def run(paths: Paths, as_of: str, seed: int) -> Manifest:
     mint = forecast.scores.filter(pl.col("method") == "mint")
     w = Scribe(
         manifest,
-        source="real:london",
+        source="real:lcl",
         model="gbm",
         population=f"{assignment.height} households reporting through the whole forecast window, {forecast.origins} origins",
         origin="lookahead_registry.stages.meter",

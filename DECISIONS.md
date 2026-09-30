@@ -114,9 +114,11 @@ build time. The site fetches nothing from any host but its own.
 
 ## 2026-09-29: the backtest's prediction frames stay out of git
 
-Each backend's prediction and scoring frames run to tens of megabytes; three backends and a
+Each backend's prediction and scoring frames run to tens of megabytes, and the hierarchy's
+reconciled frame (every method, node, origin and horizon) to four hundred; three backends and a
 rederive would have doubled the repository. The summaries, the manifests, the model exports, the
-serving bundle and the marts are committed; `make backtest` rebuilds the frames.
+serving bundle and the marts (which carry the latest reconciled day) are committed; `make backtest`
+and `make hierarchy` rebuild the frames.
 
 ## 2026-09-29: the schema goes in the SQL, not in the connection's search path
 

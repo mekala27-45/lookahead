@@ -1,0 +1,160 @@
+node,parent,level,kind,label
+US48,,0,lower48,Lower 48 states
+Eastern,US48,1,interconnection,Eastern Interconnection
+Texas,US48,1,interconnection,Texas Interconnection
+Western,US48,1,interconnection,Western Interconnection
+CAL,Western,2,region,California
+CAR,Eastern,2,region,Carolinas
+CENT,Eastern,2,region,Central
+FLA,Eastern,2,region,Florida
+MIDA,Eastern,2,region,Mid-Atlantic
+MIDW,Eastern,2,region,Midwest
+NE,Eastern,2,region,New England
+NW,Western,2,region,Northwest
+NY,Eastern,2,region,New York
+SE,Eastern,2,region,Southeast
+SW,Western,2,region,Southwest
+TEN,Eastern,2,region,Tennessee
+TEX,Texas,2,region,Texas
+AECI,MIDW,3,authority,AECI
+AVA,NW,3,authority,AVA
+AZPS,SW,3,authority,AZPS
+BANC,CAL,3,authority,BANC
+BPAT,NW,3,authority,BPAT
+CHPD,NW,3,authority,CHPD
+CISO,CAL,3,authority,CISO
+CPLE,CAR,3,authority,CPLE
+CPLW,CAR,3,authority,CPLW
+DOPD,NW,3,authority,DOPD
+DUK,CAR,3,authority,DUK
+EPE,SW,3,authority,EPE
+ERCO,TEX,3,authority,ERCO
+FMPP,FLA,3,authority,FMPP
+FPC,FLA,3,authority,FPC
+FPL,FLA,3,authority,FPL
+GCPD,NW,3,authority,GCPD
+GVL,FLA,3,authority,GVL
+HST,FLA,3,authority,HST
+IID,CAL,3,authority,IID
+IPCO,NW,3,authority,IPCO
+ISNE,NE,3,authority,ISNE
+JEA,FLA,3,authority,JEA
+LDWP,CAL,3,authority,LDWP
+LGEE,MIDW,3,authority,LGEE
+MISO,MIDW,3,authority,MISO
+NEVP,NW,3,authority,NEVP
+NWMT,NW,3,authority,NWMT
+NYIS,NY,3,authority,NYIS
+PACE,NW,3,authority,PACE
+PACW,NW,3,authority,PACW
+PGE,NW,3,authority,PGE
+PJM,MIDA,3,authority,PJM
+PNM,SW,3,authority,PNM
+PSCO,NW,3,authority,PSCO
+PSEI,NW,3,authority,PSEI
+SC,CAR,3,authority,SC
+SCEG,CAR,3,authority,SCEG
+SCL,NW,3,authority,SCL
+SEC,FLA,3,authority,SEC
+SOCO,SE,3,authority,SOCO
+SPA,CENT,3,authority,SPA
+SRP,SW,3,authority,SRP
+SWPP,CENT,3,authority,SWPP
+TAL,FLA,3,authority,TAL
+TEC,FLA,3,authority,TEC
+TEPC,SW,3,authority,TEPC
+TIDC,CAL,3,authority,TIDC
+TPWR,NW,3,authority,TPWR
+TVA,TEN,3,authority,TVA
+WALC,SW,3,authority,WALC
+CISO.PGAE,CISO,4,subregion,CISO PGAE
+CISO.SCE,CISO,4,subregion,CISO SCE
+CISO.SDGE,CISO,4,subregion,CISO SDGE
+CISO.VEA,CISO,4,subregion,CISO VEA
+CISO.rest,CISO,4,remainder,CISO remainder
+ERCO.COAS,ERCO,4,subregion,ERCO COAS
+ERCO.EAST,ERCO,4,subregion,ERCO EAST
+ERCO.FWES,ERCO,4,subregion,ERCO FWES
+ERCO.NCEN,ERCO,4,subregion,ERCO NCEN
+ERCO.NRTH,ERCO,4,subregion,ERCO NRTH
+ERCO.SCEN,ERCO,4,subregion,ERCO SCEN
+ERCO.SOUT,ERCO,4,subregion,ERCO SOUT
+ERCO.WEST,ERCO,4,subregion,ERCO WEST
+ERCO.rest,ERCO,4,remainder,ERCO remainder
+ISNE.4001,ISNE,4,subregion,ISNE 4001
+ISNE.4002,ISNE,4,subregion,ISNE 4002
+ISNE.4003,ISNE,4,subregion,ISNE 4003
+ISNE.4004,ISNE,4,subregion,ISNE 4004
+ISNE.4005,ISNE,4,subregion,ISNE 4005
+ISNE.4006,ISNE,4,subregion,ISNE 4006
+ISNE.4007,ISNE,4,subregion,ISNE 4007
+ISNE.4008,ISNE,4,subregion,ISNE 4008
+ISNE.rest,ISNE,4,remainder,ISNE remainder
+MISO.0001,MISO,4,subregion,MISO 0001
+MISO.0004,MISO,4,subregion,MISO 0004
+MISO.0006,MISO,4,subregion,MISO 0006
+MISO.0027,MISO,4,subregion,MISO 0027
+MISO.0035,MISO,4,subregion,MISO 0035
+MISO.8910,MISO,4,subregion,MISO 8910
+MISO.rest,MISO,4,remainder,MISO remainder
+NYIS.ZONA,NYIS,4,subregion,NYIS ZONA
+NYIS.ZONB,NYIS,4,subregion,NYIS ZONB
+NYIS.ZONC,NYIS,4,subregion,NYIS ZONC
+NYIS.ZOND,NYIS,4,subregion,NYIS ZOND
+NYIS.ZONE,NYIS,4,subregion,NYIS ZONE
+NYIS.ZONF,NYIS,4,subregion,NYIS ZONF
+NYIS.ZONG,NYIS,4,subregion,NYIS ZONG
+NYIS.ZONH,NYIS,4,subregion,NYIS ZONH
+NYIS.ZONI,NYIS,4,subregion,NYIS ZONI
+NYIS.ZONJ,NYIS,4,subregion,NYIS ZONJ
+NYIS.ZONK,NYIS,4,subregion,NYIS ZONK
+NYIS.rest,NYIS,4,remainder,NYIS remainder
+PJM.AE,PJM,4,subregion,PJM AE
+PJM.AEP,PJM,4,subregion,PJM AEP
+PJM.AP,PJM,4,subregion,PJM AP
+PJM.ATSI,PJM,4,subregion,PJM ATSI
+PJM.BC,PJM,4,subregion,PJM BC
+PJM.CE,PJM,4,subregion,PJM CE
+PJM.DAY,PJM,4,subregion,PJM DAY
+PJM.DEOK,PJM,4,subregion,PJM DEOK
+PJM.DOM,PJM,4,subregion,PJM DOM
+PJM.DPL,PJM,4,subregion,PJM DPL
+PJM.DUQ,PJM,4,subregion,PJM DUQ
+PJM.EKPC,PJM,4,subregion,PJM EKPC
+PJM.JC,PJM,4,subregion,PJM JC
+PJM.ME,PJM,4,subregion,PJM ME
+PJM.PE,PJM,4,subregion,PJM PE
+PJM.PEP,PJM,4,subregion,PJM PEP
+PJM.PL,PJM,4,subregion,PJM PL
+PJM.PN,PJM,4,subregion,PJM PN
+PJM.PS,PJM,4,subregion,PJM PS
+PJM.RECO,PJM,4,subregion,PJM RECO
+PJM.rest,PJM,4,remainder,PJM remainder
+PNM.ACMA,PNM,4,subregion,PNM ACMA
+PNM.CYGA,PNM,4,subregion,PNM CYGA
+PNM.Frep,PNM,4,subregion,PNM Frep
+PNM.Jica,PNM,4,subregion,PNM Jica
+PNM.KAFB,PNM,4,subregion,PNM KAFB
+PNM.KCEC,PNM,4,subregion,PNM KCEC
+PNM.LAC,PNM,4,subregion,PNM LAC
+PNM.PNM,PNM,4,subregion,PNM PNM
+PNM.TSGT,PNM,4,subregion,PNM TSGT
+PNM.rest,PNM,4,remainder,PNM remainder
+SWPP.CSWS,SWPP,4,subregion,SWPP CSWS
+SWPP.EDE,SWPP,4,subregion,SWPP EDE
+SWPP.GRDA,SWPP,4,subregion,SWPP GRDA
+SWPP.INDN,SWPP,4,subregion,SWPP INDN
+SWPP.KACY,SWPP,4,subregion,SWPP KACY
+SWPP.KCPL,SWPP,4,subregion,SWPP KCPL
+SWPP.LES,SWPP,4,subregion,SWPP LES
+SWPP.MPS,SWPP,4,subregion,SWPP MPS
+SWPP.NPPD,SWPP,4,subregion,SWPP NPPD
+SWPP.OKGE,SWPP,4,subregion,SWPP OKGE
+SWPP.OPPD,SWPP,4,subregion,SWPP OPPD
+SWPP.SECI,SWPP,4,subregion,SWPP SECI
+SWPP.SPRM,SWPP,4,subregion,SWPP SPRM
+SWPP.SPS,SWPP,4,subregion,SWPP SPS
+SWPP.WAUE,SWPP,4,subregion,SWPP WAUE
+SWPP.WFEC,SWPP,4,subregion,SWPP WFEC
+SWPP.WR,SWPP,4,subregion,SWPP WR
+SWPP.rest,SWPP,4,remainder,SWPP remainder

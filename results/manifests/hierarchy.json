@@ -1,0 +1,1989 @@
+{
+ "as_of": "2026-09-29",
+ "figures": {},
+ "seed": 13,
+ "tables": {
+  "hierarchy.by_level": {
+   "columns": [
+    "Method",
+    "Level",
+    "Nodes",
+    "Rows",
+    "MAPE",
+    "lower",
+    "upper",
+    "90 pct coverage"
+   ],
+   "formats": [
+    "text",
+    "text",
+    "int",
+    "int",
+    "pct2",
+    "pct2",
+    "pct2",
+    "pct1"
+   ],
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "rows": [
+    [
+     "base",
+     "lower 48",
+     1,
+     15049,
+     0.02647905217,
+     0.02487295629,
+     0.02814229768,
+     0.9001262542
+    ],
+    [
+     "base",
+     "interconnection",
+     3,
+     49755,
+     0.03040683814,
+     0.02902730338,
+     0.03162133832,
+     0.8989850266
+    ],
+    [
+     "base",
+     "region",
+     13,
+     223815,
+     0.03927121217,
+     0.03769039496,
+     0.04039494905,
+     0.881741617
+    ],
+    [
+     "base",
+     "authority",
+     51,
+     885665,
+     0.05650209938,
+     0.05233513175,
+     0.06025702988,
+     0.8833294756
+    ],
+    [
+     "base",
+     "subregion",
+     83,
+     1436191,
+     0.08528223055,
+     0.0828726653,
+     0.08709295386,
+     0.8844457318
+    ],
+    [
+     "bottom_up",
+     "lower 48",
+     1,
+     15049,
+     0.02149342065,
+     0.01977217233,
+     0.02276632773,
+     0.999667752
+    ],
+    [
+     "bottom_up",
+     "interconnection",
+     3,
+     49755,
+     0.02820215053,
+     0.0270459845,
+     0.02926215889,
+     0.9888855391
+    ],
+    [
+     "bottom_up",
+     "region",
+     13,
+     223815,
+     0.03852686162,
+     0.0369856007,
+     0.03945672206,
+     0.9444764649
+    ],
+    [
+     "bottom_up",
+     "authority",
+     51,
+     885665,
+     0.05650209938,
+     0.05229745179,
+     0.06012213832,
+     0.8939610349
+    ],
+    [
+     "bottom_up",
+     "subregion",
+     83,
+     1436191,
+     0.08528223055,
+     0.08271669726,
+     0.08705960994,
+     0.8844457318
+    ],
+    [
+     "top_down",
+     "lower 48",
+     1,
+     15049,
+     0.02647905217,
+     0.02491115156,
+     0.02796738047,
+     0.9005249518
+    ],
+    [
+     "top_down",
+     "interconnection",
+     3,
+     49755,
+     0.0703827963,
+     0.06497712724,
+     0.07698970208,
+     0.5173148427
+    ],
+    [
+     "top_down",
+     "region",
+     13,
+     223815,
+     0.09346705245,
+     0.0891496343,
+     0.09800767144,
+     0.3971181556
+    ],
+    [
+     "top_down",
+     "authority",
+     51,
+     885665,
+     0.1510470132,
+     0.1428342714,
+     0.1614472816,
+     0.2800257434
+    ],
+    [
+     "top_down",
+     "subregion",
+     83,
+     1436191,
+     0.1427610941,
+     0.1364106239,
+     0.1488671353,
+     0.30391849
+    ],
+    [
+     "mint",
+     "lower 48",
+     1,
+     15049,
+     0.02136644249,
+     0.01990734374,
+     0.02235217955,
+     1.0
+    ],
+    [
+     "mint",
+     "interconnection",
+     3,
+     49755,
+     0.02817396747,
+     0.02705875381,
+     0.02918451493,
+     0.9874786454
+    ],
+    [
+     "mint",
+     "region",
+     13,
+     223815,
+     0.03854194318,
+     0.0370706109,
+     0.03932993581,
+     0.948158077
+    ],
+    [
+     "mint",
+     "authority",
+     51,
+     885665,
+     0.0566684191,
+     0.05272753879,
+     0.06041621617,
+     0.8824487814
+    ],
+    [
+     "mint",
+     "subregion",
+     83,
+     1436191,
+     0.1000911389,
+     0.09639127212,
+     0.10331339,
+     0.8795821726
+    ]
+   ]
+  },
+  "hierarchy.helped_or_hurt": {
+   "columns": [
+    "Method",
+    "Level",
+    "Base MAPE",
+    "Reconciled MAPE",
+    "Change",
+    "Verdict"
+   ],
+   "formats": [
+    "text",
+    "text",
+    "pct2",
+    "pct2",
+    "spct1",
+    "text"
+   ],
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "rows": [
+    [
+     "bottom_up",
+     "lower 48",
+     0.02647905217,
+     0.02149342065,
+     -0.004985631517,
+     "helped"
+    ],
+    [
+     "bottom_up",
+     "interconnection",
+     0.03040683814,
+     0.02820215053,
+     -0.002204687609,
+     "helped"
+    ],
+    [
+     "bottom_up",
+     "region",
+     0.03927121217,
+     0.03852686162,
+     -0.0007443505506,
+     "helped"
+    ],
+    [
+     "bottom_up",
+     "authority",
+     0.05650209938,
+     0.05650209938,
+     0.0,
+     "unchanged"
+    ],
+    [
+     "bottom_up",
+     "subregion",
+     0.08528223055,
+     0.08528223055,
+     0.0,
+     "unchanged"
+    ],
+    [
+     "top_down",
+     "lower 48",
+     0.02647905217,
+     0.02647905217,
+     -1.283695372e-16,
+     "unchanged"
+    ],
+    [
+     "top_down",
+     "interconnection",
+     0.03040683814,
+     0.0703827963,
+     0.03997595816,
+     "hurt"
+    ],
+    [
+     "top_down",
+     "region",
+     0.03927121217,
+     0.09346705245,
+     0.05419584028,
+     "hurt"
+    ],
+    [
+     "top_down",
+     "authority",
+     0.05650209938,
+     0.1510470132,
+     0.0945449138,
+     "hurt"
+    ],
+    [
+     "top_down",
+     "subregion",
+     0.08528223055,
+     0.1427610941,
+     0.05747886355,
+     "hurt"
+    ],
+    [
+     "mint",
+     "lower 48",
+     0.02647905217,
+     0.02136644249,
+     -0.005112609683,
+     "helped"
+    ],
+    [
+     "mint",
+     "interconnection",
+     0.03040683814,
+     0.02817396747,
+     -0.002232870668,
+     "helped"
+    ],
+    [
+     "mint",
+     "region",
+     0.03927121217,
+     0.03854194318,
+     -0.0007292689935,
+     "helped"
+    ],
+    [
+     "mint",
+     "authority",
+     0.05650209938,
+     0.0566684191,
+     0.0001663197246,
+     "hurt"
+    ],
+    [
+     "mint",
+     "subregion",
+     0.08528223055,
+     0.1000911389,
+     0.01480890833,
+     "hurt"
+    ]
+   ]
+  }
+ },
+ "values": {
+  "hierarchy.authorities": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 51
+  },
+  "hierarchy.authorities_with_subregions": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 8
+  },
+  "hierarchy.base.level0.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.9001262542
+  },
+  "hierarchy.base.level0.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02647905217
+  },
+  "hierarchy.base.level0.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02487295629
+  },
+  "hierarchy.base.level0.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02814229768
+  },
+  "hierarchy.base.level1.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.8989850266
+  },
+  "hierarchy.base.level1.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.03040683814
+  },
+  "hierarchy.base.level1.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02902730338
+  },
+  "hierarchy.base.level1.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.03162133832
+  },
+  "hierarchy.base.level2.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.881741617
+  },
+  "hierarchy.base.level2.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.03927121217
+  },
+  "hierarchy.base.level2.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.03769039496
+  },
+  "hierarchy.base.level2.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.04039494905
+  },
+  "hierarchy.base.level3.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.8833294756
+  },
+  "hierarchy.base.level3.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.05650209938
+  },
+  "hierarchy.base.level3.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.05233513175
+  },
+  "hierarchy.base.level3.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.06025702988
+  },
+  "hierarchy.base.level4.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.8844457318
+  },
+  "hierarchy.base.level4.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.08528223055
+  },
+  "hierarchy.base.level4.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0828726653
+  },
+  "hierarchy.base.level4.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.08709295386
+  },
+  "hierarchy.best_method": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "bottom_up"
+  },
+  "hierarchy.bottom_up.level0.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.999667752
+  },
+  "hierarchy.bottom_up.level0.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02149342065
+  },
+  "hierarchy.bottom_up.level0.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.01977217233
+  },
+  "hierarchy.bottom_up.level0.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02276632773
+  },
+  "hierarchy.bottom_up.level1.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.9888855391
+  },
+  "hierarchy.bottom_up.level1.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02820215053
+  },
+  "hierarchy.bottom_up.level1.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0270459845
+  },
+  "hierarchy.bottom_up.level1.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02926215889
+  },
+  "hierarchy.bottom_up.level2.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.9444764649
+  },
+  "hierarchy.bottom_up.level2.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.03852686162
+  },
+  "hierarchy.bottom_up.level2.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0369856007
+  },
+  "hierarchy.bottom_up.level2.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.03945672206
+  },
+  "hierarchy.bottom_up.level3.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.8939610349
+  },
+  "hierarchy.bottom_up.level3.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.05650209938
+  },
+  "hierarchy.bottom_up.level3.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.05229745179
+  },
+  "hierarchy.bottom_up.level3.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.06012213832
+  },
+  "hierarchy.bottom_up.level4.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.8844457318
+  },
+  "hierarchy.bottom_up.level4.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.08528223055
+  },
+  "hierarchy.bottom_up.level4.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.08271669726
+  },
+  "hierarchy.bottom_up.level4.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.08705960994
+  },
+  "hierarchy.coherence_gap_mw.base": {
+   "fmt": "mw",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 71795.93509
+  },
+  "hierarchy.coherence_gap_mw.bottom_up": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0
+  },
+  "hierarchy.coherence_gap_mw.mint": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0
+  },
+  "hierarchy.coherence_gap_mw.top_down": {
+   "fmt": "float4",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0
+  },
+  "hierarchy.coherent_methods": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "bottom_up, top_down, mint"
+  },
+  "hierarchy.helped_list": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "bottom_up at the lower 48 level; bottom_up at the interconnection level; bottom_up at the region level; mint at the lower 48 level; mint at the interconnection level; mint at the region level"
+  },
+  "hierarchy.hurt_list": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "top_down at the interconnection level; top_down at the region level; top_down at the authority level; top_down at the subregion level; mint at the authority level; mint at the subregion level"
+  },
+  "hierarchy.leaves": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 134
+  },
+  "hierarchy.mint.level0.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 1.0
+  },
+  "hierarchy.mint.level0.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02136644249
+  },
+  "hierarchy.mint.level0.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.01990734374
+  },
+  "hierarchy.mint.level0.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02235217955
+  },
+  "hierarchy.mint.level1.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.9874786454
+  },
+  "hierarchy.mint.level1.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02817396747
+  },
+  "hierarchy.mint.level1.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02705875381
+  },
+  "hierarchy.mint.level1.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02918451493
+  },
+  "hierarchy.mint.level2.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.948158077
+  },
+  "hierarchy.mint.level2.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.03854194318
+  },
+  "hierarchy.mint.level2.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0370706109
+  },
+  "hierarchy.mint.level2.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.03932993581
+  },
+  "hierarchy.mint.level3.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.8824487814
+  },
+  "hierarchy.mint.level3.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0566684191
+  },
+  "hierarchy.mint.level3.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.05272753879
+  },
+  "hierarchy.mint.level3.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.06041621617
+  },
+  "hierarchy.mint.level4.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.8795821726
+  },
+  "hierarchy.mint.level4.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.1000911389
+  },
+  "hierarchy.mint.level4.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.09639127212
+  },
+  "hierarchy.mint.level4.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.10331339
+  },
+  "hierarchy.negative_remainders": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 1
+  },
+  "hierarchy.nodes": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 159
+  },
+  "hierarchy.origins": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 363
+  },
+  "hierarchy.remainder_nodes": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 8
+  },
+  "hierarchy.rows": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 17424
+  },
+  "hierarchy.seconds": {
+   "fmt": "float1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 23.88012171
+  },
+  "hierarchy.shrinkage_intensity": {
+   "fmt": "float3",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.001834520367
+  },
+  "hierarchy.subregions": {
+   "fmt": "int",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 83
+  },
+  "hierarchy.top_down.level0.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.9005249518
+  },
+  "hierarchy.top_down.level0.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02647905217
+  },
+  "hierarchy.top_down.level0.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02491115156
+  },
+  "hierarchy.top_down.level0.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.02796738047
+  },
+  "hierarchy.top_down.level1.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.5173148427
+  },
+  "hierarchy.top_down.level1.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0703827963
+  },
+  "hierarchy.top_down.level1.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.06497712724
+  },
+  "hierarchy.top_down.level1.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.07698970208
+  },
+  "hierarchy.top_down.level2.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.3971181556
+  },
+  "hierarchy.top_down.level2.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.09346705245
+  },
+  "hierarchy.top_down.level2.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.0891496343
+  },
+  "hierarchy.top_down.level2.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.09800767144
+  },
+  "hierarchy.top_down.level3.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.2800257434
+  },
+  "hierarchy.top_down.level3.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.1510470132
+  },
+  "hierarchy.top_down.level3.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.1428342714
+  },
+  "hierarchy.top_down.level3.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.1614472816
+  },
+  "hierarchy.top_down.level4.coverage_90": {
+   "fmt": "pct1",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.30391849
+  },
+  "hierarchy.top_down.level4.mape": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.1427610941
+  },
+  "hierarchy.top_down.level4.mape_lower": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.1364106239
+  },
+  "hierarchy.top_down.level4.mape_upper": {
+   "fmt": "pct2",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": 0.1488671353
+  },
+  "hierarchy.verdict.bottom_up.level0": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "helped"
+  },
+  "hierarchy.verdict.bottom_up.level1": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "helped"
+  },
+  "hierarchy.verdict.bottom_up.level2": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "helped"
+  },
+  "hierarchy.verdict.bottom_up.level3": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "unchanged"
+  },
+  "hierarchy.verdict.bottom_up.level4": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "unchanged"
+  },
+  "hierarchy.verdict.mint.level0": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "helped"
+  },
+  "hierarchy.verdict.mint.level1": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "helped"
+  },
+  "hierarchy.verdict.mint.level2": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "helped"
+  },
+  "hierarchy.verdict.mint.level3": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "hurt"
+  },
+  "hierarchy.verdict.mint.level4": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "hurt"
+  },
+  "hierarchy.verdict.top_down.level0": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "unchanged"
+  },
+  "hierarchy.verdict.top_down.level1": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "hurt"
+  },
+  "hierarchy.verdict.top_down.level2": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "hurt"
+  },
+  "hierarchy.verdict.top_down.level3": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "hurt"
+  },
+  "hierarchy.verdict.top_down.level4": {
+   "fmt": "text",
+   "provenance": {
+    "as_of": "2026-09-29",
+    "condition": null,
+    "model": "own",
+    "origin": "lookahead_registry.stages.hierarchy",
+    "population": "159 nodes of the hierarchy, test year",
+    "seed": null,
+    "seeds": null,
+    "source": "real:eia930"
+   },
+   "value": "hurt"
+  }
+ }
+}

@@ -173,7 +173,7 @@ def _score(
 
 
 def forecast_and_reconcile(panel: pl.DataFrame, windows: dict[str, str | int], seed: int) -> MeterForecast:
-    data = PanelData.from_frames(panel, None, windows, "real:london")
+    data = PanelData.from_frames(panel, None, windows, "real:lcl")
     nodes = [TOTAL, *[n for n in data.names if n != TOTAL]]
     summing = summing_for([n for n in nodes if n != TOTAL])
     spec = ForecastSpec(backend="gbm", seed=seed)
