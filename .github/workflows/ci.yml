@@ -72,8 +72,14 @@ jobs:
       - run: uv sync --frozen
       - name: Tests with the coverage floor
         run: uv run pytest --cov --cov-report=term-missing:skip-covered --cov-report=xml
+      # The check migrates with alembic from an empty database, so it gets one of its own rather
+      # than the one the test fixtures filled.
       - name: The forecast log observed out of process
-        run: uv run python scripts/check_persistence.py --start-server
+        run: |
+          uv run python -c "import psycopg; c = psycopg.connect('postgresql://postgres:postgres@localhost:5432/postgres', autocommit=True); c.execute('drop database if exists lookahead_check'); c.execute('create database lookahead_check')"
+          uv run python scripts/check_persistence.py --start-server
+        env:
+          LOOKAHEAD_TEST_DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/lookahead_check
       - name: The three notebooks run on the committed results
         run: uv run pytest --nbmake notebooks -p no:cacheprovider
 
