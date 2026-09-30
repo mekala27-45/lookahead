@@ -13,10 +13,12 @@ temperature sensitivity, the noise level and the missing data rate one at a time
 
 from __future__ import annotations
 
+import json
 import os
 from collections.abc import Callable
 from concurrent.futures import ProcessPoolExecutor
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -191,14 +193,34 @@ def run_one(condition: str, seed: int) -> RunRecord:
     return record
 
 
+CHECKPOINT_ENV = "LOOKAHEAD_RECOVERY_CHECKPOINTS"
+"""A directory; when set, every finished (condition, seed) record is written there as JSON and a
+rerun reads it back instead of running the condition again. The build machine restarts without
+notice; a record read back is the record that was computed. The rederive never sets it."""
+
+
+def _checkpoint_path(condition: str, seed: int) -> Path | None:
+    folder = os.environ.get(CHECKPOINT_ENV, "").strip()
+    return Path(folder) / f"{condition}-{seed}.json" if folder else None
+
+
 def _worker(args: tuple[str, int]) -> RunRecord:
-    return run_one(*args)
+    condition, seed = args
+    path = _checkpoint_path(condition, seed)
+    if path is not None and path.exists():
+        raw = json.loads(path.read_text(encoding="utf-8"))
+        return RunRecord(**raw)
+    record = run_one(condition, seed)
+    if path is not None:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(asdict(record)), encoding="utf-8")
+    return record
 
 
 def run_study(conditions: list[str], seeds: int, workers: int = 2) -> list[RunRecord]:
     jobs = [(c, s) for c in conditions for s in range(seeds)]
     if workers <= 1:
-        return [run_one(c, s) for c, s in jobs]
+        return [_worker(job) for job in jobs]
     with ProcessPoolExecutor(max_workers=workers) as pool:
         return list(pool.map(_worker, jobs))
 

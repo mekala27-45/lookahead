@@ -50,3 +50,7 @@ results/backtest/*/predictions.parquet
 results/backtest/*/scoring.parquet
 results/hierarchy/predictions.parquet
 results/hierarchy/scoring.parquet
+
+# Refit and record checkpoints for resuming an interrupted run; never inputs to the rederive
+results/backtest/gbm/checkpoints/
+results/recovery/checkpoints/

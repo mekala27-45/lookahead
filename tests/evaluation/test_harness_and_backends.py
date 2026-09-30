@@ -3,6 +3,8 @@ protocol, and the questions of whether each step ran."""
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import polars as pl
 import pytest
@@ -333,3 +335,44 @@ def test_recovery_run_reports_every_figure() -> None:
     ):
         assert key in record.figures
     assert record.figures["harness.origins"] == 363 * 8
+
+
+def test_gbm_refits_are_checkpointed_and_read_back_identically(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The build machine restarts without notice; with the checkpoint directory set, a refit's
+    booster is saved and the rerun loads the booster that was trained, so the predictions match."""
+    from lookahead_forecast.gbm import CHECKPOINT_ENV, _train_or_load
+
+    monkeypatch.setenv(CHECKPOINT_ENV, str(tmp_path))
+    generator = np.random.default_rng(0)
+    x = generator.normal(size=(400, 3))
+    y = x[:, 0] * 0.5 + generator.normal(scale=0.1, size=400) + 1.0
+    spec = ForecastSpec(backend="gbm", seed=1, gbm_rounds=5)
+    names = ["a", "b", "c"]
+    first = _train_or_load("2025-01-01", x, y, names, spec, 1)
+    assert (tmp_path / f"{spec.spec_hash}-2025-01-01.ubj").exists()
+    again = _train_or_load("2025-01-01", x, y, names, spec, 999)  # a different seed: not retrained
+    p1 = np.asarray(first[0].inplace_predict(x[:10]))  # type: ignore[attr-defined]
+    p2 = np.asarray(again[0].inplace_predict(x[:10]))  # type: ignore[attr-defined]
+    np.testing.assert_array_equal(p1, p2)
+
+
+def test_recovery_records_are_checkpointed(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from lookahead_evaluation import recovery
+
+    monkeypatch.setenv(recovery.CHECKPOINT_ENV, str(tmp_path))
+    calls: list[tuple[str, int]] = []
+
+    def fake_run_one(condition: str, seed: int) -> recovery.RunRecord:
+        calls.append((condition, seed))
+        return recovery.RunRecord(
+            condition=condition, seed=seed, figures={"x": 1.5}, per_authority=[{"a": 1}]
+        )
+
+    monkeypatch.setattr(recovery, "run_one", fake_run_one)
+    first = recovery.run_study(["base"], 2, workers=1)
+    second = recovery.run_study(["base"], 2, workers=1)
+    assert calls == [("base", 0), ("base", 1)]
+    assert [r.figures for r in second] == [r.figures for r in first]
+    assert second[0].per_authority == [{"a": 1}]
