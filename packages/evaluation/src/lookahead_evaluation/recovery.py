@@ -14,6 +14,7 @@ temperature sensitivity, the noise level and the missing data rate one at a time
 from __future__ import annotations
 
 import json
+import multiprocessing
 import os
 from collections.abc import Callable
 from concurrent.futures import ProcessPoolExecutor
@@ -221,7 +222,13 @@ def run_study(conditions: list[str], seeds: int, workers: int = 2) -> list[RunRe
     jobs = [(c, s) for c in conditions for s in range(seeds)]
     if workers <= 1:
         return [_worker(job) for job in jobs]
-    with ProcessPoolExecutor(max_workers=workers) as pool:
+    # One BLAS thread per worker: the study is thousands of small solves, and two workers each
+    # spinning two threads on two cores ran twelve times slower than this. The workers are
+    # spawned, not forked, so they load numpy with the setting.
+    os.environ["OMP_NUM_THREADS"] = "1"
+    os.environ["OPENBLAS_NUM_THREADS"] = "1"
+    context = multiprocessing.get_context("spawn")
+    with ProcessPoolExecutor(max_workers=workers, mp_context=context) as pool:
         return list(pool.map(_worker, jobs))
 
 
