@@ -20,6 +20,7 @@ The reversal from the brief's stack line is in DECISIONS.md.
 
 from __future__ import annotations
 
+import hashlib
 import os
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -169,15 +170,23 @@ and a booster loaded from disk is the booster that was trained, so the run resum
 stopped with the same numbers. The rederive never sets it."""
 
 
+def _scope(data: PanelData) -> str:
+    """What a checkpoint belongs to besides the spec: the source and the series it was trained
+    on, so the meter's household panel and the grid never read each other's boosters."""
+    names = hashlib.sha256("|".join(data.names).encode()).hexdigest()[:12]
+    source = "".join(c if c.isalnum() else "_" for c in data.data_source)
+    return f"{source}-{names}"
+
+
 def _train_or_load(
-    key: str, x: np.ndarray, y: np.ndarray, names: list[str], spec: ForecastSpec, seed: int
+    key: str, scope: str, x: np.ndarray, y: np.ndarray, names: list[str], spec: ForecastSpec, seed: int
 ) -> list[object]:
     folder = os.environ.get(CHECKPOINT_ENV, "").strip()
     if not folder:
         return _train(x, y, names, spec, seed)
     import xgboost as xgb
 
-    path = Path(folder) / f"{spec.spec_hash}-{key}.ubj"
+    path = Path(folder) / f"{spec.spec_hash}-{scope}-{key}.ubj"
     if path.exists():
         booster = xgb.Booster()
         booster.load_model(str(path))
@@ -224,7 +233,7 @@ class GbmForecaster:
         # The calibration fit: trained on the window before the validation year, scored over it.
         refit = {a: data.authorities[a].series.position(data.validation_start) - 1 for a in data.names}
         x, y = _training_matrix(designs, data, refit, spec.gbm_training_window_days)
-        boosters = _train_or_load("calibration", x, y, names, spec, spec.seed)
+        boosters = _train_or_load("calibration", _scope(data), x, y, names, spec, spec.seed)
         preds = []
         actual = []
         horizons = []
@@ -280,7 +289,7 @@ class GbmForecaster:
                 refit = {a: data.authorities[a].series.position(start) - 1 for a in data.names}
                 x, y = _training_matrix(fitted.designs, data, refit, spec.gbm_training_window_days)
                 fitted.boosters[key] = _train_or_load(
-                    key, x, y, fitted.names, spec, spec.seed + 100 * len(fitted.boosters)
+                    key, _scope(data), x, y, fitted.names, spec, spec.seed + 100 * len(fitted.boosters)
                 )
                 fitted.training_rows_by_refit[key] = int(len(y))
                 fits += 1

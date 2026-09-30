@@ -350,9 +350,15 @@ def test_gbm_refits_are_checkpointed_and_read_back_identically(
     y = x[:, 0] * 0.5 + generator.normal(scale=0.1, size=400) + 1.0
     spec = ForecastSpec(backend="gbm", seed=1, gbm_rounds=5)
     names = ["a", "b", "c"]
-    first = _train_or_load("2025-01-01", x, y, names, spec, 1)
-    assert (tmp_path / f"{spec.spec_hash}-2025-01-01.ubj").exists()
-    again = _train_or_load("2025-01-01", x, y, names, spec, 999)  # a different seed: not retrained
+    first = _train_or_load("2025-01-01", "grid-abc", x, y, names, spec, 1)
+    assert (tmp_path / f"{spec.spec_hash}-grid-abc-2025-01-01.ubj").exists()
+    again = _train_or_load(
+        "2025-01-01", "grid-abc", x, y, names, spec, 999
+    )  # a different seed: not retrained
+    # Another population with the same spec trains its own booster rather than reading this one.
+    other = _train_or_load("2025-01-01", "households-def", x[:200], y[:200], names, spec, 1)
+    assert (tmp_path / f"{spec.spec_hash}-households-def-2025-01-01.ubj").exists()
+    assert other[0] is not again[0]
     p1 = np.asarray(first[0].inplace_predict(x[:10]))  # type: ignore[attr-defined]
     p2 = np.asarray(again[0].inplace_predict(x[:10]))  # type: ignore[attr-defined]
     np.testing.assert_array_equal(p1, p2)
