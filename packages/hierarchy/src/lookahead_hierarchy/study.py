@@ -172,11 +172,15 @@ the chunk again. The build machine restarts without notice. The rederive never s
 VALIDATION_FIELDS = ("origin_position", "horizon", "pred_ratio", "actual_ratio", "scale")
 
 
-def _chunk_paths(chunk: list[str], spec: ForecastSpec) -> tuple[Path, Path] | None:
+def _chunk_paths(chunk: list[str], spec: ForecastSpec, data: PanelData) -> tuple[Path, Path] | None:
+    """Keyed by the chunk's nodes, the spec and the panel's digest: the recovery study runs the
+    same node names over many simulated grids, and each must fit its own."""
     folder = os.environ.get(CHECKPOINT_ENV, "").strip()
     if not folder:
         return None
-    key = hashlib.sha256(("|".join(chunk) + "#" + spec.spec_hash).encode()).hexdigest()[:16]
+    key = hashlib.sha256(("|".join(chunk) + "#" + spec.spec_hash + "#" + data.digest()).encode()).hexdigest()[
+        :16
+    ]
     base = Path(folder) / key
     return base.with_suffix(".scoring.parquet"), base.with_suffix(".validation.npz")
 
@@ -188,7 +192,7 @@ def _backtest_in_chunks(
     validation: dict[str, ValidationRun] = {}
     for start in range(0, len(series), NODES_PER_CHUNK):
         chunk = series[start : start + NODES_PER_CHUNK]
-        paths = _chunk_paths(chunk, spec)
+        paths = _chunk_paths(chunk, spec, data)
         if paths is not None and paths[0].exists() and paths[1].exists():
             parts.append(pl.read_parquet(paths[0]))
             with np.load(paths[1]) as saved:

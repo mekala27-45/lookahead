@@ -20,7 +20,6 @@ The reversal from the brief's stack line is in DECISIONS.md.
 
 from __future__ import annotations
 
-import hashlib
 import os
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -171,11 +170,11 @@ stopped with the same numbers. The rederive never sets it."""
 
 
 def _scope(data: PanelData) -> str:
-    """What a checkpoint belongs to besides the spec: the source and the series it was trained
-    on, so the meter's household panel and the grid never read each other's boosters."""
-    names = hashlib.sha256("|".join(data.names).encode()).hexdigest()[:12]
+    """What a checkpoint belongs to besides the spec: the source and a digest of the series it
+    was trained on, so the meter's household panel and the grid never read each other's boosters,
+    and a refreshed panel never reads a stale one."""
     source = "".join(c if c.isalnum() else "_" for c in data.data_source)
-    return f"{source}-{names}"
+    return f"{source}-{data.digest()}"
 
 
 def _train_or_load(

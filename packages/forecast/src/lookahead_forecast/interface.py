@@ -76,6 +76,21 @@ class PanelData:
     def names(self) -> list[str]:
         return sorted(self.authorities)
 
+    def digest(self) -> str:
+        """A short hash of the source, the series names and every series' values, first hour and
+        weather, so anything cached from a run of this panel is never read back for another."""
+        import hashlib
+
+        h = hashlib.sha256(self.data_source.encode())
+        for name in self.names:
+            a = self.authorities[name]
+            h.update(name.encode())
+            h.update(a.series.first_hour.isoformat().encode())
+            h.update(np.ascontiguousarray(a.series.values, dtype=np.float64).tobytes())
+            h.update(np.ascontiguousarray(a.temperature, dtype=np.float64).tobytes())
+            h.update(np.ascontiguousarray(a.operator, dtype=np.float64).tobytes())
+        return h.hexdigest()[:16]
+
     def origins(self, start: datetime, end: datetime, authority: str) -> np.ndarray:
         """Positions of every daily origin at the issue hour from start to end inclusive, within the series."""
         series = self.authorities[authority].series

@@ -168,6 +168,15 @@ def test_a_negative_remainder_is_derived_not_fit_and_bottom_up_keeps_the_authori
     assert list(tmp_path.glob("*.scoring.parquet")), "each chunk's rows were checkpointed"
     again = run_study(data, summing, seed=5)  # read back from the checkpoints
     assert [s.mape for s in again.scores] == [s.mape for s in study.scores]
+    # Another grid with the same node names (the recovery study's case) gets its own chunks.
+    other_grid = simulate(GridSpec(subregion_gap=-0.03, missing_rate=0.05), 5)
+    other_panel = build_node_panel(other_grid.panel, other_grid.subregions, None, nodes, authorities)
+    other = PanelData.from_frames(other_panel, None, SIM_WINDOWS, "simulated")
+    assert other.digest() != data.digest()
+    before = len(list(tmp_path.glob("*.scoring.parquet")))
+    other_study = run_study(other, summing, seed=5)
+    assert len(list(tmp_path.glob("*.scoring.parquet"))) > before, "the other grid wrote its own chunks"
+    assert [s.mape for s in other_study.scores] != [s.mape for s in study.scores]
     assert study.coherence_gap_mw["bottom_up"] < 1e-3
     parent = str(summing.parents[rest])
     j_parent = summing.nodes.index(parent)
