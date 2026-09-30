@@ -1,1 +1,933 @@
-{"statement": "placeholder until the marts stage runs", "as_of": "", "served_backend": "own", "backends": [], "authorities": [], "regions": [], "tiles": [], "policy": {}, "known_events": [], "files": [], "bytes": {}}
+{
+ "statement": "Demand data from the U.S. Energy Information Administration's Hourly Electric Grid Monitor, public domain; weather from Open-Meteo under CC BY 4.0; household data from UK Power Networks' Low Carbon London release under CC BY 4.0. Forecasts here are demonstrations and not for grid operations.",
+ "as_of": "2026-09-29",
+ "built_at": "2026-09-30T05:40:30.741507+00:00",
+ "served_backend": "gbm",
+ "backends": [
+  "gbm",
+  "own",
+  "seasonal_naive"
+ ],
+ "authorities": [
+  {
+   "authority": "AECI",
+   "region": "MIDW",
+   "label": "AECI",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 2656.7761235333187
+  },
+  {
+   "authority": "AVA",
+   "region": "NW",
+   "label": "AVA",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 1453.1820332932043
+  },
+  {
+   "authority": "AZPS",
+   "region": "SW",
+   "label": "AZPS",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 3879.115486327449
+  },
+  {
+   "authority": "BANC",
+   "region": "CAL",
+   "label": "BANC",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 1997.2588854454589
+  },
+  {
+   "authority": "BPAT",
+   "region": "NW",
+   "label": "BPAT",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 6604.192258742806
+  },
+  {
+   "authority": "CHPD",
+   "region": "NW",
+   "label": "CHPD",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 216.89406762053824
+  },
+  {
+   "authority": "CISO",
+   "region": "CAL",
+   "label": "CISO",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 25448.562007874014
+  },
+  {
+   "authority": "CPLE",
+   "region": "CAR",
+   "label": "CPLE",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 7057.85540031049
+  },
+  {
+   "authority": "CPLW",
+   "region": "CAR",
+   "label": "CPLW",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 565.4648736282008
+  },
+  {
+   "authority": "DOPD",
+   "region": "NW",
+   "label": "DOPD",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 241.95724428603756
+  },
+  {
+   "authority": "DUK",
+   "region": "CAR",
+   "label": "DUK",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 12232.86699889258
+  },
+  {
+   "authority": "EPE",
+   "region": "SW",
+   "label": "EPE",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 1028.6539755499869
+  },
+  {
+   "authority": "ERCO",
+   "region": "TEX",
+   "label": "ERCO",
+   "interconnection": "Texas",
+   "comparable": true,
+   "typical_mw": 49439.01835993792
+  },
+  {
+   "authority": "FMPP",
+   "region": "FLA",
+   "label": "FMPP",
+   "interconnection": "Eastern",
+   "comparable": false,
+   "typical_mw": 2139.9862519595467
+  },
+  {
+   "authority": "FPC",
+   "region": "FLA",
+   "label": "FPC",
+   "interconnection": "Eastern",
+   "comparable": false,
+   "typical_mw": 6488.205736592929
+  },
+  {
+   "authority": "FPL",
+   "region": "FLA",
+   "label": "FPL",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 15841.898981419297
+  },
+  {
+   "authority": "GCPD",
+   "region": "NW",
+   "label": "GCPD",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 691.4620673436074
+  },
+  {
+   "authority": "GVL",
+   "region": "FLA",
+   "label": "GVL",
+   "interconnection": "Eastern",
+   "comparable": false,
+   "typical_mw": 240.38270035040128
+  },
+  {
+   "authority": "HST",
+   "region": "FLA",
+   "label": "HST",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 70.98334302567085
+  },
+  {
+   "authority": "IID",
+   "region": "CAL",
+   "label": "IID",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 443.89667448483834
+  },
+  {
+   "authority": "IPCO",
+   "region": "NW",
+   "label": "IPCO",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 2094.5740648517044
+  },
+  {
+   "authority": "ISNE",
+   "region": "NE",
+   "label": "ISNE",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 13313.281455350349
+  },
+  {
+   "authority": "JEA",
+   "region": "FLA",
+   "label": "JEA",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 1534.4424375468918
+  },
+  {
+   "authority": "LDWP",
+   "region": "CAL",
+   "label": "LDWP",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 2906.4547731700527
+  },
+  {
+   "authority": "LGEE",
+   "region": "MIDW",
+   "label": "LGEE",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 4169.964802020034
+  },
+  {
+   "authority": "MISO",
+   "region": "MIDW",
+   "label": "MISO",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 74348.57981028872
+  },
+  {
+   "authority": "NEVP",
+   "region": "NW",
+   "label": "NEVP",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 4531.922584932303
+  },
+  {
+   "authority": "NWMT",
+   "region": "NW",
+   "label": "NWMT",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 1358.079972270364
+  },
+  {
+   "authority": "NYIS",
+   "region": "NY",
+   "label": "NYIS",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 17416.954493884554
+  },
+  {
+   "authority": "PACE",
+   "region": "NW",
+   "label": "PACE",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 5803.776255897287
+  },
+  {
+   "authority": "PACW",
+   "region": "NW",
+   "label": "PACW",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 2386.527882686588
+  },
+  {
+   "authority": "PGE",
+   "region": "NW",
+   "label": "PGE",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 2512.1348320828374
+  },
+  {
+   "authority": "PJM",
+   "region": "MIDA",
+   "label": "PJM",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 92679.71754931062
+  },
+  {
+   "authority": "PNM",
+   "region": "SW",
+   "label": "PNM",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 1644.2700858250278
+  },
+  {
+   "authority": "PSCO",
+   "region": "NW",
+   "label": "PSCO",
+   "interconnection": "Western",
+   "comparable": false,
+   "typical_mw": 5296.288284796811
+  },
+  {
+   "authority": "PSEI",
+   "region": "NW",
+   "label": "PSEI",
+   "interconnection": "Western",
+   "comparable": false,
+   "typical_mw": 2908.9338107382323
+  },
+  {
+   "authority": "SC",
+   "region": "CAR",
+   "label": "SC",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 2896.5385234750256
+  },
+  {
+   "authority": "SCEG",
+   "region": "CAR",
+   "label": "SCEG",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 2819.38408511705
+  },
+  {
+   "authority": "SCL",
+   "region": "NW",
+   "label": "SCL",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 1075.0455916537526
+  },
+  {
+   "authority": "SEC",
+   "region": "FLA",
+   "label": "SEC",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 245.48104577261347
+  },
+  {
+   "authority": "SOCO",
+   "region": "SE",
+   "label": "SOCO",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 27191.751434750062
+  },
+  {
+   "authority": "SPA",
+   "region": "CENT",
+   "label": "SPA",
+   "interconnection": "Eastern",
+   "comparable": false,
+   "typical_mw": 50.70546090723539
+  },
+  {
+   "authority": "SRP",
+   "region": "SW",
+   "label": "SRP",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 3835.673996109004
+  },
+  {
+   "authority": "SWPP",
+   "region": "CENT",
+   "label": "SWPP",
+   "interconnection": "Eastern",
+   "comparable": false,
+   "typical_mw": 32130.187787790615
+  },
+  {
+   "authority": "TAL",
+   "region": "FLA",
+   "label": "TAL",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 322.8520707578806
+  },
+  {
+   "authority": "TEC",
+   "region": "FLA",
+   "label": "TEC",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 2533.4050689010455
+  },
+  {
+   "authority": "TEPC",
+   "region": "SW",
+   "label": "TEPC",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 1576.6227124275015
+  },
+  {
+   "authority": "TIDC",
+   "region": "CAL",
+   "label": "TIDC",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 328.151507569123
+  },
+  {
+   "authority": "TPWR",
+   "region": "NW",
+   "label": "TPWR",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 540.1424441124391
+  },
+  {
+   "authority": "TVA",
+   "region": "TEN",
+   "label": "TVA",
+   "interconnection": "Eastern",
+   "comparable": true,
+   "typical_mw": 18630.45389753766
+  },
+  {
+   "authority": "WALC",
+   "region": "SW",
+   "label": "WALC",
+   "interconnection": "Western",
+   "comparable": true,
+   "typical_mw": 1051.8333610533612
+  }
+ ],
+ "regions": [
+  {
+   "code": "CAL",
+   "label": "California",
+   "interconnection": "Western"
+  },
+  {
+   "code": "NW",
+   "label": "Northwest",
+   "interconnection": "Western"
+  },
+  {
+   "code": "SW",
+   "label": "Southwest",
+   "interconnection": "Western"
+  },
+  {
+   "code": "TEX",
+   "label": "Texas",
+   "interconnection": "Texas"
+  },
+  {
+   "code": "CENT",
+   "label": "Central",
+   "interconnection": "Eastern"
+  },
+  {
+   "code": "MIDW",
+   "label": "Midwest",
+   "interconnection": "Eastern"
+  },
+  {
+   "code": "MIDA",
+   "label": "Mid-Atlantic",
+   "interconnection": "Eastern"
+  },
+  {
+   "code": "NY",
+   "label": "New York",
+   "interconnection": "Eastern"
+  },
+  {
+   "code": "NE",
+   "label": "New England",
+   "interconnection": "Eastern"
+  },
+  {
+   "code": "CAR",
+   "label": "Carolinas",
+   "interconnection": "Eastern"
+  },
+  {
+   "code": "SE",
+   "label": "Southeast",
+   "interconnection": "Eastern"
+  },
+  {
+   "code": "TEN",
+   "label": "Tennessee",
+   "interconnection": "Eastern"
+  },
+  {
+   "code": "FLA",
+   "label": "Florida",
+   "interconnection": "Eastern"
+  }
+ ],
+ "tiles": [
+  {
+   "authority": "SCL",
+   "region": "NW",
+   "row": 0,
+   "col": 0
+  },
+  {
+   "authority": "CHPD",
+   "region": "NW",
+   "row": 0,
+   "col": 1
+  },
+  {
+   "authority": "DOPD",
+   "region": "NW",
+   "row": 0,
+   "col": 2
+  },
+  {
+   "authority": "GCPD",
+   "region": "NW",
+   "row": 0,
+   "col": 3
+  },
+  {
+   "authority": "AVA",
+   "region": "NW",
+   "row": 0,
+   "col": 4
+  },
+  {
+   "authority": "NWMT",
+   "region": "NW",
+   "row": 0,
+   "col": 5
+  },
+  {
+   "authority": "TPWR",
+   "region": "NW",
+   "row": 1,
+   "col": 0
+  },
+  {
+   "authority": "PSEI",
+   "region": "NW",
+   "row": 1,
+   "col": 1
+  },
+  {
+   "authority": "BPAT",
+   "region": "NW",
+   "row": 1,
+   "col": 2
+  },
+  {
+   "authority": "PGE",
+   "region": "NW",
+   "row": 1,
+   "col": 3
+  },
+  {
+   "authority": "IPCO",
+   "region": "NW",
+   "row": 1,
+   "col": 4
+  },
+  {
+   "authority": "PACE",
+   "region": "NW",
+   "row": 1,
+   "col": 5
+  },
+  {
+   "authority": "PACW",
+   "region": "NW",
+   "row": 2,
+   "col": 0
+  },
+  {
+   "authority": "NEVP",
+   "region": "NW",
+   "row": 2,
+   "col": 1
+  },
+  {
+   "authority": "PSCO",
+   "region": "NW",
+   "row": 2,
+   "col": 5
+  },
+  {
+   "authority": "BANC",
+   "region": "CAL",
+   "row": 3,
+   "col": 0
+  },
+  {
+   "authority": "TIDC",
+   "region": "CAL",
+   "row": 3,
+   "col": 1
+  },
+  {
+   "authority": "CISO",
+   "region": "CAL",
+   "row": 4,
+   "col": 0
+  },
+  {
+   "authority": "LDWP",
+   "region": "CAL",
+   "row": 4,
+   "col": 1
+  },
+  {
+   "authority": "IID",
+   "region": "CAL",
+   "row": 5,
+   "col": 1
+  },
+  {
+   "authority": "WALC",
+   "region": "SW",
+   "row": 3,
+   "col": 2
+  },
+  {
+   "authority": "AZPS",
+   "region": "SW",
+   "row": 4,
+   "col": 2
+  },
+  {
+   "authority": "SRP",
+   "region": "SW",
+   "row": 4,
+   "col": 3
+  },
+  {
+   "authority": "TEPC",
+   "region": "SW",
+   "row": 5,
+   "col": 2
+  },
+  {
+   "authority": "EPE",
+   "region": "SW",
+   "row": 5,
+   "col": 3
+  },
+  {
+   "authority": "PNM",
+   "region": "SW",
+   "row": 4,
+   "col": 4
+  },
+  {
+   "authority": "SWPP",
+   "region": "CENT",
+   "row": 2,
+   "col": 6
+  },
+  {
+   "authority": "SPA",
+   "region": "CENT",
+   "row": 3,
+   "col": 6
+  },
+  {
+   "authority": "ERCO",
+   "region": "TEX",
+   "row": 5,
+   "col": 5
+  },
+  {
+   "authority": "AECI",
+   "region": "MIDW",
+   "row": 3,
+   "col": 7
+  },
+  {
+   "authority": "MISO",
+   "region": "MIDW",
+   "row": 2,
+   "col": 7
+  },
+  {
+   "authority": "LGEE",
+   "region": "MIDW",
+   "row": 3,
+   "col": 8
+  },
+  {
+   "authority": "TVA",
+   "region": "TEN",
+   "row": 4,
+   "col": 7
+  },
+  {
+   "authority": "PJM",
+   "region": "MIDA",
+   "row": 2,
+   "col": 9
+  },
+  {
+   "authority": "NYIS",
+   "region": "NY",
+   "row": 1,
+   "col": 10
+  },
+  {
+   "authority": "ISNE",
+   "region": "NE",
+   "row": 0,
+   "col": 11
+  },
+  {
+   "authority": "CPLW",
+   "region": "CAR",
+   "row": 3,
+   "col": 9
+  },
+  {
+   "authority": "DUK",
+   "region": "CAR",
+   "row": 4,
+   "col": 9
+  },
+  {
+   "authority": "CPLE",
+   "region": "CAR",
+   "row": 3,
+   "col": 10
+  },
+  {
+   "authority": "SCEG",
+   "region": "CAR",
+   "row": 4,
+   "col": 10
+  },
+  {
+   "authority": "SC",
+   "region": "CAR",
+   "row": 5,
+   "col": 10
+  },
+  {
+   "authority": "SOCO",
+   "region": "SE",
+   "row": 5,
+   "col": 7
+  },
+  {
+   "authority": "JEA",
+   "region": "FLA",
+   "row": 5,
+   "col": 9
+  },
+  {
+   "authority": "TAL",
+   "region": "FLA",
+   "row": 6,
+   "col": 7
+  },
+  {
+   "authority": "GVL",
+   "region": "FLA",
+   "row": 6,
+   "col": 8
+  },
+  {
+   "authority": "FPC",
+   "region": "FLA",
+   "row": 6,
+   "col": 9
+  },
+  {
+   "authority": "SEC",
+   "region": "FLA",
+   "row": 7,
+   "col": 8
+  },
+  {
+   "authority": "TEC",
+   "region": "FLA",
+   "row": 7,
+   "col": 9
+  },
+  {
+   "authority": "FMPP",
+   "region": "FLA",
+   "row": 7,
+   "col": 10
+  },
+  {
+   "authority": "FPL",
+   "region": "FLA",
+   "row": 8,
+   "col": 10
+  },
+  {
+   "authority": "HST",
+   "region": "FLA",
+   "row": 9,
+   "col": 10
+  }
+ ],
+ "policy": {
+  "issue_hour_utc": 0,
+  "horizons": 48,
+  "quantile_levels": [
+   0.05,
+   0.25,
+   0.5,
+   0.75,
+   0.95
+  ],
+  "interval_level": 0.9,
+  "alert_persistence_hours": 3
+ },
+ "known_events": [
+  {
+   "event": "covid_2020",
+   "node": "NYIS",
+   "onset_utc": "2020-03-16T00:00:00Z",
+   "end_utc": "2020-04-30T23:00:00Z",
+   "description": "New York's COVID-19 mitigation: schools closed from March 16 and the state paused non essential business on March 22; weekday demand ran 11 to 14 percent under temperature comparable demand through April"
+  },
+  {
+   "event": "covid_2020",
+   "node": "MISO",
+   "onset_utc": "2020-03-18T00:00:00Z",
+   "end_utc": "2020-04-30T23:00:00Z",
+   "description": "The central region's COVID-19 mitigation: the automotive plants announced closures on March 18 and demand ran 9 to 13 percent under temperature comparable demand from late March through April"
+  },
+  {
+   "event": "uri_2021",
+   "node": "ERCO",
+   "onset_utc": "2021-02-15T07:20:00Z",
+   "end_utc": "2021-02-19T06:00:00Z",
+   "description": "Winter Storm Uri: ERCOT ordered firm load shed from 1:20 a.m. Central on February 15 and shed up to 20 GW; the demand the feed reports is what was served, well below what was wanted, until the shed ended late on February 18"
+  },
+  {
+   "event": "ida_2021",
+   "node": "MISO.8910",
+   "onset_utc": "2021-08-29T17:00:00Z",
+   "end_utc": "2021-09-05T23:00:00Z",
+   "description": "Hurricane Ida made landfall in Louisiana at 11:55 a.m. Central on August 29; Entergy lost 210 transmission lines and hourly load in MISO's South region on August 30 was 25 to 30 percent below the average of the preceding days"
+  },
+  {
+   "event": "ida_2021",
+   "node": "MISO",
+   "onset_utc": "2021-08-29T17:00:00Z",
+   "end_utc": "2021-09-05T23:00:00Z",
+   "description": "The same event seen at the whole of MISO, where the South region is about a fifth of demand; listed so the page can say whether an authority level detector sees a regional collapse"
+  },
+  {
+   "event": "elliott_2022",
+   "node": "TVA",
+   "onset_utc": "2022-12-23T15:31:00Z",
+   "end_utc": "2022-12-24T20:00:00Z",
+   "description": "Winter Storm Elliott: with over 6,000 MW of unplanned generation outages TVA ordered firm load shed of over 1,500 MW at 10:31 a.m. Eastern on December 23 and shed again, ten percent of its peak, early on December 24"
+  },
+  {
+   "event": "elliott_2022",
+   "node": "DUK",
+   "onset_utc": "2022-12-24T11:00:00Z",
+   "end_utc": "2022-12-24T20:00:00Z",
+   "description": "Winter Storm Elliott: Duke Energy Carolinas shed about 1,000 MW of firm load in rotating outages from the morning of December 24, about 500,000 customers across the Carolinas"
+  },
+  {
+   "event": "elliott_2022",
+   "node": "CPLE",
+   "onset_utc": "2022-12-24T11:00:00Z",
+   "end_utc": "2022-12-24T20:00:00Z",
+   "description": "Winter Storm Elliott: Duke Energy Progress East shed about 961 MW of firm load in rotating outages on the morning of December 24"
+  },
+  {
+   "event": "beryl_2024",
+   "node": "ERCO.COAS",
+   "onset_utc": "2024-07-08T09:00:00Z",
+   "end_utc": "2024-07-12T23:00:00Z",
+   "description": "Hurricane Beryl made landfall near Matagorda at about 4 a.m. Central on July 8 and cut power to about 2.2 million CenterPoint customers in Houston, most of ERCOT's Coast zone; ERCOT's forecast peak that day was about 20 percent below the same day's five year average"
+  },
+  {
+   "event": "beryl_2024",
+   "node": "ERCO",
+   "onset_utc": "2024-07-08T09:00:00Z",
+   "end_utc": "2024-07-12T23:00:00Z",
+   "description": "The same event seen at the whole of ERCOT, where the Coast zone is about a quarter of demand"
+  }
+ ],
+ "files": [
+  "backtest_by_authority.parquet",
+  "events_alerts.parquet",
+  "events_by_authority.parquet",
+  "fan_latest.parquet",
+  "hierarchy_levels.parquet",
+  "hierarchy_nodes.parquet",
+  "horizon_profile.parquet",
+  "known_event_windows.parquet",
+  "known_events.parquet",
+  "lower48_latest.parquet",
+  "meter_clusters.parquet",
+  "meter_forecast_scores.parquet",
+  "meter_forecast_total.parquet",
+  "meter_profiles.parquet",
+  "peak_contribution.parquet",
+  "reconciled_latest.parquet",
+  "recovery.parquet",
+  "reliability.parquet",
+  "residual_heatmap.parquet",
+  "skill_rows.parquet",
+  "tiles.parquet",
+  "tou_by_type.parquet",
+  "tou_events.parquet",
+  "weather_recent.parquet"
+ ],
+ "bytes": {
+  "backtest_by_authority.parquet": 9488,
+  "events_alerts.parquet": 8295,
+  "events_by_authority.parquet": 2762,
+  "fan_latest.parquet": 283353,
+  "hierarchy_levels.parquet": 3977,
+  "hierarchy_nodes.parquet": 5717,
+  "horizon_profile.parquet": 129601,
+  "known_event_windows.parquet": 133744,
+  "known_events.parquet": 6233,
+  "lower48_latest.parquet": 11534,
+  "meter_clusters.parquet": 2688,
+  "meter_forecast_scores.parquet": 2999,
+  "meter_forecast_total.parquet": 189457,
+  "meter_profiles.parquet": 3897,
+  "peak_contribution.parquet": 3188,
+  "reconciled_latest.parquet": 300299,
+  "recovery.parquet": 9151,
+  "reliability.parquet": 2100,
+  "residual_heatmap.parquet": 1666397,
+  "skill_rows.parquet": 18523,
+  "tiles.parquet": 5738,
+  "tou_by_type.parquet": 2507,
+  "tou_events.parquet": 8100,
+  "weather_recent.parquet": 84189
+ }
+}
