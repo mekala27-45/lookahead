@@ -279,7 +279,8 @@ def run(paths: Paths, as_of: str, seed: int, *, known: bool = True) -> Manifest:
             pl.col("hours").sum().alias("hours"),
             pl.col("peak_z").max().alias("peak_z"),
         )
-        .sort("alerts", descending=True)
+        # The authority breaks ties, so the table's row order is the same on every run.
+        .sort(["alerts", "authority"], descending=[True, False])
     )
     by_authority.write_parquet(folder / "by_authority.parquet")
     w.table(

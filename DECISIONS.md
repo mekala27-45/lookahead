@@ -144,3 +144,16 @@ validation residuals likewise, it carries no interval of its own, and it is left
 accuracy tables at the subregion level. Bottom up therefore reproduces each such authority's own
 median exactly, which a test holds.
 
+## 2026-09-30: the rederive found one table whose rows came back in another order
+
+The full rederive in a worktree (`results/rederive-full.json`, commit c964169) rebuilt every stage
+from the committed inputs: the recovery study, both backtests with fresh boosters, the skill
+table, the hierarchy, the events, the meter, the registry. Every one of the 1,886 values matched
+the committed manifest to one part in a billion and 43 of the 44 tables matched row for row; the
+44th, the events by authority, held the same rows in another order, because it was sorted by the
+alert count alone and many authorities share a count. The sort now breaks ties by the authority
+code, and the rerun of the events stage in a fresh worktree (`results/rederive.json`) matches the
+table row for row. Wall clock timings differ between runs and are reported beside the comparison,
+never judged; the hierarchy's committed timing is the short one from a run that read its chunk
+checkpoints, and the rederive's is the full one.
+

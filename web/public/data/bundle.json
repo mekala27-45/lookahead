@@ -1,7 +1,7 @@
 {
  "statement": "Demand data from the U.S. Energy Information Administration's Hourly Electric Grid Monitor, public domain; weather from Open-Meteo under CC BY 4.0; household data from UK Power Networks' Low Carbon London release under CC BY 4.0. Forecasts here are demonstrations and not for grid operations.",
  "as_of": "2026-09-29",
- "built_at": "2026-09-30T05:40:30.741507+00:00",
+ "built_at": "2026-09-30T12:18:33.141479+00:00",
  "served_backend": "gbm",
  "backends": [
   "gbm",
@@ -905,14 +905,14 @@
   "weather_recent.parquet"
  ],
  "bytes": {
-  "backtest_by_authority.parquet": 9488,
+  "backtest_by_authority.parquet": 9514,
   "events_alerts.parquet": 8295,
   "events_by_authority.parquet": 2762,
   "fan_latest.parquet": 283353,
   "hierarchy_levels.parquet": 3977,
   "hierarchy_nodes.parquet": 5717,
-  "horizon_profile.parquet": 129601,
-  "known_event_windows.parquet": 133744,
+  "horizon_profile.parquet": 129511,
+  "known_event_windows.parquet": 133745,
   "known_events.parquet": 6233,
   "lower48_latest.parquet": 11534,
   "meter_clusters.parquet": 2688,

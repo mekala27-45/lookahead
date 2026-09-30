@@ -668,44 +668,44 @@ data defects, 0.62 per thousand hours.
 |---|---:|---:|---:|---:|---:|
 | SEC | 37 | 1 | 36 | 169 | 17.6 |
 | SRP | 29 | 29 | 0 | 148 | 18.9 |
-| WALC | 26 | 10 | 16 | 69 | 10.5 |
 | SPA | 26 | 0 | 26 | 45 | not applicable |
+| WALC | 26 | 10 | 16 | 69 | 10.5 |
 | BANC | 17 | 0 | 17 | 17 | not applicable |
 | GVL | 16 | 0 | 16 | 254 | not applicable |
 | TIDC | 14 | 1 | 13 | 44 | 6.5 |
 | NEVP | 11 | 1 | 10 | 18 | 7.2 |
-| SC | 7 | 0 | 7 | 99 | not applicable |
 | CISO | 7 | 0 | 7 | 54 | not applicable |
 | EPE | 7 | 1 | 6 | 55 | 7.7 |
 | FPL | 7 | 4 | 3 | 30 | 9.7 |
-| NWMT | 6 | 0 | 6 | 7 | not applicable |
+| SC | 7 | 0 | 7 | 99 | not applicable |
 | FMPP | 6 | 1 | 5 | 21 | 7.5 |
-| SWPP | 5 | 4 | 1 | 45 | 9.4 |
-| IID | 5 | 0 | 5 | 98 | not applicable |
-| TVA | 5 | 0 | 5 | 5 | not applicable |
+| NWMT | 6 | 0 | 6 | 7 | not applicable |
 | HST | 5 | 4 | 1 | 69 | 17.1 |
+| IID | 5 | 0 | 5 | 98 | not applicable |
+| SWPP | 5 | 4 | 1 | 45 | 9.4 |
+| TVA | 5 | 0 | 5 | 5 | not applicable |
 | LDWP | 4 | 4 | 0 | 209 | 80.0 |
 | CHPD | 3 | 3 | 0 | 13 | 7.1 |
-| TEC | 3 | 1 | 2 | 10 | 6.7 |
-| SCEG | 3 | 0 | 3 | 288 | not applicable |
 | MISO | 3 | 0 | 3 | 14 | not applicable |
-| CPLE | 2 | 1 | 1 | 28 | 7.1 |
-| PJM | 2 | 0 | 2 | 47 | not applicable |
+| SCEG | 3 | 0 | 3 | 288 | not applicable |
+| TEC | 3 | 1 | 2 | 10 | 6.7 |
 | AZPS | 2 | 0 | 2 | 15 | not applicable |
-| GCPD | 2 | 1 | 1 | 15 | 15.6 |
 | BPAT | 2 | 2 | 0 | 6 | 10.1 |
-| ISNE | 2 | 1 | 1 | 8 | 7.4 |
+| CPLE | 2 | 1 | 1 | 28 | 7.1 |
 | FPC | 2 | 1 | 1 | 33 | 7.3 |
+| GCPD | 2 | 1 | 1 | 15 | 15.6 |
+| ISNE | 2 | 1 | 1 | 8 | 7.4 |
+| PJM | 2 | 0 | 2 | 47 | not applicable |
 | PSCO | 2 | 1 | 1 | 8 | 14.1 |
-| DUK | 1 | 0 | 1 | 25 | not applicable |
-| TEPC | 1 | 0 | 1 | 24 | not applicable |
+| AVA | 1 | 0 | 1 | 2 | not applicable |
 | CPLW | 1 | 0 | 1 | 25 | not applicable |
+| DUK | 1 | 0 | 1 | 25 | not applicable |
 | ERCO | 1 | 0 | 1 | 48 | not applicable |
-| PACE | 1 | 0 | 1 | 1 | not applicable |
 | LGEE | 1 | 0 | 1 | 16 | not applicable |
 | NYIS | 1 | 0 | 1 | 6 | not applicable |
+| PACE | 1 | 0 | 1 | 1 | not applicable |
 | SOCO | 1 | 0 | 1 | 1 | not applicable |
-| AVA | 1 | 0 | 1 | 2 | not applicable |
+| TEPC | 1 | 0 | 1 | 24 | not applicable |
 
 Source: real:eia930, model own, 51 authorities in the backtest, test year, as of 2026-09-29.
 
