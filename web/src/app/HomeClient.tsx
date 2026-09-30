@@ -9,7 +9,7 @@ import { FanChart, type FanRow } from "@/components/FanChart";
 import { Status } from "@/components/Status";
 import { TileMap } from "@/components/TileMap";
 import { type Answer, read, type ScorecardResponse } from "@/lib/api";
-import { fmt } from "@/lib/format";
+import { fmt, whenUtc } from "@/lib/format";
 import type { AuthorityInfo, RegionInfo, Tile } from "@/lib/load";
 import { markReady } from "@/lib/ready";
 import { useMart } from "@/lib/useMart";
@@ -30,7 +30,7 @@ interface Lower48Row extends FanRow {
   origin: string;
 }
 
-const when = (iso: string) => iso.replace("T", " ").slice(0, 16) + " UTC";
+const when = (value: unknown) => whenUtc(value);
 
 export function HomeClient({
   tiles,

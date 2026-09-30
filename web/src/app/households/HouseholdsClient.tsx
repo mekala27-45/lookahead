@@ -4,7 +4,7 @@ import { useEffect, useMemo } from "react";
 
 import { ChartFrame } from "@/components/charts/ChartFrame";
 import { LineChart } from "@/components/charts/LineChart";
-import { fmt } from "@/lib/format";
+import { fmt, whenUtc } from "@/lib/format";
 import { markReady } from "@/lib/ready";
 import { useMart } from "@/lib/useMart";
 
@@ -30,7 +30,7 @@ interface TotalRow extends Record<string, unknown> {
   actual: number;
 }
 
-const when = (iso: string) => String(iso).replace("T", " ").slice(0, 16);
+const when = (value: unknown) => whenUtc(value, "");
 
 export function HouseholdsClient({ profilesCallout, profilesProvenance, totalCallout, totalProvenance }: { profilesCallout: string; profilesProvenance: string; totalCallout: string; totalProvenance: string }) {
   const profiles = useMart<ProfileRow>(`select cluster, daytype, slot, ratio from mart_meter_profiles order by cluster, daytype, slot`);

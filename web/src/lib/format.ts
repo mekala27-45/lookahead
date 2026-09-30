@@ -135,3 +135,17 @@ export function formatValue(value: Scalar | undefined, fmt: string): string {
 
 /** Shorthand for chart code, which formats query results rather than manifest entries. */
 export const fmt = (value: Scalar | undefined, format: Fmt): string => formatValue(value, format);
+
+/** A timestamp from a mart or the API as "YYYY-MM-DD HH:MM" in UTC. DuckDB hands a timestamp
+ * column to the page as epoch milliseconds or a Date, the API as an ISO string; all three land
+ * here, so no page prints a raw number of milliseconds. */
+export function whenUtc(value: unknown, suffix = " UTC"): string {
+  if (value === null || value === undefined || value === "") return "";
+  let iso: string;
+  if (value instanceof Date) iso = value.toISOString();
+  else if (typeof value === "number" || (typeof value === "bigint")) iso = new Date(Number(value)).toISOString();
+  else if (typeof value === "string" && /^\d{11,}$/.test(value)) iso = new Date(Number(value)).toISOString();
+  else iso = String(value);
+  return iso.replace("T", " ").slice(0, 16) + suffix;
+}
+

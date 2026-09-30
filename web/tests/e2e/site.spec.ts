@@ -17,6 +17,10 @@ test("the control room shows the two headline numbers, the coverage and the stat
   await expect(page.getByTestId("headline-losses-value")).toContainText(printed(`skill.${served}.h1_24.losses`));
   await expect(page.getByTestId("headline-coverage-value")).toHaveText(printed(`backtest.${served}.coverage_90`));
   await expect(page.getByTestId("footer")).toContainText(bundle.statement);
+  // The latest alerts carry a formatted UTC hour, never the epoch milliseconds DuckDB hands over.
+  const alerts = page.getByTestId("latest-alerts");
+  await expect(alerts).toContainText(/\d{4}-\d{2}-\d{2} \d{2}:\d{2} UTC/, { timeout: 40_000 });
+  await expect(alerts).not.toContainText(/\d{11,}/);
 });
 
 test("the tile map renders every authority as a link, colored once the mart has answered", async ({ page }) => {

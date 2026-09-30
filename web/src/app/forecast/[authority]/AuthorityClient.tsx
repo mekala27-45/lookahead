@@ -8,7 +8,7 @@ import { SourceChip, useApiSource } from "@/components/Controls";
 import { FanChart, type FanRow } from "@/components/FanChart";
 import { Status } from "@/components/Status";
 import { type Answer, ApiError, type ForecastOut, issueForecast } from "@/lib/api";
-import { fmt } from "@/lib/format";
+import { fmt, whenUtc } from "@/lib/format";
 import { markReady } from "@/lib/ready";
 import { useMart } from "@/lib/useMart";
 
@@ -38,7 +38,7 @@ interface ReconciledRow extends Record<string, unknown> {
   actual: number | null;
 }
 
-const when = (iso: string) => iso.replace("T", " ").slice(0, 16) + " UTC";
+const when = (value: unknown) => whenUtc(value);
 
 export function AuthorityClient({
   authority,

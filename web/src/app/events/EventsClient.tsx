@@ -7,7 +7,7 @@ import { Heatmap } from "@/components/charts/Heatmap";
 import { LineChart } from "@/components/charts/LineChart";
 import { Segmented } from "@/components/Controls";
 import { Status } from "@/components/Status";
-import { fmt } from "@/lib/format";
+import { fmt, whenUtc } from "@/lib/format";
 import type { AuthorityInfo } from "@/lib/load";
 import { markReady } from "@/lib/ready";
 import { useMart } from "@/lib/useMart";
@@ -37,7 +37,7 @@ interface WindowRow extends Record<string, unknown> {
   z: number | null;
 }
 
-const when = (iso: string) => String(iso).replace("T", " ").slice(0, 16) + " UTC";
+const when = (value: unknown) => whenUtc(value);
 
 export function EventsClient({
   authorities,
