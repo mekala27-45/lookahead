@@ -60,10 +60,14 @@ def shrink_covariance(residuals: np.ndarray) -> tuple[np.ndarray, float]:
     sd[sd == 0] = 1.0
     corr = cov / np.outer(sd, sd)
     z = centred / sd
-    # Variance of the sample correlations, the numerator of the optimal intensity.
-    w = np.einsum("ni,nj->nij", z, z)
-    w_mean = w.mean(axis=0)
-    var = ((w - w_mean) ** 2).sum(axis=0) * n / ((n - 1) ** 3)
+    # Variance of the sample correlations, the numerator of the optimal intensity. With w_nij =
+    # z_ni z_nj, sum_n (w_nij - mean_ij)^2 = sum_n w_nij^2 - n mean_ij^2, and both sums are
+    # matrix products, so the rows by nodes by nodes tensor (three gigabytes on the real
+    # hierarchy) is never formed.
+    products = z.T @ z
+    squares = (z**2).T @ (z**2)
+    w_mean = products / n
+    var = (squares - n * w_mean**2) * n / ((n - 1) ** 3)
     off = ~np.eye(p, dtype=bool)
     numerator = var[off].sum()
     denominator = (corr[off] ** 2).sum()

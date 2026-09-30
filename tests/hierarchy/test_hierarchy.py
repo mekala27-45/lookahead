@@ -185,3 +185,22 @@ def test_a_negative_remainder_is_derived_not_fit_and_bottom_up_keeps_the_authori
             assert score.nodes == len(
                 [n for n in summing.nodes_at(score.level) if n not in summing.remainders]
             )
+
+
+def test_shrinkage_intensity_matches_the_explicit_tensor() -> None:
+    """The intensity is computed from two matrix products; this holds it to the definition written
+    out over the rows by nodes by nodes tensor, which is what the real hierarchy cannot afford."""
+    generator = np.random.default_rng(3)
+    r = generator.normal(size=(60, 5)) @ generator.normal(size=(5, 5))
+    n, p = r.shape
+    centred = r - r.mean(axis=0)
+    cov = centred.T @ centred / (n - 1)
+    sd = np.sqrt(np.diag(cov))
+    corr = cov / np.outer(sd, sd)
+    z = centred / sd
+    w = np.einsum("ni,nj->nij", z, z)
+    var = ((w - w.mean(axis=0)) ** 2).sum(axis=0) * n / ((n - 1) ** 3)
+    off = ~np.eye(p, dtype=bool)
+    expected = float(np.clip(var[off].sum() / (corr[off] ** 2).sum(), 0.0, 1.0))
+    _, intensity = shrink_covariance(r)
+    assert intensity == pytest.approx(expected, rel=1e-9)
