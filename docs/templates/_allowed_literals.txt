@@ -41,3 +41,53 @@ utf-8
 03_events_and_the_meter
 mekala27-45
 Terminus 2
+# Definitions of the stated protocol and names with digits in them: the horizon bands, the
+# interval levels, the ramp windows, the quantile pairs, section and notebook numbers, HTTP
+# statuses, percentile names and the simulator's condition labels. None is a result.
+lower 48
+horizons 1 to 24
+Horizons 1 to 24
+Horizons 25 to 48
+horizons 1 to 24 and 48 for 25 to 48
+1 to 24
+25 to 48
+48 horizons
+48 hours
+48 rows
+24 hours
+24 or 48 hours
+last 24 hours
+90 percent
+50 percent
+5, 25, 50, 75 and 95 percent
+0.25 to 0.75
+0.05 to 0.95
+(1 minus
+05:00
+09:00
+16:00
+20:00
+p50
+p99
+p95
+notebook 01
+notebook 02
+notebook 03
+## 1.
+## 2.
+## 3.
+## 4.
+## 5.
+## 6.
+## 7.
+503
+ERA5
+2 C
+missing 5 percent
+noise 3 percent
+for 2026
+eia930
+:00 UTC
+:00
+1 to 
+e2e

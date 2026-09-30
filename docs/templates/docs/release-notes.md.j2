@@ -11,8 +11,8 @@ and graded in public against the operator's own day ahead forecast.
   (one global XGBoost with quantile objectives), graded by a rolling origin backtest with the
   seasonal naive and the operator in every table. The {{ b }} backend beat the operator in
   {{ v('skill.' ~ b ~ '.h1_24.wins') }} of {{ v('skill.' ~ b ~ '.h1_24.authorities') }} comparable
-  authorities at horizons 1 to 24 and lost in {{ v('skill.' ~ b ~ '.h1_24.losses') }}; its 90
-  percent bands covered {{ v('backtest.' ~ b ~ '.coverage_90') }} of the hours.
+  authorities at horizons 1 to 24 and lost in {{ v('skill.' ~ b ~ '.h1_24.losses') }}; its
+  90 percent bands covered {{ v('backtest.' ~ b ~ '.coverage_90') }} of the hours.
 - {{ v('hierarchy.nodes') }} nodes reconciled by bottom up, top down and MinT, coherent to the
   megawatt; helped at {{ v('hierarchy.helped_list') }}, hurt at {{ v('hierarchy.hurt_list') }}.
 - A detector that tells demand events from data defects, graded on {{ v('events.known.events') }}

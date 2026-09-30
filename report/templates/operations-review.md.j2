@@ -7,7 +7,7 @@ Load desk, as of {{ manifest.as_of }}. Rendered from `results/manifest.json`; ev
 a manifest value or table and `scripts/check_published_numbers.py` fails CI if this file drifts
 from it.
 
-## 1. Skill against the operator
+## Skill against the operator
 
 Over the test year ({{ v('data.windows.test_start') }} to {{ v('data.windows.test_end') }}), at
 horizons 1 to 24, the served backend ({{ b }}) beat the operator's published day ahead forecast in
@@ -42,7 +42,7 @@ gbm in {{ v('skill.crosscheck.gbm_better') }}; they fall on different sides of t
 
 {{ label('skill.crosscheck') }}
 
-## 2. Coverage
+## Coverage
 
 The 90 percent bands covered {{ v('backtest.' ~ b ~ '.coverage_90') }} of the test year's hours
 ({{ v('backtest.' ~ b ~ '.coverage_90_lower') }} to {{ v('backtest.' ~ b ~ '.coverage_90_upper') }}) and
@@ -58,7 +58,7 @@ actuals at or below each served level: {{ v('backtest.' ~ b ~ '.reliability.q05'
 
 {{ label('backtest.' ~ b ~ '.by_horizon') }}
 
-## 3. Where reconciliation helped and where it hurt
+## Where reconciliation helped and where it hurt
 
 {{ v('hierarchy.nodes') }} nodes from the lower 48 to the subregion, every one forecast directly
 and reconciled by bottom up, top down and MinT (shrinkage intensity
@@ -74,7 +74,7 @@ to {{ v('hierarchy.mint.level0.mape') }}; at the leaves from {{ v('hierarchy.bas
 
 {{ label('hierarchy.helped_or_hurt') }}
 
-## 4. The events the detector caught and missed
+## The events the detector caught and missed
 
 The detector watches the day's own forecast residual, standardized per authority, past
 {{ v('events.threshold') }} for {{ v('events.persistence_hours') }} hours; hours a quarantine rule
@@ -92,7 +92,7 @@ defects. On the demonstration grid it recovered {{ v('events.sim.defects_recover
 
 {{ label('events.known.table') }}
 
-## 5. The meter
+## The meter
 
 {{ v('meter.households_profiled') }} London households in {{ v('meter.clusters') }} load shape clusters;
 cluster {{ v('meter.top_peak_cluster') }} ({{ v('meter.top_peak_cluster_shape') }}) carries
@@ -118,7 +118,7 @@ cluster {{ v('meter.peak.target_cluster') }} first.
 
 {{ label('meter.peak.contribution') }}
 
-## 6. The live log and the registry
+## The live log and the registry
 
 The API serves {{ v('registry.served') }}, chosen by {{ v('registry.gates') }} gates
 ({{ v('registry.served_reason') }}). The separate client verification is {{ v('deploy.status') }} at
@@ -127,7 +127,7 @@ the response {{ v('deploy.audit_before_response') }}, unscored share after scori
 {{ v('deploy.unscored_share') }}. The live browser check {{ v('live.status') }}. Latency: local p99 for
 issuing a forecast {{ v('latency.local.issue.p99_ms') }}.
 
-## 7. Limitations
+## Limitations
 
 The models saw observed weather at the target hour; a real day ahead forecast sees a weather
 forecast, so every error figure here is a lower bound on what a live desk would see and every win

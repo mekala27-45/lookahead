@@ -1,7 +1,7 @@
 {%- set card = 'own' -%}
 {%- set title = 'own, the per authority ridge backend' -%}
 {% set intended %}
-The own backend forecasts hourly demand for each of the {{ v('backtest.own.authorities') }} balancing
+The own backend forecasts hourly demand for each of the {{ v('hierarchy.authorities') }} balancing
 authorities in the backtest, 1 to {{ v('policy.horizons') }} hours after a daily origin at
 {{ v('policy.issue_hour_utc') }}:00 UTC, with quantiles at {{ v('policy.quantile_levels') }}. It is one
 of the two candidates the registry judges and the fallback the API serves when no candidate clears
@@ -50,8 +50,8 @@ validation year. Chosen on validation: {{ v('backtest.own.chosen_on_validation')
 {{ label('backtest.own.mape') }}
 
 On the simulator with known truth, the heating and cooling thresholds are recovered within 2 C in
-{{ v('recovery.base.own.thresholds_within_2c') }} of authorities on the base condition and the 90
-percent coverage is {{ v('recovery.base.own.coverage_90') }}; the holiday effect's absolute error is
+{{ v('recovery.base.own.thresholds_within_2c') }} of authorities on the base condition and the
+90 percent coverage is {{ v('recovery.base.own.coverage_90') }}; the holiday effect's absolute error is
 {{ v('recovery.base.own.holiday_effect_abs_error') }}.
 {% endset %}
 {% set contract %}

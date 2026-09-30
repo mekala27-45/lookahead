@@ -4,15 +4,20 @@
 Demand forecasting for the U.S. power grid and the household meter: hourly demand for every
 balancing authority in the lower 48 with weather, forecast by two backends on one interface out
 to 48 hours with calibrated quantiles, graded by a rolling origin backtest against the seasonal
-naive and the operator's own day ahead forecast, reconciled across the hierarchy from the lower
-48 to the subregion, watched by an anomaly detector that separates demand events from data
+naive and the operator's own day ahead forecast, reconciled across the hierarchy from the lower 48
+to the subregion, watched by an anomaly detector that separates demand events from data
 defects and is graded on known events, extended to the meter with five and a half thousand London
 households clustered by load shape and reconciled bottom up, served by a live API that stores
 every forecast it issues and scores it when the actuals arrive, with a registry, model cards, an
 operations review rendered from the manifest, and a control room site.
 
+{% if v('live.status') == 'passed' and v('deploy.status') == 'deployed' -%}
 Every one of the eighteen mandatory steps in the build order is done; the checklist below carries
-one line of evidence per item. Every dataset is used in full: {{ v('data.eia.balance_files') }}
+one line of evidence per item.
+{%- else -%}
+The checklist below marks each of the eighteen mandatory steps done or not done with one line of
+evidence per item; the live check in a real browser is the one still open at this render.
+{%- endif %} Every dataset is used in full: {{ v('data.eia.balance_files') }}
 balance and {{ v('data.eia.subregion_files') }} subregion files from {{ v('data.eia.first_half') }}
 to {{ v('data.eia.latest_half') }}, every authority that reports demand
 ({{ v('data.eia.demand_authorities') }} of {{ v('data.eia.authorities_in_files') }};

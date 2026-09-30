@@ -1,0 +1,2070 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>lookahead operations review, as of 2026-09-29</title>
+<style>
+/* The operations review memo, HTML form. Inlined into report/operations-review.html by the claim
+   gate. Nothing is fetched: Space Grotesk and Atkinson Hyperlegible Next are used when installed,
+   and the stacks fall back to fonts every system has. Light tokens from the validated palette;
+   prose keeps a 68 character measure; tables may run wider. */
+
+:root {
+  --ink: #101826;
+  --ink-2: #4E5A6B;
+  --rule: #D5DCE6;
+  --rule-strong: #6B7787;
+  --paper: #F2F5F9;
+  --quote: #FFFFFF;
+  --serif: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  --display: "Space Grotesk", system-ui, sans-serif;
+  --sans: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  --mono: "Atkinson Hyperlegible Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.6;
+  font-kerning: normal;
+}
+
+main.memo {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 3rem 1rem 4rem;
+}
+
+main.memo > p,
+main.memo > ul,
+main.memo > ol,
+main.memo > h1,
+main.memo > h2,
+main.memo > h3,
+main.memo > blockquote {
+  max-width: 68ch;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 2rem;
+  margin: 0 0 1rem;
+}
+
+h2 {
+  font-size: 1.375rem;
+  margin: 3rem 0 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+strong {
+  font-weight: 600;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  overflow-wrap: anywhere;
+}
+
+/* Tables: sans serif, tabular figures, numbers right aligned. The Markdown converter marks
+   numeric columns with an inline right alignment; td.num covers tables written as HTML. */
+table {
+  display: block;
+  max-width: 100%;
+  width: max-content;
+  overflow-x: auto;
+  margin: 1.5rem 0 0.5rem;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+th,
+td {
+  padding: 0.375rem 0.75rem;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+th {
+  font-weight: 600;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+th:first-child,
+td:first-child {
+  padding-left: 0;
+}
+
+td.num,
+th.num {
+  text-align: right;
+}
+
+/* The provenance label printed under every table. */
+table + p {
+  max-width: 68ch;
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--ink-2);
+  margin-bottom: 1.5rem;
+}
+
+/* The statement closes the memo. */
+blockquote {
+  margin: 3rem 0 0;
+  padding: 1rem 1.25rem;
+  background: var(--quote);
+  border-left: 3px solid var(--rule-strong);
+  font-size: 0.9375rem;
+}
+
+blockquote p {
+  margin: 0;
+}
+
+@media (max-width: 30rem) {
+  body {
+    font-size: 1rem;
+  }
+
+  h1 {
+    font-size: 1.625rem;
+  }
+}
+
+@media print {
+  @page {
+    margin: 16mm 14mm;
+  }
+
+  html,
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  body {
+    font-size: 10.5pt;
+    line-height: 1.45;
+  }
+
+  main.memo {
+    max-width: none;
+    padding: 0;
+  }
+
+  main.memo > p,
+  main.memo > h1,
+  main.memo > h2,
+  main.memo > blockquote {
+    max-width: none;
+  }
+
+  h2 {
+    break-before: page;
+    page-break-before: always;
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  strong,
+  code,
+  th,
+  td,
+  table + p,
+  blockquote {
+    color: #000;
+  }
+
+  table {
+    display: table;
+    width: auto;
+    max-width: 100%;
+    overflow: visible;
+    font-size: 8pt;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  th,
+  td {
+    white-space: normal;
+    border-bottom-color: #999;
+  }
+
+  th {
+    border-bottom-color: #000;
+  }
+
+  blockquote {
+    background: #fff;
+    border-left-color: #000;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  table + p {
+    font-size: 7.5pt;
+  }
+
+  h2 + p,
+  table + p {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+
+  /* A sentence that introduces a table stays on the table's page. */
+  p:has(+ table) {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+}
+</style>
+</head>
+<body>
+<main class="memo">
+<h1>Operations review: the forecast against the operator</h1>
+<p>Load desk, as of 2026-09-29. Rendered from <code>results/manifest.json</code>; every figure below is
+a manifest value or table and <code>scripts/check_published_numbers.py</code> fails CI if this file drifts
+from it.</p>
+<h2>Skill against the operator</h2>
+<p>Over the test year (2025-09-29 to 2026-09-28), at
+horizons 1 to 24, the served backend (gbm) beat the operator's published day ahead forecast in
+18 of 44 comparable
+balancing authorities (13 to
+24 across bootstrap replicates of the test days), lost to it
+in 17 (12 to
+22) and tied in 9,
+after Benjamini-Hochberg across the authorities. Pooled over the comparable hours its MAPE was
+4.52% against the operator's
+5.52%, a skill of +18.1%;
+the median authority's skill was +3.2%. Over all 48 horizons
+the MAPE was 5.48% (5.01% to
+5.98%) against the seasonal naive's 11.66%.
+At the daily peak the model's absolute error was 4.83%
+against the operator's 103.78%, with a median timing
+error of 1.0 h hours against
+1.0 h.</p>
+<p>7 authorities are not counted because the published
+forecast covers a different scope than the demand series: FMPP (forecast to demand 1.01 validation, 0.76 test), FPC (forecast to demand 0.76 validation, 0.76 test), GVL (forecast to demand 0.91 validation, 0.89 test), PSCO (forecast to demand 0.94 validation, 0.83 test), PSEI (forecast to demand 0.72 validation, 0.53 test), SPA (forecast to demand 2.04 validation, 1.06 test), SWPP (forecast to demand 1.01 validation, 1.11 test).</p>
+<table>
+<thead>
+<tr>
+<th>Authority</th>
+<th style="text-align:right">Hours</th>
+<th style="text-align:right">Model MAPE</th>
+<th style="text-align:right">Operator MAPE</th>
+<th style="text-align:right">Skill</th>
+<th style="text-align:right">lower</th>
+<th style="text-align:right">upper</th>
+<th style="text-align:right">p value</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AECI</td>
+<td style="text-align:right">8,760</td>
+<td style="text-align:right">5.08%</td>
+<td style="text-align:right">1.97%</td>
+<td style="text-align:right">-157.9%</td>
+<td style="text-align:right">-186.3%</td>
+<td style="text-align:right">-134.9%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>AVA</td>
+<td style="text-align:right">8,734</td>
+<td style="text-align:right">2.49%</td>
+<td style="text-align:right">1.65%</td>
+<td style="text-align:right">-50.6%</td>
+<td style="text-align:right">-58.2%</td>
+<td style="text-align:right">-41.3%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>AZPS</td>
+<td style="text-align:right">8,745</td>
+<td style="text-align:right">4.45%</td>
+<td style="text-align:right">9.73%</td>
+<td style="text-align:right">+54.3%</td>
+<td style="text-align:right">+50.3%</td>
+<td style="text-align:right">+58.2%</td>
+<td style="text-align:right">0.002</td>
+<td>win</td>
+</tr>
+<tr>
+<td>BANC</td>
+<td style="text-align:right">8,650</td>
+<td style="text-align:right">3.37%</td>
+<td style="text-align:right">3.49%</td>
+<td style="text-align:right">+3.6%</td>
+<td style="text-align:right">-28.0%</td>
+<td style="text-align:right">+31.2%</td>
+<td style="text-align:right">1.000</td>
+<td>tie</td>
+</tr>
+<tr>
+<td>BPAT</td>
+<td style="text-align:right">8,760</td>
+<td style="text-align:right">2.22%</td>
+<td style="text-align:right">1.85%</td>
+<td style="text-align:right">-20.5%</td>
+<td style="text-align:right">-28.8%</td>
+<td style="text-align:right">-12.3%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>CHPD</td>
+<td style="text-align:right">8,760</td>
+<td style="text-align:right">3.62%</td>
+<td style="text-align:right">3.09%</td>
+<td style="text-align:right">-17.1%</td>
+<td style="text-align:right">-23.8%</td>
+<td style="text-align:right">-10.0%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>CISO</td>
+<td style="text-align:right">8,658</td>
+<td style="text-align:right">3.04%</td>
+<td style="text-align:right">8.97%</td>
+<td style="text-align:right">+66.1%</td>
+<td style="text-align:right">+64.0%</td>
+<td style="text-align:right">+68.2%</td>
+<td style="text-align:right">0.002</td>
+<td>win</td>
+</tr>
+<tr>
+<td>CPLE</td>
+<td style="text-align:right">8,255</td>
+<td style="text-align:right">4.30%</td>
+<td style="text-align:right">3.79%</td>
+<td style="text-align:right">-13.3%</td>
+<td style="text-align:right">-22.8%</td>
+<td style="text-align:right">-3.0%</td>
+<td style="text-align:right">0.028</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>CPLW</td>
+<td style="text-align:right">8,135</td>
+<td style="text-align:right">4.02%</td>
+<td style="text-align:right">4.22%</td>
+<td style="text-align:right">+4.6%</td>
+<td style="text-align:right">-5.1%</td>
+<td style="text-align:right">+14.4%</td>
+<td style="text-align:right">0.523</td>
+<td>tie</td>
+</tr>
+<tr>
+<td>DOPD</td>
+<td style="text-align:right">8,760</td>
+<td style="text-align:right">2.75%</td>
+<td style="text-align:right">4.72%</td>
+<td style="text-align:right">+41.7%</td>
+<td style="text-align:right">+35.2%</td>
+<td style="text-align:right">+47.2%</td>
+<td style="text-align:right">0.002</td>
+<td>win</td>
+</tr>
+<tr>
+<td>DUK</td>
+<td style="text-align:right">8,711</td>
+<td style="text-align:right">3.45%</td>
+<td style="text-align:right">3.65%</td>
+<td style="text-align:right">+5.5%</td>
+<td style="text-align:right">-12.9%</td>
+<td style="text-align:right">+21.4%</td>
+<td style="text-align:right">0.651</td>
+<td>tie</td>
+</tr>
+<tr>
+<td>EPE</td>
+<td style="text-align:right">8,660</td>
+<td style="text-align:right">3.67%</td>
+<td style="text-align:right">3.20%</td>
+<td style="text-align:right">-14.7%</td>
+<td style="text-align:right">-21.3%</td>
+<td style="text-align:right">-6.1%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>ERCO</td>
+<td style="text-align:right">8,688</td>
+<td style="text-align:right">2.78%</td>
+<td style="text-align:right">1.99%</td>
+<td style="text-align:right">-39.2%</td>
+<td style="text-align:right">-52.4%</td>
+<td style="text-align:right">-26.3%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>FPL</td>
+<td style="text-align:right">8,733</td>
+<td style="text-align:right">3.94%</td>
+<td style="text-align:right">3.38%</td>
+<td style="text-align:right">-16.8%</td>
+<td style="text-align:right">-25.6%</td>
+<td style="text-align:right">-9.1%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>GCPD</td>
+<td style="text-align:right">8,721</td>
+<td style="text-align:right">1.80%</td>
+<td style="text-align:right">2.29%</td>
+<td style="text-align:right">+21.5%</td>
+<td style="text-align:right">+10.4%</td>
+<td style="text-align:right">+29.5%</td>
+<td style="text-align:right">0.004</td>
+<td>win</td>
+</tr>
+<tr>
+<td>HST</td>
+<td style="text-align:right">8,734</td>
+<td style="text-align:right">5.21%</td>
+<td style="text-align:right">6.75%</td>
+<td style="text-align:right">+22.8%</td>
+<td style="text-align:right">+19.5%</td>
+<td style="text-align:right">+27.2%</td>
+<td style="text-align:right">0.002</td>
+<td>win</td>
+</tr>
+<tr>
+<td>IID</td>
+<td style="text-align:right">8,614</td>
+<td style="text-align:right">4.83%</td>
+<td style="text-align:right">3.44%</td>
+<td style="text-align:right">-40.2%</td>
+<td style="text-align:right">-51.7%</td>
+<td style="text-align:right">-29.1%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>IPCO</td>
+<td style="text-align:right">8,760</td>
+<td style="text-align:right">2.78%</td>
+<td style="text-align:right">5.26%</td>
+<td style="text-align:right">+47.1%</td>
+<td style="text-align:right">+39.9%</td>
+<td style="text-align:right">+52.8%</td>
+<td style="text-align:right">0.002</td>
+<td>win</td>
+</tr>
+<tr>
+<td>ISNE</td>
+<td style="text-align:right">8,759</td>
+<td style="text-align:right">5.52%</td>
+<td style="text-align:right">3.04%</td>
+<td style="text-align:right">-81.7%</td>
+<td style="text-align:right">-90.9%</td>
+<td style="text-align:right">-71.5%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>JEA</td>
+<td style="text-align:right">8,760</td>
+<td style="text-align:right">4.10%</td>
+<td style="text-align:right">4.45%</td>
+<td style="text-align:right">+7.7%</td>
+<td style="text-align:right">+1.1%</td>
+<td style="text-align:right">+15.2%</td>
+<td style="text-align:right">0.076</td>
+<td>tie</td>
+</tr>
+<tr>
+<td>LDWP</td>
+<td style="text-align:right">8,710</td>
+<td style="text-align:right">29.98%</td>
+<td style="text-align:right">36.42%</td>
+<td style="text-align:right">+17.7%</td>
+<td style="text-align:right">+6.5%</td>
+<td style="text-align:right">+37.0%</td>
+<td style="text-align:right">0.002</td>
+<td>win</td>
+</tr>
+<tr>
+<td>LGEE</td>
+<td style="text-align:right">8,744</td>
+<td style="text-align:right">4.12%</td>
+<td style="text-align:right">8.14%</td>
+<td style="text-align:right">+49.4%</td>
+<td style="text-align:right">+45.2%</td>
+<td style="text-align:right">+53.1%</td>
+<td style="text-align:right">0.002</td>
+<td>win</td>
+</tr>
+<tr>
+<td>MISO</td>
+<td style="text-align:right">8,722</td>
+<td style="text-align:right">2.34%</td>
+<td style="text-align:right">2.65%</td>
+<td style="text-align:right">+11.5%</td>
+<td style="text-align:right">+4.7%</td>
+<td style="text-align:right">+17.3%</td>
+<td style="text-align:right">0.004</td>
+<td>win</td>
+</tr>
+<tr>
+<td>NEVP</td>
+<td style="text-align:right">8,745</td>
+<td style="text-align:right">2.78%</td>
+<td style="text-align:right">8.93%</td>
+<td style="text-align:right">+68.8%</td>
+<td style="text-align:right">+66.0%</td>
+<td style="text-align:right">+71.4%</td>
+<td style="text-align:right">0.002</td>
+<td>win</td>
+</tr>
+<tr>
+<td>NWMT</td>
+<td style="text-align:right">8,753</td>
+<td style="text-align:right">3.12%</td>
+<td style="text-align:right">2.55%</td>
+<td style="text-align:right">-22.4%</td>
+<td style="text-align:right">-33.3%</td>
+<td style="text-align:right">-11.6%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>NYIS</td>
+<td style="text-align:right">8,731</td>
+<td style="text-align:right">3.75%</td>
+<td style="text-align:right">2.63%</td>
+<td style="text-align:right">-42.2%</td>
+<td style="text-align:right">-53.2%</td>
+<td style="text-align:right">-30.7%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>PACE</td>
+<td style="text-align:right">8,664</td>
+<td style="text-align:right">3.15%</td>
+<td style="text-align:right">5.22%</td>
+<td style="text-align:right">+39.6%</td>
+<td style="text-align:right">+34.3%</td>
+<td style="text-align:right">+44.5%</td>
+<td style="text-align:right">0.002</td>
+<td>win</td>
+</tr>
+<tr>
+<td>PACW</td>
+<td style="text-align:right">8,760</td>
+<td style="text-align:right">2.61%</td>
+<td style="text-align:right">2.68%</td>
+<td style="text-align:right">+2.7%</td>
+<td style="text-align:right">-5.6%</td>
+<td style="text-align:right">+11.3%</td>
+<td style="text-align:right">0.573</td>
+<td>tie</td>
+</tr>
+<tr>
+<td>PGE</td>
+<td style="text-align:right">8,760</td>
+<td style="text-align:right">2.55%</td>
+<td style="text-align:right">1.58%</td>
+<td style="text-align:right">-61.6%</td>
+<td style="text-align:right">-72.0%</td>
+<td style="text-align:right">-53.1%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>PJM</td>
+<td style="text-align:right">8,712</td>
+<td style="text-align:right">2.99%</td>
+<td style="text-align:right">3.50%</td>
+<td style="text-align:right">+14.7%</td>
+<td style="text-align:right">+8.9%</td>
+<td style="text-align:right">+19.6%</td>
+<td style="text-align:right">0.002</td>
+<td>win</td>
+</tr>
+<tr>
+<td>PNM</td>
+<td style="text-align:right">8,760</td>
+<td style="text-align:right">2.95%</td>
+<td style="text-align:right">5.64%</td>
+<td style="text-align:right">+47.6%</td>
+<td style="text-align:right">+44.3%</td>
+<td style="text-align:right">+51.5%</td>
+<td style="text-align:right">0.002</td>
+<td>win</td>
+</tr>
+<tr>
+<td>SC</td>
+<td style="text-align:right">8,565</td>
+<td style="text-align:right">4.33%</td>
+<td style="text-align:right">4.01%</td>
+<td style="text-align:right">-7.9%</td>
+<td style="text-align:right">-15.9%</td>
+<td style="text-align:right">+0.8%</td>
+<td style="text-align:right">0.124</td>
+<td>tie</td>
+</tr>
+<tr>
+<td>SCEG</td>
+<td style="text-align:right">8,255</td>
+<td style="text-align:right">4.91%</td>
+<td style="text-align:right">5.66%</td>
+<td style="text-align:right">+13.3%</td>
+<td style="text-align:right">+7.2%</td>
+<td style="text-align:right">+20.0%</td>
+<td style="text-align:right">0.002</td>
+<td>win</td>
+</tr>
+<tr>
+<td>SCL</td>
+<td style="text-align:right">8,760</td>
+<td style="text-align:right">3.08%</td>
+<td style="text-align:right">3.40%</td>
+<td style="text-align:right">+9.4%</td>
+<td style="text-align:right">+4.5%</td>
+<td style="text-align:right">+14.7%</td>
+<td style="text-align:right">0.014</td>
+<td>win</td>
+</tr>
+<tr>
+<td>SEC</td>
+<td style="text-align:right">8,542</td>
+<td style="text-align:right">11.84%</td>
+<td style="text-align:right">15.34%</td>
+<td style="text-align:right">+22.9%</td>
+<td style="text-align:right">+11.5%</td>
+<td style="text-align:right">+33.1%</td>
+<td style="text-align:right">0.006</td>
+<td>win</td>
+</tr>
+<tr>
+<td>SOCO</td>
+<td style="text-align:right">8,758</td>
+<td style="text-align:right">2.99%</td>
+<td style="text-align:right">1.38%</td>
+<td style="text-align:right">-117.4%</td>
+<td style="text-align:right">-148.5%</td>
+<td style="text-align:right">-99.5%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>SRP</td>
+<td style="text-align:right">8,760</td>
+<td style="text-align:right">7.18%</td>
+<td style="text-align:right">9.68%</td>
+<td style="text-align:right">+25.9%</td>
+<td style="text-align:right">+17.3%</td>
+<td style="text-align:right">+32.3%</td>
+<td style="text-align:right">0.002</td>
+<td>win</td>
+</tr>
+<tr>
+<td>TAL</td>
+<td style="text-align:right">8,759</td>
+<td style="text-align:right">4.46%</td>
+<td style="text-align:right">4.26%</td>
+<td style="text-align:right">-4.8%</td>
+<td style="text-align:right">-10.6%</td>
+<td style="text-align:right">+2.4%</td>
+<td style="text-align:right">0.200</td>
+<td>tie</td>
+</tr>
+<tr>
+<td>TEC</td>
+<td style="text-align:right">8,758</td>
+<td style="text-align:right">3.90%</td>
+<td style="text-align:right">4.00%</td>
+<td style="text-align:right">+2.6%</td>
+<td style="text-align:right">-1.9%</td>
+<td style="text-align:right">+8.2%</td>
+<td style="text-align:right">0.429</td>
+<td>tie</td>
+</tr>
+<tr>
+<td>TEPC</td>
+<td style="text-align:right">8,712</td>
+<td style="text-align:right">3.67%</td>
+<td style="text-align:right">2.87%</td>
+<td style="text-align:right">-27.7%</td>
+<td style="text-align:right">-33.8%</td>
+<td style="text-align:right">-20.3%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>TIDC</td>
+<td style="text-align:right">8,719</td>
+<td style="text-align:right">3.27%</td>
+<td style="text-align:right">3.18%</td>
+<td style="text-align:right">-2.8%</td>
+<td style="text-align:right">-10.5%</td>
+<td style="text-align:right">+3.1%</td>
+<td style="text-align:right">0.477</td>
+<td>tie</td>
+</tr>
+<tr>
+<td>TPWR</td>
+<td style="text-align:right">8,760</td>
+<td style="text-align:right">3.01%</td>
+<td style="text-align:right">2.29%</td>
+<td style="text-align:right">-31.5%</td>
+<td style="text-align:right">-38.5%</td>
+<td style="text-align:right">-22.4%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>TVA</td>
+<td style="text-align:right">8,755</td>
+<td style="text-align:right">3.43%</td>
+<td style="text-align:right">2.33%</td>
+<td style="text-align:right">-46.8%</td>
+<td style="text-align:right">-60.4%</td>
+<td style="text-align:right">-34.0%</td>
+<td style="text-align:right">0.002</td>
+<td>loss</td>
+</tr>
+<tr>
+<td>WALC</td>
+<td style="text-align:right">8,732</td>
+<td style="text-align:right">9.30%</td>
+<td style="text-align:right">23.56%</td>
+<td style="text-align:right">+60.5%</td>
+<td style="text-align:right">+52.5%</td>
+<td style="text-align:right">+66.3%</td>
+<td style="text-align:right">0.002</td>
+<td>win</td>
+</tr>
+</tbody>
+</table>
+<p>Source: real:eia930, model gbm, 44 authorities with a comparable operator forecast, test year, as of 2026-09-29.</p>
+<p>The cross check: own has the lower error in 4 authorities and
+gbm in 40; they fall on different sides of the operator in
+8 of 44. Nothing is averaged.</p>
+<table>
+<thead>
+<tr>
+<th>Authority</th>
+<th style="text-align:right">own MAPE</th>
+<th style="text-align:right">gbm MAPE</th>
+<th style="text-align:right">Seasonal naive MAPE</th>
+<th style="text-align:right">Operator MAPE</th>
+<th>Lower error</th>
+<th>Disagree on the operator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AECI</td>
+<td style="text-align:right">5.11%</td>
+<td style="text-align:right">5.08%</td>
+<td style="text-align:right">18.23%</td>
+<td style="text-align:right">1.97%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>AVA</td>
+<td style="text-align:right">2.87%</td>
+<td style="text-align:right">2.49%</td>
+<td style="text-align:right">7.24%</td>
+<td style="text-align:right">1.65%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>AZPS</td>
+<td style="text-align:right">4.60%</td>
+<td style="text-align:right">4.45%</td>
+<td style="text-align:right">9.64%</td>
+<td style="text-align:right">9.73%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>BANC</td>
+<td style="text-align:right">4.23%</td>
+<td style="text-align:right">3.36%</td>
+<td style="text-align:right">9.36%</td>
+<td style="text-align:right">3.49%</td>
+<td>gbm</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>BPAT</td>
+<td style="text-align:right">2.52%</td>
+<td style="text-align:right">2.22%</td>
+<td style="text-align:right">5.94%</td>
+<td style="text-align:right">1.85%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>CHPD</td>
+<td style="text-align:right">3.71%</td>
+<td style="text-align:right">3.62%</td>
+<td style="text-align:right">10.45%</td>
+<td style="text-align:right">3.09%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>CISO</td>
+<td style="text-align:right">3.83%</td>
+<td style="text-align:right">3.07%</td>
+<td style="text-align:right">6.74%</td>
+<td style="text-align:right">8.97%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>CPLE</td>
+<td style="text-align:right">4.85%</td>
+<td style="text-align:right">4.47%</td>
+<td style="text-align:right">15.75%</td>
+<td style="text-align:right">3.79%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>CPLW</td>
+<td style="text-align:right">4.45%</td>
+<td style="text-align:right">4.12%</td>
+<td style="text-align:right">14.89%</td>
+<td style="text-align:right">4.22%</td>
+<td>gbm</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>DOPD</td>
+<td style="text-align:right">2.86%</td>
+<td style="text-align:right">2.75%</td>
+<td style="text-align:right">7.67%</td>
+<td style="text-align:right">4.72%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>DUK</td>
+<td style="text-align:right">4.22%</td>
+<td style="text-align:right">3.48%</td>
+<td style="text-align:right">12.92%</td>
+<td style="text-align:right">3.65%</td>
+<td>gbm</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>EPE</td>
+<td style="text-align:right">4.22%</td>
+<td style="text-align:right">3.71%</td>
+<td style="text-align:right">9.39%</td>
+<td style="text-align:right">3.20%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>ERCO</td>
+<td style="text-align:right">2.99%</td>
+<td style="text-align:right">2.78%</td>
+<td style="text-align:right">7.43%</td>
+<td style="text-align:right">1.99%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>FPL</td>
+<td style="text-align:right">4.35%</td>
+<td style="text-align:right">3.94%</td>
+<td style="text-align:right">9.96%</td>
+<td style="text-align:right">3.38%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>GCPD</td>
+<td style="text-align:right">1.97%</td>
+<td style="text-align:right">1.80%</td>
+<td style="text-align:right">4.83%</td>
+<td style="text-align:right">2.29%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>HST</td>
+<td style="text-align:right">5.25%</td>
+<td style="text-align:right">5.21%</td>
+<td style="text-align:right">12.60%</td>
+<td style="text-align:right">6.75%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>IID</td>
+<td style="text-align:right">5.36%</td>
+<td style="text-align:right">4.82%</td>
+<td style="text-align:right">13.59%</td>
+<td style="text-align:right">3.44%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>IPCO</td>
+<td style="text-align:right">3.02%</td>
+<td style="text-align:right">2.78%</td>
+<td style="text-align:right">7.79%</td>
+<td style="text-align:right">5.26%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>ISNE</td>
+<td style="text-align:right">5.52%</td>
+<td style="text-align:right">5.52%</td>
+<td style="text-align:right">11.06%</td>
+<td style="text-align:right">3.04%</td>
+<td>own</td>
+<td>no</td>
+</tr>
+<tr>
+<td>JEA</td>
+<td style="text-align:right">4.50%</td>
+<td style="text-align:right">4.10%</td>
+<td style="text-align:right">12.85%</td>
+<td style="text-align:right">4.45%</td>
+<td>gbm</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>LDWP</td>
+<td style="text-align:right">25.09%</td>
+<td style="text-align:right">29.84%</td>
+<td style="text-align:right">42.14%</td>
+<td style="text-align:right">36.42%</td>
+<td>own</td>
+<td>no</td>
+</tr>
+<tr>
+<td>LGEE</td>
+<td style="text-align:right">4.47%</td>
+<td style="text-align:right">4.12%</td>
+<td style="text-align:right">13.41%</td>
+<td style="text-align:right">8.14%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>MISO</td>
+<td style="text-align:right">2.76%</td>
+<td style="text-align:right">2.35%</td>
+<td style="text-align:right">7.30%</td>
+<td style="text-align:right">2.65%</td>
+<td>gbm</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>NEVP</td>
+<td style="text-align:right">2.99%</td>
+<td style="text-align:right">2.78%</td>
+<td style="text-align:right">8.63%</td>
+<td style="text-align:right">8.93%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>NWMT</td>
+<td style="text-align:right">3.24%</td>
+<td style="text-align:right">3.12%</td>
+<td style="text-align:right">7.03%</td>
+<td style="text-align:right">2.55%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>NYIS</td>
+<td style="text-align:right">4.36%</td>
+<td style="text-align:right">3.75%</td>
+<td style="text-align:right">9.32%</td>
+<td style="text-align:right">2.63%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>PACE</td>
+<td style="text-align:right">3.32%</td>
+<td style="text-align:right">3.14%</td>
+<td style="text-align:right">6.53%</td>
+<td style="text-align:right">5.22%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>PACW</td>
+<td style="text-align:right">3.23%</td>
+<td style="text-align:right">2.61%</td>
+<td style="text-align:right">6.76%</td>
+<td style="text-align:right">2.68%</td>
+<td>gbm</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>PGE</td>
+<td style="text-align:right">3.21%</td>
+<td style="text-align:right">2.55%</td>
+<td style="text-align:right">6.29%</td>
+<td style="text-align:right">1.58%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>PJM</td>
+<td style="text-align:right">3.29%</td>
+<td style="text-align:right">2.99%</td>
+<td style="text-align:right">8.72%</td>
+<td style="text-align:right">3.50%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>PNM</td>
+<td style="text-align:right">3.00%</td>
+<td style="text-align:right">2.95%</td>
+<td style="text-align:right">6.11%</td>
+<td style="text-align:right">5.64%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>SC</td>
+<td style="text-align:right">4.56%</td>
+<td style="text-align:right">4.39%</td>
+<td style="text-align:right">12.08%</td>
+<td style="text-align:right">4.01%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>SCEG</td>
+<td style="text-align:right">5.14%</td>
+<td style="text-align:right">4.92%</td>
+<td style="text-align:right">13.55%</td>
+<td style="text-align:right">5.66%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>SCL</td>
+<td style="text-align:right">3.45%</td>
+<td style="text-align:right">3.08%</td>
+<td style="text-align:right">7.12%</td>
+<td style="text-align:right">3.40%</td>
+<td>gbm</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>SEC</td>
+<td style="text-align:right">12.11%</td>
+<td style="text-align:right">11.88%</td>
+<td style="text-align:right">23.00%</td>
+<td style="text-align:right">15.34%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>SOCO</td>
+<td style="text-align:right">3.37%</td>
+<td style="text-align:right">2.99%</td>
+<td style="text-align:right">10.95%</td>
+<td style="text-align:right">1.38%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>SRP</td>
+<td style="text-align:right">7.06%</td>
+<td style="text-align:right">7.18%</td>
+<td style="text-align:right">13.91%</td>
+<td style="text-align:right">9.68%</td>
+<td>own</td>
+<td>no</td>
+</tr>
+<tr>
+<td>TAL</td>
+<td style="text-align:right">4.83%</td>
+<td style="text-align:right">4.46%</td>
+<td style="text-align:right">13.80%</td>
+<td style="text-align:right">4.26%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>TEC</td>
+<td style="text-align:right">4.27%</td>
+<td style="text-align:right">3.90%</td>
+<td style="text-align:right">11.62%</td>
+<td style="text-align:right">4.00%</td>
+<td>gbm</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>TEPC</td>
+<td style="text-align:right">3.89%</td>
+<td style="text-align:right">3.67%</td>
+<td style="text-align:right">9.21%</td>
+<td style="text-align:right">2.87%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>TIDC</td>
+<td style="text-align:right">4.19%</td>
+<td style="text-align:right">3.27%</td>
+<td style="text-align:right">8.50%</td>
+<td style="text-align:right">3.18%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>TPWR</td>
+<td style="text-align:right">3.29%</td>
+<td style="text-align:right">3.01%</td>
+<td style="text-align:right">8.61%</td>
+<td style="text-align:right">2.29%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>TVA</td>
+<td style="text-align:right">3.87%</td>
+<td style="text-align:right">3.43%</td>
+<td style="text-align:right">12.27%</td>
+<td style="text-align:right">2.33%</td>
+<td>gbm</td>
+<td>no</td>
+</tr>
+<tr>
+<td>WALC</td>
+<td style="text-align:right">8.98%</td>
+<td style="text-align:right">9.31%</td>
+<td style="text-align:right">17.33%</td>
+<td style="text-align:right">23.56%</td>
+<td>own</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p>Source: real:eia930, model both, authorities in the backtest, test year, as of 2026-09-29.</p>
+<h2>Coverage</h2>
+<p>The 90 percent bands covered 89.1% of the test year's hours
+(88.6% to 89.6%) and
+the 50 percent bands 49.0%. On the validation year the calibration
+held 90.0% at the 90 percent level, inside the gate's
+band of 85% to 95%. Shares of
+actuals at or below each served level: 5.5%,
+24.1%, 48.4%,
+73.1% and 94.6% against
+5, 25, 50, 75 and 95 percent; degenerate levels none.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Horizon (h)</th>
+<th style="text-align:right">MAPE</th>
+<th style="text-align:right">Operator MAPE</th>
+<th style="text-align:right">Seasonal naive MAPE</th>
+<th style="text-align:right">CRPS</th>
+<th style="text-align:right">50 pct coverage</th>
+<th style="text-align:right">90 pct coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">1</td>
+<td style="text-align:right">4.04%</td>
+<td style="text-align:right">7.60%</td>
+<td style="text-align:right">11.90%</td>
+<td style="text-align:right">2.81%</td>
+<td style="text-align:right">50.3%</td>
+<td style="text-align:right">89.7%</td>
+</tr>
+<tr>
+<td style="text-align:right">2</td>
+<td style="text-align:right">4.07%</td>
+<td style="text-align:right">7.63%</td>
+<td style="text-align:right">11.51%</td>
+<td style="text-align:right">2.83%</td>
+<td style="text-align:right">47.4%</td>
+<td style="text-align:right">88.6%</td>
+</tr>
+<tr>
+<td style="text-align:right">3</td>
+<td style="text-align:right">4.05%</td>
+<td style="text-align:right">7.46%</td>
+<td style="text-align:right">11.15%</td>
+<td style="text-align:right">2.80%</td>
+<td style="text-align:right">48.5%</td>
+<td style="text-align:right">88.6%</td>
+</tr>
+<tr>
+<td style="text-align:right">4</td>
+<td style="text-align:right">4.51%</td>
+<td style="text-align:right">7.90%</td>
+<td style="text-align:right">11.45%</td>
+<td style="text-align:right">3.17%</td>
+<td style="text-align:right">48.6%</td>
+<td style="text-align:right">89.3%</td>
+</tr>
+<tr>
+<td style="text-align:right">5</td>
+<td style="text-align:right">4.27%</td>
+<td style="text-align:right">7.17%</td>
+<td style="text-align:right">11.05%</td>
+<td style="text-align:right">2.95%</td>
+<td style="text-align:right">49.1%</td>
+<td style="text-align:right">90.1%</td>
+</tr>
+<tr>
+<td style="text-align:right">6</td>
+<td style="text-align:right">4.42%</td>
+<td style="text-align:right">58.89%</td>
+<td style="text-align:right">11.20%</td>
+<td style="text-align:right">3.07%</td>
+<td style="text-align:right">49.0%</td>
+<td style="text-align:right">90.4%</td>
+</tr>
+<tr>
+<td style="text-align:right">7</td>
+<td style="text-align:right">4.76%</td>
+<td style="text-align:right">8.23%</td>
+<td style="text-align:right">11.46%</td>
+<td style="text-align:right">3.36%</td>
+<td style="text-align:right">52.0%</td>
+<td style="text-align:right">91.1%</td>
+</tr>
+<tr>
+<td style="text-align:right">8</td>
+<td style="text-align:right">4.38%</td>
+<td style="text-align:right">49.21%</td>
+<td style="text-align:right">11.01%</td>
+<td style="text-align:right">3.01%</td>
+<td style="text-align:right">50.7%</td>
+<td style="text-align:right">90.6%</td>
+</tr>
+<tr>
+<td style="text-align:right">9</td>
+<td style="text-align:right">4.59%</td>
+<td style="text-align:right">50.31%</td>
+<td style="text-align:right">11.18%</td>
+<td style="text-align:right">3.16%</td>
+<td style="text-align:right">49.6%</td>
+<td style="text-align:right">90.0%</td>
+</tr>
+<tr>
+<td style="text-align:right">10</td>
+<td style="text-align:right">4.67%</td>
+<td style="text-align:right">6.71%</td>
+<td style="text-align:right">11.19%</td>
+<td style="text-align:right">3.21%</td>
+<td style="text-align:right">48.7%</td>
+<td style="text-align:right">89.6%</td>
+</tr>
+<tr>
+<td style="text-align:right">11</td>
+<td style="text-align:right">4.76%</td>
+<td style="text-align:right">6.86%</td>
+<td style="text-align:right">11.07%</td>
+<td style="text-align:right">3.28%</td>
+<td style="text-align:right">48.6%</td>
+<td style="text-align:right">90.1%</td>
+</tr>
+<tr>
+<td style="text-align:right">12</td>
+<td style="text-align:right">4.79%</td>
+<td style="text-align:right">7.24%</td>
+<td style="text-align:right">10.90%</td>
+<td style="text-align:right">3.31%</td>
+<td style="text-align:right">49.0%</td>
+<td style="text-align:right">89.7%</td>
+</tr>
+<tr>
+<td style="text-align:right">13</td>
+<td style="text-align:right">4.95%</td>
+<td style="text-align:right">7.04%</td>
+<td style="text-align:right">10.98%</td>
+<td style="text-align:right">3.46%</td>
+<td style="text-align:right">47.8%</td>
+<td style="text-align:right">90.0%</td>
+</tr>
+<tr>
+<td style="text-align:right">14</td>
+<td style="text-align:right">4.98%</td>
+<td style="text-align:right">7.34%</td>
+<td style="text-align:right">11.04%</td>
+<td style="text-align:right">3.46%</td>
+<td style="text-align:right">49.6%</td>
+<td style="text-align:right">89.8%</td>
+</tr>
+<tr>
+<td style="text-align:right">15</td>
+<td style="text-align:right">5.24%</td>
+<td style="text-align:right">7.90%</td>
+<td style="text-align:right">11.15%</td>
+<td style="text-align:right">3.65%</td>
+<td style="text-align:right">49.7%</td>
+<td style="text-align:right">89.4%</td>
+</tr>
+<tr>
+<td style="text-align:right">16</td>
+<td style="text-align:right">5.28%</td>
+<td style="text-align:right">8.65%</td>
+<td style="text-align:right">11.30%</td>
+<td style="text-align:right">3.67%</td>
+<td style="text-align:right">48.1%</td>
+<td style="text-align:right">89.0%</td>
+</tr>
+<tr>
+<td style="text-align:right">17</td>
+<td style="text-align:right">5.38%</td>
+<td style="text-align:right">8.55%</td>
+<td style="text-align:right">11.52%</td>
+<td style="text-align:right">3.73%</td>
+<td style="text-align:right">48.3%</td>
+<td style="text-align:right">88.1%</td>
+</tr>
+<tr>
+<td style="text-align:right">18</td>
+<td style="text-align:right">5.66%</td>
+<td style="text-align:right">8.94%</td>
+<td style="text-align:right">12.15%</td>
+<td style="text-align:right">3.93%</td>
+<td style="text-align:right">47.6%</td>
+<td style="text-align:right">87.7%</td>
+</tr>
+<tr>
+<td style="text-align:right">19</td>
+<td style="text-align:right">5.70%</td>
+<td style="text-align:right">9.01%</td>
+<td style="text-align:right">12.36%</td>
+<td style="text-align:right">3.95%</td>
+<td style="text-align:right">49.2%</td>
+<td style="text-align:right">89.3%</td>
+</tr>
+<tr>
+<td style="text-align:right">20</td>
+<td style="text-align:right">5.88%</td>
+<td style="text-align:right">9.73%</td>
+<td style="text-align:right">12.91%</td>
+<td style="text-align:right">4.09%</td>
+<td style="text-align:right">48.8%</td>
+<td style="text-align:right">88.7%</td>
+</tr>
+<tr>
+<td style="text-align:right">21</td>
+<td style="text-align:right">5.87%</td>
+<td style="text-align:right">9.08%</td>
+<td style="text-align:right">13.04%</td>
+<td style="text-align:right">4.07%</td>
+<td style="text-align:right">48.3%</td>
+<td style="text-align:right">88.8%</td>
+</tr>
+<tr>
+<td style="text-align:right">22</td>
+<td style="text-align:right">5.74%</td>
+<td style="text-align:right">9.35%</td>
+<td style="text-align:right">12.98%</td>
+<td style="text-align:right">3.98%</td>
+<td style="text-align:right">48.2%</td>
+<td style="text-align:right">88.4%</td>
+</tr>
+<tr>
+<td style="text-align:right">23</td>
+<td style="text-align:right">5.65%</td>
+<td style="text-align:right">8.48%</td>
+<td style="text-align:right">12.84%</td>
+<td style="text-align:right">3.93%</td>
+<td style="text-align:right">48.6%</td>
+<td style="text-align:right">88.9%</td>
+</tr>
+<tr>
+<td style="text-align:right">24</td>
+<td style="text-align:right">5.36%</td>
+<td style="text-align:right">7.96%</td>
+<td style="text-align:right">12.32%</td>
+<td style="text-align:right">3.73%</td>
+<td style="text-align:right">49.2%</td>
+<td style="text-align:right">88.7%</td>
+</tr>
+<tr>
+<td style="text-align:right">25</td>
+<td style="text-align:right">5.51%</td>
+<td style="text-align:right">7.61%</td>
+<td style="text-align:right">11.92%</td>
+<td style="text-align:right">3.84%</td>
+<td style="text-align:right">49.6%</td>
+<td style="text-align:right">88.7%</td>
+</tr>
+<tr>
+<td style="text-align:right">26</td>
+<td style="text-align:right">5.44%</td>
+<td style="text-align:right">7.64%</td>
+<td style="text-align:right">11.53%</td>
+<td style="text-align:right">3.79%</td>
+<td style="text-align:right">48.8%</td>
+<td style="text-align:right">88.4%</td>
+</tr>
+<tr>
+<td style="text-align:right">27</td>
+<td style="text-align:right">5.29%</td>
+<td style="text-align:right">7.47%</td>
+<td style="text-align:right">11.17%</td>
+<td style="text-align:right">3.68%</td>
+<td style="text-align:right">49.1%</td>
+<td style="text-align:right">88.6%</td>
+</tr>
+<tr>
+<td style="text-align:right">28</td>
+<td style="text-align:right">5.74%</td>
+<td style="text-align:right">7.90%</td>
+<td style="text-align:right">11.47%</td>
+<td style="text-align:right">4.03%</td>
+<td style="text-align:right">48.8%</td>
+<td style="text-align:right">88.9%</td>
+</tr>
+<tr>
+<td style="text-align:right">29</td>
+<td style="text-align:right">5.45%</td>
+<td style="text-align:right">7.18%</td>
+<td style="text-align:right">11.06%</td>
+<td style="text-align:right">3.76%</td>
+<td style="text-align:right">48.6%</td>
+<td style="text-align:right">89.4%</td>
+</tr>
+<tr>
+<td style="text-align:right">30</td>
+<td style="text-align:right">5.63%</td>
+<td style="text-align:right">58.97%</td>
+<td style="text-align:right">11.20%</td>
+<td style="text-align:right">3.91%</td>
+<td style="text-align:right">48.7%</td>
+<td style="text-align:right">89.7%</td>
+</tr>
+<tr>
+<td style="text-align:right">31</td>
+<td style="text-align:right">5.91%</td>
+<td style="text-align:right">8.24%</td>
+<td style="text-align:right">11.46%</td>
+<td style="text-align:right">4.14%</td>
+<td style="text-align:right">50.6%</td>
+<td style="text-align:right">89.7%</td>
+</tr>
+<tr>
+<td style="text-align:right">32</td>
+<td style="text-align:right">5.45%</td>
+<td style="text-align:right">49.34%</td>
+<td style="text-align:right">11.03%</td>
+<td style="text-align:right">3.75%</td>
+<td style="text-align:right">50.4%</td>
+<td style="text-align:right">89.4%</td>
+</tr>
+<tr>
+<td style="text-align:right">33</td>
+<td style="text-align:right">5.62%</td>
+<td style="text-align:right">50.44%</td>
+<td style="text-align:right">11.19%</td>
+<td style="text-align:right">3.88%</td>
+<td style="text-align:right">49.9%</td>
+<td style="text-align:right">89.3%</td>
+</tr>
+<tr>
+<td style="text-align:right">34</td>
+<td style="text-align:right">5.65%</td>
+<td style="text-align:right">6.71%</td>
+<td style="text-align:right">11.20%</td>
+<td style="text-align:right">3.90%</td>
+<td style="text-align:right">50.1%</td>
+<td style="text-align:right">89.3%</td>
+</tr>
+<tr>
+<td style="text-align:right">35</td>
+<td style="text-align:right">5.70%</td>
+<td style="text-align:right">6.86%</td>
+<td style="text-align:right">11.08%</td>
+<td style="text-align:right">3.94%</td>
+<td style="text-align:right">50.1%</td>
+<td style="text-align:right">89.2%</td>
+</tr>
+<tr>
+<td style="text-align:right">36</td>
+<td style="text-align:right">5.72%</td>
+<td style="text-align:right">7.23%</td>
+<td style="text-align:right">10.91%</td>
+<td style="text-align:right">3.95%</td>
+<td style="text-align:right">50.1%</td>
+<td style="text-align:right">89.3%</td>
+</tr>
+<tr>
+<td style="text-align:right">37</td>
+<td style="text-align:right">5.86%</td>
+<td style="text-align:right">7.05%</td>
+<td style="text-align:right">11.00%</td>
+<td style="text-align:right">4.10%</td>
+<td style="text-align:right">49.0%</td>
+<td style="text-align:right">89.7%</td>
+</tr>
+<tr>
+<td style="text-align:right">38</td>
+<td style="text-align:right">5.91%</td>
+<td style="text-align:right">7.35%</td>
+<td style="text-align:right">11.05%</td>
+<td style="text-align:right">4.11%</td>
+<td style="text-align:right">49.2%</td>
+<td style="text-align:right">89.3%</td>
+</tr>
+<tr>
+<td style="text-align:right">39</td>
+<td style="text-align:right">6.23%</td>
+<td style="text-align:right">7.91%</td>
+<td style="text-align:right">11.17%</td>
+<td style="text-align:right">4.33%</td>
+<td style="text-align:right">48.7%</td>
+<td style="text-align:right">88.6%</td>
+</tr>
+<tr>
+<td style="text-align:right">40</td>
+<td style="text-align:right">6.26%</td>
+<td style="text-align:right">8.66%</td>
+<td style="text-align:right">11.31%</td>
+<td style="text-align:right">4.36%</td>
+<td style="text-align:right">47.7%</td>
+<td style="text-align:right">87.9%</td>
+</tr>
+<tr>
+<td style="text-align:right">41</td>
+<td style="text-align:right">6.35%</td>
+<td style="text-align:right">8.55%</td>
+<td style="text-align:right">11.53%</td>
+<td style="text-align:right">4.40%</td>
+<td style="text-align:right">47.7%</td>
+<td style="text-align:right">87.9%</td>
+</tr>
+<tr>
+<td style="text-align:right">42</td>
+<td style="text-align:right">6.62%</td>
+<td style="text-align:right">8.95%</td>
+<td style="text-align:right">12.17%</td>
+<td style="text-align:right">4.60%</td>
+<td style="text-align:right">47.6%</td>
+<td style="text-align:right">87.4%</td>
+</tr>
+<tr>
+<td style="text-align:right">43</td>
+<td style="text-align:right">6.64%</td>
+<td style="text-align:right">9.01%</td>
+<td style="text-align:right">12.37%</td>
+<td style="text-align:right">4.60%</td>
+<td style="text-align:right">48.4%</td>
+<td style="text-align:right">89.0%</td>
+</tr>
+<tr>
+<td style="text-align:right">44</td>
+<td style="text-align:right">6.80%</td>
+<td style="text-align:right">9.74%</td>
+<td style="text-align:right">12.91%</td>
+<td style="text-align:right">4.73%</td>
+<td style="text-align:right">48.1%</td>
+<td style="text-align:right">88.4%</td>
+</tr>
+<tr>
+<td style="text-align:right">45</td>
+<td style="text-align:right">6.78%</td>
+<td style="text-align:right">9.09%</td>
+<td style="text-align:right">13.05%</td>
+<td style="text-align:right">4.70%</td>
+<td style="text-align:right">48.3%</td>
+<td style="text-align:right">88.3%</td>
+</tr>
+<tr>
+<td style="text-align:right">46</td>
+<td style="text-align:right">6.62%</td>
+<td style="text-align:right">9.36%</td>
+<td style="text-align:right">12.98%</td>
+<td style="text-align:right">4.60%</td>
+<td style="text-align:right">48.4%</td>
+<td style="text-align:right">88.4%</td>
+</tr>
+<tr>
+<td style="text-align:right">47</td>
+<td style="text-align:right">6.49%</td>
+<td style="text-align:right">8.49%</td>
+<td style="text-align:right">12.84%</td>
+<td style="text-align:right">4.52%</td>
+<td style="text-align:right">48.6%</td>
+<td style="text-align:right">88.5%</td>
+</tr>
+<tr>
+<td style="text-align:right">48</td>
+<td style="text-align:right">6.23%</td>
+<td style="text-align:right">7.97%</td>
+<td style="text-align:right">12.32%</td>
+<td style="text-align:right">4.32%</td>
+<td style="text-align:right">48.2%</td>
+<td style="text-align:right">88.5%</td>
+</tr>
+</tbody>
+</table>
+<p>Source: real:eia930, model gbm, 51 authorities in the backtest, test year, as of 2026-09-29.</p>
+<h2>Where reconciliation helped and where it hurt</h2>
+<p>159 nodes from the lower 48 to the subregion, every one forecast directly
+and reconciled by bottom up, top down and MinT (shrinkage intensity
+0.002); every reconciled set is coherent to within
+0.0000 MW where the base forecasts disagreed by up to
+71,796 MW. Reconciliation helped at bottom_up at the lower 48 level; bottom_up at the interconnection level; bottom_up at the region level; mint at the lower 48 level; mint at the interconnection level; mint at the region level
+and hurt at top_down at the interconnection level; top_down at the region level; top_down at the authority level; top_down at the subregion level; mint at the authority level; mint at the subregion level; the method with the lowest error summed over levels is
+bottom_up. At the top MinT moved the MAPE from 2.65%
+to 2.14%; at the leaves from 8.53% to
+10.01%.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Level</th>
+<th style="text-align:right">Base MAPE</th>
+<th style="text-align:right">Reconciled MAPE</th>
+<th style="text-align:right">Change</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bottom_up</td>
+<td>lower 48</td>
+<td style="text-align:right">2.65%</td>
+<td style="text-align:right">2.15%</td>
+<td style="text-align:right">-0.5%</td>
+<td>helped</td>
+</tr>
+<tr>
+<td>bottom_up</td>
+<td>interconnection</td>
+<td style="text-align:right">3.04%</td>
+<td style="text-align:right">2.82%</td>
+<td style="text-align:right">-0.2%</td>
+<td>helped</td>
+</tr>
+<tr>
+<td>bottom_up</td>
+<td>region</td>
+<td style="text-align:right">3.93%</td>
+<td style="text-align:right">3.85%</td>
+<td style="text-align:right">-0.1%</td>
+<td>helped</td>
+</tr>
+<tr>
+<td>bottom_up</td>
+<td>authority</td>
+<td style="text-align:right">5.65%</td>
+<td style="text-align:right">5.65%</td>
+<td style="text-align:right">0.0%</td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td>bottom_up</td>
+<td>subregion</td>
+<td style="text-align:right">8.53%</td>
+<td style="text-align:right">8.53%</td>
+<td style="text-align:right">0.0%</td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td>top_down</td>
+<td>lower 48</td>
+<td style="text-align:right">2.65%</td>
+<td style="text-align:right">2.65%</td>
+<td style="text-align:right">0.0%</td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td>top_down</td>
+<td>interconnection</td>
+<td style="text-align:right">3.04%</td>
+<td style="text-align:right">7.04%</td>
+<td style="text-align:right">+4.0%</td>
+<td>hurt</td>
+</tr>
+<tr>
+<td>top_down</td>
+<td>region</td>
+<td style="text-align:right">3.93%</td>
+<td style="text-align:right">9.35%</td>
+<td style="text-align:right">+5.4%</td>
+<td>hurt</td>
+</tr>
+<tr>
+<td>top_down</td>
+<td>authority</td>
+<td style="text-align:right">5.65%</td>
+<td style="text-align:right">15.10%</td>
+<td style="text-align:right">+9.5%</td>
+<td>hurt</td>
+</tr>
+<tr>
+<td>top_down</td>
+<td>subregion</td>
+<td style="text-align:right">8.53%</td>
+<td style="text-align:right">14.28%</td>
+<td style="text-align:right">+5.7%</td>
+<td>hurt</td>
+</tr>
+<tr>
+<td>mint</td>
+<td>lower 48</td>
+<td style="text-align:right">2.65%</td>
+<td style="text-align:right">2.14%</td>
+<td style="text-align:right">-0.5%</td>
+<td>helped</td>
+</tr>
+<tr>
+<td>mint</td>
+<td>interconnection</td>
+<td style="text-align:right">3.04%</td>
+<td style="text-align:right">2.82%</td>
+<td style="text-align:right">-0.2%</td>
+<td>helped</td>
+</tr>
+<tr>
+<td>mint</td>
+<td>region</td>
+<td style="text-align:right">3.93%</td>
+<td style="text-align:right">3.85%</td>
+<td style="text-align:right">-0.1%</td>
+<td>helped</td>
+</tr>
+<tr>
+<td>mint</td>
+<td>authority</td>
+<td style="text-align:right">5.65%</td>
+<td style="text-align:right">5.67%</td>
+<td style="text-align:right">0.0%</td>
+<td>hurt</td>
+</tr>
+<tr>
+<td>mint</td>
+<td>subregion</td>
+<td style="text-align:right">8.53%</td>
+<td style="text-align:right">10.01%</td>
+<td style="text-align:right">+1.5%</td>
+<td>hurt</td>
+</tr>
+</tbody>
+</table>
+<p>Source: real:eia930, model own, 159 nodes of the hierarchy, test year, as of 2026-09-29.</p>
+<h2>The events the detector caught and missed</h2>
+<p>The detector watches the day's own forecast residual, standardized per authority, past
+6.0 for 3 hours; hours a quarantine rule
+flagged are data defects, never demand events. It detected 3 of the
+10 rows of the known events table (30%) with a median
+delay of 5.7 hours, and raised 0
+alerts in the 4,924 window hours outside the events. Missed:
+covid_2020 at NYIS, covid_2020 at MISO, ida_2021 at MISO.8910, ida_2021 at MISO, elliott_2022 at TVA, elliott_2022 at DUK, elliott_2022 at CPLE. Over the real test year it raised 277
+alerts, 71 demand events and 206 data
+defects. On the demonstration grid it recovered 6 of
+6 planted defects as defects, 1 of
+2 planted load sheds, with 8 false alarms.</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Node</th>
+<th>Onset (UTC)</th>
+<th>Verdict</th>
+<th>Detection hour (UTC)</th>
+<th style="text-align:right">Delay hours</th>
+<th style="text-align:right">Peak z</th>
+<th style="text-align:right">False alarms in window</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>covid_2020</td>
+<td>NYIS</td>
+<td>2020-03-16 00:00</td>
+<td>missed</td>
+<td>none</td>
+<td style="text-align:right">not applicable</td>
+<td style="text-align:right">not applicable</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td>covid_2020</td>
+<td>MISO</td>
+<td>2020-03-18 00:00</td>
+<td>missed</td>
+<td>none</td>
+<td style="text-align:right">not applicable</td>
+<td style="text-align:right">not applicable</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td>uri_2021</td>
+<td>ERCO</td>
+<td>2021-02-15 07:20</td>
+<td>detected</td>
+<td>2021-02-15 13:00</td>
+<td style="text-align:right">5.7</td>
+<td style="text-align:right">8.9</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td>ida_2021</td>
+<td>MISO.8910</td>
+<td>2021-08-29 17:00</td>
+<td>missed</td>
+<td>none</td>
+<td style="text-align:right">not applicable</td>
+<td style="text-align:right">not applicable</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td>ida_2021</td>
+<td>MISO</td>
+<td>2021-08-29 17:00</td>
+<td>missed</td>
+<td>none</td>
+<td style="text-align:right">not applicable</td>
+<td style="text-align:right">not applicable</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td>elliott_2022</td>
+<td>TVA</td>
+<td>2022-12-23 15:31</td>
+<td>missed</td>
+<td>none</td>
+<td style="text-align:right">not applicable</td>
+<td style="text-align:right">not applicable</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td>elliott_2022</td>
+<td>DUK</td>
+<td>2022-12-24 11:00</td>
+<td>missed</td>
+<td>none</td>
+<td style="text-align:right">not applicable</td>
+<td style="text-align:right">not applicable</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td>elliott_2022</td>
+<td>CPLE</td>
+<td>2022-12-24 11:00</td>
+<td>missed</td>
+<td>none</td>
+<td style="text-align:right">not applicable</td>
+<td style="text-align:right">not applicable</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td>beryl_2024</td>
+<td>ERCO.COAS</td>
+<td>2024-07-08 09:00</td>
+<td>detected</td>
+<td>2024-07-08 12:00</td>
+<td style="text-align:right">3.0</td>
+<td style="text-align:right">19.2</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td>beryl_2024</td>
+<td>ERCO</td>
+<td>2024-07-08 09:00</td>
+<td>detected</td>
+<td>2024-07-08 20:00</td>
+<td style="text-align:right">11.0</td>
+<td style="text-align:right">7.4</td>
+<td style="text-align:right">0</td>
+</tr>
+</tbody>
+</table>
+<p>Source: real:eia930, model own, the known events table, each in a window of ten days either side, as of 2026-09-29.</p>
+<h2>The meter</h2>
+<p>5,358 London households in 3 load shape clusters;
+cluster 1 (evening peak) carries
+50.5% of the weekday evening peak with
+52.3% of the households. Under the pre-registered plan
+(hash <code>b1c595ba7016</code>), the dynamic time of use group used
+-5.8% (-7.0% to
+-4.7%) during the 69 high price events
+against matched standard households, -0.160 kWh per household per event,
+with a rebound of +0.2% afterwards; 4 of
+4 event types are distinguishable from zero after correction. The cluster
+forecast, reconciled by MinT, moved the panel total's MAPE from 4.30%
+to 4.26% and the clusters' from
+6.78% to 9.12%. A program
+buying peak reduction at 60 pounds per kilowatt would approach
+cluster 0 first.</p>
+<table>
+<thead>
+<tr>
+<th>Event type</th>
+<th style="text-align:right">Events</th>
+<th style="text-align:right">Response</th>
+<th style="text-align:right">lower</th>
+<th style="text-align:right">upper</th>
+<th style="text-align:right">p value</th>
+<th>After correction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>night</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">-6.0%</td>
+<td style="text-align:right">-7.9%</td>
+<td style="text-align:right">-3.3%</td>
+<td style="text-align:right">0.000</td>
+<td>different from zero</td>
+</tr>
+<tr>
+<td>morning</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">-9.4%</td>
+<td style="text-align:right">-10.6%</td>
+<td style="text-align:right">-8.0%</td>
+<td style="text-align:right">0.000</td>
+<td>different from zero</td>
+</tr>
+<tr>
+<td>afternoon</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">-6.5%</td>
+<td style="text-align:right">-6.5%</td>
+<td style="text-align:right">-6.5%</td>
+<td style="text-align:right">0.000</td>
+<td>different from zero</td>
+</tr>
+<tr>
+<td>evening</td>
+<td style="text-align:right">40</td>
+<td style="text-align:right">-4.8%</td>
+<td style="text-align:right">-6.0%</td>
+<td style="text-align:right">-3.4%</td>
+<td style="text-align:right">0.000</td>
+<td>different from zero</td>
+</tr>
+</tbody>
+</table>
+<p>Source: real:lcl, 1088 matched pairs over 69 high price events of 2013, 500 seeds, as of 2026-09-29.</p>
+<table>
+<thead>
+<tr>
+<th>Cluster</th>
+<th>Shape</th>
+<th style="text-align:right">Households</th>
+<th style="text-align:right">Evening kW per household</th>
+<th style="text-align:right">Share of the evening peak</th>
+<th style="text-align:right">Value of a 10 pct cut, GBP per household</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>evening peak</td>
+<td style="text-align:right">2,802</td>
+<td style="text-align:right">0.58</td>
+<td style="text-align:right">50.5%</td>
+<td style="text-align:right">3.5</td>
+</tr>
+<tr>
+<td>0</td>
+<td>evening peak</td>
+<td style="text-align:right">2,502</td>
+<td style="text-align:right">0.63</td>
+<td style="text-align:right">48.8%</td>
+<td style="text-align:right">3.8</td>
+</tr>
+<tr>
+<td>2</td>
+<td>night heavy</td>
+<td style="text-align:right">54</td>
+<td style="text-align:right">0.47</td>
+<td style="text-align:right">0.8%</td>
+<td style="text-align:right">2.8</td>
+</tr>
+</tbody>
+</table>
+<p>Source: real:lcl, model gbm, 4485 households reporting through the whole forecast window, 352 origins, as of 2026-09-29.</p>
+<h2>The live log and the registry</h2>
+<p>The API serves gbm, chosen by 7 gates
+(gbm cleared every gate with the best headline (wins minus losses +1)). The separate client verification is deployed at
+https://lookahead-grid-api.fly.dev: 48 rows read back, audit row before
+the response yes, unscored share after scoring
+0.0%. The live browser check not checked. Latency: local p99 for
+issuing a forecast 42 ms.</p>
+<h2>Limitations</h2>
+<p>The models saw observed weather at the target hour; a real day ahead forecast sees a weather
+forecast, so every error figure here is a lower bound on what a live desk would see and every win
+against the operator an upper bound. The operator's forecast is compared only where its scope
+matches the demand series. The hierarchy is EIA's. The detector's threshold was chosen on the
+simulator because the real validation year has no labelled events. The London panel is from 2011
+to 2014, opted in, and the tariff group was not randomized; the meter forecast uses a fixed panel
+of 4,485 households and no weather. The live scorecard scores against
+the committed actuals until the refresh job exists.</p>
+<h2>What the operator would push back on</h2>
+<p>You used observed weather, my forecast has a meteorologist behind it, your hierarchy is mine and
+not yours, and your households are a decade old and volunteered. All four are true and each is
+stated where it applies: the weather caveat on every figure that uses it, the comparability rule
+that drops 7 authorities rather than counting them, the
+remainder nodes that keep the arithmetic honest without pretending to be control areas, and the
+pre-registered plan that stops the tariff estimate from being tuned. What the build did not do is
+give the model a weather forecast, and it says so first.</p>
+<blockquote>
+<p>Demand data from the U.S. Energy Information Administration's Hourly Electric Grid Monitor, public domain; weather from Open-Meteo under CC BY 4.0; household data from UK Power Networks' Low Carbon London release under CC BY 4.0. Forecasts here are demonstrations and not for grid operations.</p>
+</blockquote>
+</main>
+</body>
+</html>

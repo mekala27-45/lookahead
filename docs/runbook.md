@@ -1,0 +1,33 @@
+# Runbook
+
+**Data.** Put the EIA six month files under `data/external/eia930/`, the London release under
+`data/external/london/` and the Open-Meteo pulls under `data/external/weather/` (on a machine that
+can reach the hosts, `deploy/` has the fetch script the build used), then `make data`, `make
+weather`.
+
+**Pipeline.** `make simulate recovery backtest hierarchy events meter registry latency manifest
+render marts` runs the stages in the order `lookahead_registry.stages.assemble.ORDER`; `make
+pipeline` runs them all. Each stage writes its own manifest under `results/manifests/` and
+`lookahead manifest` merges them into `results/manifest.json`; `lookahead marts` writes the
+site's bundle under `web/public/data/`.
+
+**Checks.** `make check`: ruff, mypy strict, pytest with the coverage floor, the em dash gate,
+the vocabulary gate, the statement gate, the palette validator (both surfaces and the dark card),
+the planted identifier scan and the claim gate's whole file diff.
+
+**API.** `uvicorn lookahead_api.main:app` against `DATABASE_URL`; `alembic upgrade head` in
+`packages/api`. Deploy: `deploy/deploy.ps1` from a Windows machine (or `deploy/deploy.sh`), then
+`deploy/verify.ps1` for the separate client check, `deploy/replay.ps1` to fill the log,
+`deploy/reset.ps1` to clear what the checks issued, `deploy/refresh.ps1` after a new backtest,
+`deploy/logs.ps1` to read the server's recent log tail (redacted) when the health check says
+the database is unreachable.
+
+**Site.** `cd web && npm ci && npm run build`; `npm run build:e2e && npm run test:e2e` runs
+Playwright against the test server that refuses HEAD and answers a first 503. Pages deploys from
+`.github/workflows/pages.yml`.
+
+**Rederive.** `make rederive` runs `scripts/reset_and_rederive.py` in a git worktree and compares
+the new manifest with the committed one; the tag is not cut until `results/rederive.json` reports
+zero drift.
+
+> Demand data from the U.S. Energy Information Administration's Hourly Electric Grid Monitor, public domain; weather from Open-Meteo under CC BY 4.0; household data from UK Power Networks' Low Carbon London release under CC BY 4.0. Forecasts here are demonstrations and not for grid operations.
