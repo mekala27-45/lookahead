@@ -1,169 +1,62 @@
 {
- "commit": "c96416967d7b8f4e298c5b777a4f571312dfaee7",
- "drift": [
-  "table events.test.by_authority row 8 col 0: 'SC' became 'EPE'",
-  "table events.test.by_authority row 8 col 2: 0 became 1",
-  "table events.test.by_authority row 8 col 3: 7 became 6",
-  "table events.test.by_authority row 8 col 4: 99 became 55",
-  "table events.test.by_authority row 8 col 5: None became 7.745841014",
-  "table events.test.by_authority row 9 col 0: 'CISO' became 'FPL'",
-  "table events.test.by_authority row 9 col 2: 0 became 4",
-  "table events.test.by_authority row 9 col 3: 7 became 3",
-  "table events.test.by_authority row 9 col 4: 54 became 30",
-  "table events.test.by_authority row 9 col 5: None became 9.660238528",
-  "table events.test.by_authority row 10 col 0: 'EPE' became 'SC'",
-  "table events.test.by_authority row 10 col 2: 1 became 0",
-  "table events.test.by_authority row 10 col 3: 6 became 7",
-  "table events.test.by_authority row 10 col 4: 55 became 99",
-  "table events.test.by_authority row 10 col 5: 7.745841014 became None",
-  "table events.test.by_authority row 11 col 0: 'FPL' became 'CISO'",
-  "table events.test.by_authority row 11 col 2: 4 became 0",
-  "table events.test.by_authority row 11 col 3: 3 became 7",
-  "table events.test.by_authority row 11 col 4: 30 became 54",
-  "table events.test.by_authority row 11 col 5: 9.660238528 became None",
-  "table events.test.by_authority row 12 col 0: 'NWMT' became 'FMPP'",
-  "table events.test.by_authority row 12 col 2: 0 became 1",
-  "table events.test.by_authority row 12 col 3: 6 became 5",
-  "table events.test.by_authority row 12 col 4: 7 became 21",
-  "table events.test.by_authority row 12 col 5: None became 7.451117179",
-  "table events.test.by_authority row 13 col 0: 'FMPP' became 'NWMT'",
-  "table events.test.by_authority row 13 col 2: 1 became 0",
-  "table events.test.by_authority row 13 col 3: 5 became 6",
-  "table events.test.by_authority row 13 col 4: 21 became 7",
-  "table events.test.by_authority row 13 col 5: 7.451117179 became None",
-  "table events.test.by_authority row 14 col 0: 'SWPP' became 'TVA'",
-  "table events.test.by_authority row 14 col 2: 4 became 0",
-  "table events.test.by_authority row 14 col 3: 1 became 5",
-  "table events.test.by_authority row 14 col 4: 45 became 5",
-  "table events.test.by_authority row 14 col 5: 9.380349513 became None",
-  "table events.test.by_authority row 15 col 0: 'IID' became 'HST'",
-  "table events.test.by_authority row 15 col 2: 0 became 4",
-  "table events.test.by_authority row 15 col 3: 5 became 1",
-  "table events.test.by_authority row 15 col 4: 98 became 69",
-  "table events.test.by_authority row 15 col 5: None became 17.12190314",
-  "table events.test.by_authority row 16 col 0: 'TVA' became 'IID'",
-  "table events.test.by_authority row 16 col 4: 5 became 98",
-  "table events.test.by_authority row 17 col 0: 'HST' became 'SWPP'",
-  "table events.test.by_authority row 17 col 4: 69 became 45",
-  "table events.test.by_authority row 17 col 5: 17.12190314 became 9.380349513",
-  "table events.test.by_authority row 19 col 0: 'CHPD' became 'TEC'",
-  "table events.test.by_authority row 19 col 2: 3 became 1",
-  "table events.test.by_authority row 19 col 3: 0 became 2",
-  "table events.test.by_authority row 19 col 4: 13 became 10",
-  "table events.test.by_authority row 19 col 5: 7.127264636 became 6.654602034",
-  "table events.test.by_authority row 20 col 0: 'TEC' became 'CHPD'",
-  "table events.test.by_authority row 20 col 2: 1 became 3",
-  "table events.test.by_authority row 20 col 3: 2 became 0",
-  "table events.test.by_authority row 20 col 4: 10 became 13",
-  "table events.test.by_authority row 20 col 5: 6.654602034 became 7.127264636",
-  "table events.test.by_authority row 23 col 0: 'CPLE' became 'PJM'",
-  "table events.test.by_authority row 23 col 2: 1 became 0",
-  "table events.test.by_authority row 23 col 3: 1 became 2",
-  "table events.test.by_authority row 23 col 4: 28 became 47",
-  "table events.test.by_authority row 23 col 5: 7.105411146 became None",
-  "table events.test.by_authority row 24 col 0: 'PJM' became 'FPC'",
-  "table events.test.by_authority row 24 col 2: 0 became 1",
-  "table events.test.by_authority row 24 col 3: 2 became 1",
-  "table events.test.by_authority row 24 col 4: 47 became 33",
-  "table events.test.by_authority row 24 col 5: None became 7.280020883",
-  "table events.test.by_authority row 25 col 0: 'AZPS' became 'CPLE'",
-  "table events.test.by_authority row 25 col 2: 0 became 1",
-  "table events.test.by_authority row 25 col 3: 2 became 1",
-  "table events.test.by_authority row 25 col 4: 15 became 28",
-  "table events.test.by_authority row 25 col 5: None became 7.105411146",
-  "table events.test.by_authority row 27 col 0: 'BPAT' became 'AZPS'",
-  "table events.test.by_authority row 27 col 2: 2 became 0",
-  "table events.test.by_authority row 27 col 3: 0 became 2",
-  "table events.test.by_authority row 27 col 4: 6 became 15",
-  "table events.test.by_authority row 27 col 5: 10.13283003 became None",
-  "table events.test.by_authority row 29 col 0: 'FPC' became 'PSCO'",
-  "table events.test.by_authority row 29 col 4: 33 became 8",
-  "table events.test.by_authority row 29 col 5: 7.280020883 became 14.08896992",
-  "table events.test.by_authority row 30 col 0: 'PSCO' became 'BPAT'",
-  "table events.test.by_authority row 30 col 2: 1 became 2",
-  "table events.test.by_authority row 30 col 3: 1 became 0",
-  "table events.test.by_authority row 30 col 4: 8 became 6",
-  "table events.test.by_authority row 30 col 5: 14.08896992 became 10.13283003",
-  "table events.test.by_authority row 31 col 0: 'DUK' became 'CPLW'",
-  "table events.test.by_authority row 32 col 0: 'TEPC' became 'LGEE'",
-  "table events.test.by_authority row 32 col 4: 24 became 16",
-  "table events.test.by_authority row 33 col 0: 'CPLW' became 'DUK'",
-  "table events.test.by_authority row 34 col 0: 'ERCO' became 'SOCO'",
-  "table events.test.by_authority row 34 col 4: 48 became 1",
-  "table events.test.by_authority row 36 col 0: 'LGEE' became 'AVA'",
-  "table events.test.by_authority row 36 col 4: 16 became 2",
-  "table events.test.by_authority row 37 col 0: 'NYIS' became 'ERCO'",
-  "table events.test.by_authority row 37 col 4: 6 became 48",
-  "table events.test.by_authority row 38 col 0: 'SOCO' became 'NYIS'",
-  "table events.test.by_authority row 38 col 4: 1 became 6",
-  "table events.test.by_authority row 39 col 0: 'AVA' became 'TEPC'",
-  "table events.test.by_authority row 39 col 4: 2 became 24"
- ],
- "finished_at": "2026-09-30T12:14:09.210406+00:00",
+ "commit": "6bb279ba43b3486b6183522b6c0f21a68284ae44",
+ "drift": [],
+ "finished_at": "2026-09-30T12:20:58.031581+00:00",
  "gates_passed": true,
- "reproduced": false,
+ "reproduced": true,
  "reset": null,
  "stages": {
-  "backtest_gbm": 7330.155234336853,
-  "backtest_own": 372.98083662986755,
-  "data": 36.88554906845093,
-  "events": 56.65691804885864,
-  "hierarchy": 1165.992936372757,
-  "latency": 0.26506805419921875,
-  "manifest_render_marts": 4.546969175338745,
-  "meter": 109.88428235054016,
-  "recovery": 3432.754405736923,
-  "registry": 2.84389591217041,
-  "simulate": 2.1614177227020264,
-  "skill": 4.642418146133423,
-  "weather": 5.025394678115845
+  "events": 55.40977692604065,
+  "latency": 0.24818682670593262,
+  "manifest_render_marts": 4.696228981018066,
+  "registry": 2.6826653480529785
  },
- "started_at": "2026-09-30T08:44:39.611855+00:00",
+ "started_at": "2026-09-30T12:19:08.763499+00:00",
  "tables_compared": 44,
  "timing_differences": {
   "backtest.gbm.fit_seconds": [
    524.9275603,
-   562.0215931
+   524.9275603
   ],
   "backtest.gbm.origins_per_minute": [
    256.4065618,
-   153.361989
+   256.4065618
   ],
   "backtest.gbm.predict_seconds": [
    3826.975737,
-   6716.422249
+   3826.975737
   ],
   "backtest.gbm.run_seconds": [
    4355.972765,
-   7282.769397
+   4355.972765
   ],
   "backtest.own.fit_seconds": [
    312.784265,
-   346.4039471
+   312.784265
   ],
   "backtest.own.origins_per_minute": [
    3356.307627,
-   3039.909791
+   3356.307627
   ],
   "backtest.own.predict_seconds": [
    16.30772638,
-   17.33494043
+   16.30772638
   ],
   "backtest.own.run_seconds": [
    332.7764091,
-   367.4122183
+   332.7764091
   ],
   "deploy.checked_at": [
    "2026-09-29T23:59:24.0034369Z",
    "2026-09-29T23:59:24.0034369Z"
   ],
   "events.seconds": [
-   52.40400767,
-   55.92058158
+   52.5866363,
+   53.96266079
   ],
   "hierarchy.seconds": [
    23.88012171,
-   1161.895899
+   23.88012171
   ],
   "latency.live.burst_issue_max_ms": [
    307.6,
@@ -243,7 +136,7 @@
   ],
   "meter.seconds": [
    98.09025836,
-   108.9810338
+   98.09025836
   ],
   "policy.max_p99_latency_ms": [
    2000.0,
@@ -251,11 +144,11 @@
   ],
   "recovery.seconds": [
    3565.168791,
-   3432.128078
+   3565.168791
   ],
   "registry.seconds": [
    2.038151503,
-   2.210182667
+   2.116626501
   ]
  },
  "values_compared": 1886,
