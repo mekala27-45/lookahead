@@ -13,6 +13,7 @@ temperature sensitivity, the noise level and the missing data rate one at a time
 
 from __future__ import annotations
 
+import importlib
 import json
 import multiprocessing
 import os
@@ -205,8 +206,12 @@ def _checkpoint_path(condition: str, seed: int) -> Path | None:
     return Path(folder) / f"{condition}-{seed}.json" if folder else None
 
 
-def _worker(args: tuple[str, int]) -> RunRecord:
-    condition, seed = args
+def _worker(args: tuple[str, int, tuple[str, ...]]) -> RunRecord:
+    condition, seed, modules = args
+    # A spawned worker starts with an empty extension table; importing the modules that
+    # registered the extensions in the parent registers them here too.
+    for module in modules:
+        importlib.import_module(module)
     path = _checkpoint_path(condition, seed)
     if path is not None and path.exists():
         raw = json.loads(path.read_text(encoding="utf-8"))
@@ -219,7 +224,8 @@ def _worker(args: tuple[str, int]) -> RunRecord:
 
 
 def run_study(conditions: list[str], seeds: int, workers: int = 2) -> list[RunRecord]:
-    jobs = [(c, s) for c in conditions for s in range(seeds)]
+    modules = tuple(sorted({fn.__module__ for fn in EXTENSIONS.values()}))
+    jobs = [(c, s, modules) for c in conditions for s in range(seeds)]
     if workers <= 1:
         return [_worker(job) for job in jobs]
     # One BLAS thread per worker: the study is thousands of small solves, and two workers each

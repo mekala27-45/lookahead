@@ -382,3 +382,17 @@ def test_recovery_records_are_checkpointed(tmp_path: Path, monkeypatch: pytest.M
     assert calls == [("base", 0), ("base", 1)]
     assert [r.figures for r in second] == [r.figures for r in first]
     assert second[0].per_authority == [{"a": 1}]
+
+
+def test_spawned_workers_carry_the_registered_extensions() -> None:
+    """The recovery workers are spawned, so the extension table the hierarchy and events packages
+    fill on import must be filled again in each worker: every record carries their figures."""
+    import lookahead_events  # noqa: F401
+    import lookahead_hierarchy  # noqa: F401
+    from lookahead_evaluation.recovery import EXTENSIONS, run_study
+
+    assert {"reconciliation", "detector"} <= set(EXTENSIONS)
+    records = run_study(["base"], 2, workers=2)
+    for record in records:
+        assert any(k.startswith("reconciliation.") for k in record.figures), sorted(record.figures)[:5]
+        assert any(k.startswith("detector.") for k in record.figures)
