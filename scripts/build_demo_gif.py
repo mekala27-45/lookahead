@@ -38,7 +38,7 @@ def main() -> int:
         durations.append(hold_ms)
 
     with sync_playwright() as p:
-        launch = {"executablePath": args.chromium} if Path(args.chromium).exists() else {}
+        launch = {"executable_path": args.chromium} if Path(args.chromium).exists() else {}
         browser = p.chromium.launch(**launch)
         page = browser.new_page(viewport={"width": 1180, "height": 900}, color_scheme="dark")
         page.goto(f"{args.base}/")
