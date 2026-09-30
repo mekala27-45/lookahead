@@ -55,6 +55,7 @@ RECORDING_NOTES = (
 RELATIVE_TOLERANCE = 1e-9
 STAGE_COMMANDS: dict[str, list[str]] = {
     "data": ["data"],
+    "weather": ["weather", "--no-pull"],
     "simulate": ["simulate"],
     "recovery": ["recovery"],
     "backtest_own": ["backtest", "--backend", "own"],
@@ -213,7 +214,8 @@ def make_worktree(handle: Any) -> Path:
         src = ROOT / rel
         dst = target / rel
         if src.is_dir():
-            shutil.copytree(src, dst, dirs_exist_ok=True)
+            # Never the checkpoints: the rederive fits everything again.
+            shutil.copytree(src, dst, dirs_exist_ok=True, ignore=shutil.ignore_patterns("checkpoints"))
         elif src.is_file():
             dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(src, dst)
