@@ -12,10 +12,10 @@ actual; token), `GET /v1/scorecard`, `GET /v1/models`, `GET /v1/authorities`, `G
 `GET /v1/health`. Every response carries the statement. Every write goes: the rows, then the
 audit row, then commit, then the response; `test_audit_precedes_response` holds it to that.
 
-Deployed at https://lookahead-grid-api.fly.dev on Fly.io's free allowance (one shared CPU machine that
+Deployed at https://lookahead-grid-api.vercel.app on Fly.io's free allowance (one shared CPU machine that
 stops when idle and starts on the first request, which is why the site probes twice) with Neon
 Postgres; the tables live in the `lookahead` schema when the database is shared with another
-project. Verified from a separate client (AJAY, Windows, PowerShell 5.1.26100.9444) at 2026-09-30T22:21:51.1458679Z:
+project. Verified from a separate client (AJAY, Windows, PowerShell 5.1.26100.9711) at 2026-10-23T17:54:14.2299362Z:
 deployed, 48 rows read back, audit before
 response yes. Latency from `scripts/load_test.py`:
 2 measurement files (local p99 for issuing

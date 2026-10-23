@@ -1,0 +1,14 @@
+{
+    "base_url":  "https://lookahead-grid-api.vercel.app",
+    "replayed_at":  "2026-10-23T17:55:13.4897234Z",
+    "issued":  51,
+    "scored_rows":  2447,
+    "unscored_share":  0.0004222972972972583,
+    "scorecard":  {
+                      "scored_rows":  7101,
+                      "mape":  0.0513516843189621,
+                      "coverage_90":  0.8729756372341924,
+                      "forecasts":  148,
+                      "coverage_50":  0.46387832699619774
+                  }
+}

@@ -20,7 +20,7 @@ and graded in public against the operator's own day ahead forecast.
 - The meter: 5,358 London households in 3 load
   shape clusters, a pre-registered time of use analysis (response -5.8%),
   and a cluster forecast reconciled to the panel total.
-- A live forecast log on Fly with Neon (https://lookahead-grid-api.fly.dev), verified from a separate
+- A live forecast log on Fly with Neon (https://lookahead-grid-api.vercel.app), verified from a separate
   client, and a control room on GitHub Pages that works from a recorded session when the API is
   asleep. The test server refuses HEAD and answers a first 503, as the hosts do.
 - The recovery study on a simulator with known truth (120 runs), the rederive

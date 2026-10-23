@@ -1,23 +1,23 @@
 {
- "authorities": 51,
- "base_url": "https://lookahead-grid-api.fly.dev",
- "burst_issue_max_ms": 364.9,
- "concurrency": 6,
- "errors": 0,
- "first_request_ms": 165,
- "issue": {
-  "max_ms": 143.3,
-  "mean_ms": 107.1,
-  "p50_ms": 103.8,
-  "p99_ms": 143.3
- },
- "measured_at": "2026-09-30T22:22:51.1738192Z",
- "note": "sequential requests after one warming request from a Windows client; the burst is concurrent issues",
- "read": {
-  "max_ms": 74.5,
-  "mean_ms": 60.7,
-  "p50_ms": 59.8,
-  "p99_ms": 74.5
- },
- "requests": 40
+    "base_url":  "https://lookahead-grid-api.vercel.app",
+    "measured_at":  "2026-10-23T17:56:39.8830035Z",
+    "requests":  40,
+    "concurrency":  6,
+    "authorities":  51,
+    "first_request_ms":  991.4,
+    "issue":  {
+                  "p50_ms":  1055.8,
+                  "p99_ms":  1170,
+                  "max_ms":  1170,
+                  "mean_ms":  1053.6
+              },
+    "read":  {
+                 "p50_ms":  1045,
+                 "p99_ms":  1090.1,
+                 "max_ms":  1090.1,
+                 "mean_ms":  1026.4
+             },
+    "burst_issue_max_ms":  576.3,
+    "errors":  0,
+    "note":  "sequential requests after one warming request from a Windows client; the burst is concurrent issues"
 }

@@ -1,5 +1,5 @@
 {
- "as_of": "2026-09-29",
+ "as_of": "2026-10-23",
  "figures": {},
  "seed": 13,
  "tables": {
@@ -16739,7 +16739,7 @@
   "build.stages_present": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_registry.stages.assemble",
@@ -17649,7 +17649,7 @@
   "deploy.audit_before_response": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17663,7 +17663,7 @@
   "deploy.audit_entries": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17677,7 +17677,7 @@
   "deploy.authority": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17691,7 +17691,7 @@
   "deploy.backend": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17705,7 +17705,7 @@
   "deploy.base_url": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17714,12 +17714,12 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": "https://lookahead-grid-api.fly.dev"
+   "value": "https://lookahead-grid-api.vercel.app"
   },
   "deploy.checked_at": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17728,12 +17728,12 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": "2026-09-30T22:21:51.1458679Z"
+   "value": "2026-10-23T17:54:14.2299362Z"
   },
   "deploy.client": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17742,12 +17742,12 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": "AJAY, Windows, PowerShell 5.1.26100.9444"
+   "value": "AJAY, Windows, PowerShell 5.1.26100.9711"
   },
   "deploy.forecast_id": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17756,12 +17756,12 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": "8256f9ea-efd4-43c2-a000-18421764ce82"
+   "value": "6b648fff-5eb8-48d1-ae57-b5c992207fcd"
   },
   "deploy.forecast_rows_read_back": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17775,7 +17775,7 @@
   "deploy.health_database": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17789,7 +17789,7 @@
   "deploy.health_status": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17803,7 +17803,7 @@
   "deploy.median_first_hour_mw": {
    "fmt": "mw",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17817,7 +17817,7 @@
   "deploy.model_version": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17831,7 +17831,7 @@
   "deploy.origin": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17845,7 +17845,7 @@
   "deploy.passed": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17859,7 +17859,7 @@
   "deploy.scored_now": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17873,7 +17873,7 @@
   "deploy.statement_present": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17887,7 +17887,7 @@
   "deploy.status": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17901,7 +17901,7 @@
   "deploy.unscored_share": {
    "fmt": "pct1",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "deploy/verify.ps1",
@@ -17910,7 +17910,7 @@
     "seeds": null,
     "source": "recorded"
    },
-   "value": 0.000425170068
+   "value": 0.0004295532646
   },
   "events.false_alarm_cost": {
    "fmt": "float1",
@@ -20421,7 +20421,7 @@
   "live.asleep_recorded_session_shown": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/live_check.py",
@@ -20435,7 +20435,7 @@
   "live.browser": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/live_check.py",
@@ -20449,7 +20449,7 @@
   "live.checked_at": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/live_check.py",
@@ -20463,7 +20463,7 @@
   "live.first_probe_status": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/live_check.py",
@@ -20477,7 +20477,7 @@
   "live.forecast_id": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/live_check.py",
@@ -20491,7 +20491,7 @@
   "live.routes_loaded": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/live_check.py",
@@ -20505,7 +20505,7 @@
   "live.routes_total": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/live_check.py",
@@ -20519,7 +20519,7 @@
   "live.site_url": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/live_check.py",
@@ -20533,7 +20533,7 @@
   "live.status": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/live_check.py",
@@ -21737,7 +21737,7 @@
   "palette.dark.first_three_all_pairs_cvd": {
    "fmt": "float1",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/validate_palette.js",
@@ -21751,7 +21751,7 @@
   "palette.dark.worst_adjacent_cvd": {
    "fmt": "float1",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/validate_palette.js",
@@ -21765,7 +21765,7 @@
   "palette.dark.worst_adjacent_normal": {
    "fmt": "float1",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/validate_palette.js",
@@ -21779,7 +21779,7 @@
   "palette.dark.worst_card_contrast": {
    "fmt": "float2",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/validate_palette.js",
@@ -21793,7 +21793,7 @@
   "palette.dark.worst_slot_contrast": {
    "fmt": "float2",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/validate_palette.js",
@@ -21807,7 +21807,7 @@
   "palette.failures": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/validate_palette.js",
@@ -21821,7 +21821,7 @@
   "palette.light.first_three_all_pairs_cvd": {
    "fmt": "float1",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/validate_palette.js",
@@ -21835,7 +21835,7 @@
   "palette.light.worst_adjacent_cvd": {
    "fmt": "float1",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/validate_palette.js",
@@ -21849,7 +21849,7 @@
   "palette.light.worst_adjacent_normal": {
    "fmt": "float1",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/validate_palette.js",
@@ -21863,7 +21863,7 @@
   "palette.light.worst_card_contrast": {
    "fmt": "float2",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/validate_palette.js",
@@ -21877,7 +21877,7 @@
   "palette.light.worst_slot_contrast": {
    "fmt": "float2",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/validate_palette.js",
@@ -21891,7 +21891,7 @@
   "palette.validated": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "scripts/validate_palette.js",
@@ -21905,7 +21905,7 @@
   "policy.alert_persistence_hours": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -21919,7 +21919,7 @@
   "policy.alert_threshold_grid": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -21933,7 +21933,7 @@
   "policy.bh_q": {
    "fmt": "float2",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -21947,7 +21947,7 @@
   "policy.bootstrap_block_days": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -21961,7 +21961,7 @@
   "policy.bootstrap_replicates": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -21975,7 +21975,7 @@
   "policy.conformal_horizon_bucket_hours": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -21989,7 +21989,7 @@
   "policy.cooling_thresholds": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22003,7 +22003,7 @@
   "policy.coverage_band_90_high": {
    "fmt": "pct0",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22017,7 +22017,7 @@
   "policy.coverage_band_90_low": {
    "fmt": "pct0",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22031,7 +22031,7 @@
   "policy.false_alarm_cost": {
    "fmt": "float1",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22045,7 +22045,7 @@
   "policy.gbm_refit_months": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22059,7 +22059,7 @@
   "policy.gbm_training_window_days": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22073,7 +22073,7 @@
   "policy.heating_thresholds": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22087,7 +22087,7 @@
   "policy.horizons": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22101,7 +22101,7 @@
   "policy.interval_level": {
    "fmt": "pct0",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22115,7 +22115,7 @@
   "policy.issue_hour_utc": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22129,7 +22129,7 @@
   "policy.max_median_peak_timing_error_hours": {
    "fmt": "float1",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22143,7 +22143,7 @@
   "policy.max_p99_latency_ms": {
    "fmt": "ms",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22157,7 +22157,7 @@
   "policy.max_share_significantly_worse_than_operator": {
    "fmt": "pct0",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22171,7 +22171,7 @@
   "policy.meter_cluster_range": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22185,7 +22185,7 @@
   "policy.meter_profile_window_days": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22199,7 +22199,7 @@
   "policy.meter_test_days": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22213,7 +22213,7 @@
   "policy.missed_event_cost": {
    "fmt": "float1",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22227,7 +22227,7 @@
   "policy.peak_reduction_value_gbp_per_kw": {
    "fmt": "float1",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22241,7 +22241,7 @@
   "policy.quantile_count": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22255,7 +22255,7 @@
   "policy.quantile_levels": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22269,7 +22269,7 @@
   "policy.recovery_seeds": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22283,7 +22283,7 @@
   "policy.region_count": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22297,7 +22297,7 @@
   "policy.ridge_penalties": {
    "fmt": "text",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22311,7 +22311,7 @@
   "policy.rolling_median_days": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22325,7 +22325,7 @@
   "policy.seasonal_naive_lag_hours": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22339,7 +22339,7 @@
   "policy.spike_multiple_of_rolling_median": {
    "fmt": "float1",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22353,7 +22353,7 @@
   "policy.test_months": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",
@@ -22367,7 +22367,7 @@
   "policy.validation_months": {
    "fmt": "int",
    "provenance": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-10-23",
     "condition": null,
     "model": "none",
     "origin": "lookahead_core.config.POLICY",

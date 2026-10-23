@@ -1,6 +1,6 @@
 # Operations review: the forecast against the operator
 
-Load desk, as of 2026-09-29. Rendered from `results/manifest.json`; every figure below is
+Load desk, as of 2026-10-23. Rendered from `results/manifest.json`; every figure below is
 a manifest value or table and `scripts/check_published_numbers.py` fails CI if this file drifts
 from it.
 
@@ -294,7 +294,7 @@ Source: real:lcl, model gbm, 4485 households reporting through the whole forecas
 
 The API serves gbm, chosen by 7 gates
 (gbm cleared every gate with the best headline (wins minus losses +1)). The separate client verification is deployed at
-https://lookahead-grid-api.fly.dev: 48 rows read back, audit row before
+https://lookahead-grid-api.vercel.app: 48 rows read back, audit row before
 the response yes, unscored share after scoring
 0.0%. The live browser check not checked. Latency: local p99 for
 issuing a forecast 42 ms.

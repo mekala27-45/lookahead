@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<title>lookahead operations review, as of 2026-09-29</title>
+<title>lookahead operations review, as of 2026-10-23</title>
 <style>
 /* The operations review memo, HTML form. Inlined into report/operations-review.html by the claim
    gate. Nothing is fetched: Space Grotesk and Atkinson Hyperlegible Next are used when installed,
@@ -259,7 +259,7 @@ blockquote p {
 <body>
 <main class="memo">
 <h1>Operations review: the forecast against the operator</h1>
-<p>Load desk, as of 2026-09-29. Rendered from <code>results/manifest.json</code>; every figure below is
+<p>Load desk, as of 2026-10-23. Rendered from <code>results/manifest.json</code>; every figure below is
 a manifest value or table and <code>scripts/check_published_numbers.py</code> fails CI if this file drifts
 from it.</p>
 <h2>Skill against the operator</h2>
@@ -2041,7 +2041,7 @@ cluster 0 first.</p>
 <h2>The live log and the registry</h2>
 <p>The API serves gbm, chosen by 7 gates
 (gbm cleared every gate with the best headline (wins minus losses +1)). The separate client verification is deployed at
-https://lookahead-grid-api.fly.dev: 48 rows read back, audit row before
+https://lookahead-grid-api.vercel.app: 48 rows read back, audit row before
 the response yes, unscored share after scoring
 0.0%. The live browser check not checked. Latency: local p99 for
 issuing a forecast 42 ms.</p>
