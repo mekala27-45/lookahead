@@ -8,7 +8,7 @@ When the live API is asleep the site serves these responses and says so on the p
 forecast the recording issues carries the note the reset step deletes by.
 
     LOOKAHEAD_TEST_DATABASE_URL=postgresql+psycopg://... python scripts/record_session.py --start-server
-    python scripts/record_session.py --base-url https://lookahead-grid-api.fly.dev --token ...
+    python scripts/record_session.py --base-url https://lookahead-grid-api.vercel.app --token ...
 """
 
 from __future__ import annotations

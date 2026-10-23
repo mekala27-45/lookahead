@@ -9,7 +9,7 @@ client, which is the verification the README prints. In both modes the audit row
 observed at or before the response's served_at.
 
     python scripts/check_persistence.py --start-server
-    python scripts/check_persistence.py --base-url https://lookahead-grid-api.fly.dev
+    python scripts/check_persistence.py --base-url https://lookahead-grid-api.vercel.app
 """
 
 from __future__ import annotations

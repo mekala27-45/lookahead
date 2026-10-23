@@ -4,7 +4,7 @@ running server. Writes results/latency/<label>.json, which the registry's latenc
 the documents quote.
 
     python scripts/load_test.py --base-url http://127.0.0.1:8080 --label local --requests 60 --concurrency 8
-    python scripts/load_test.py --base-url https://lookahead-grid-api.fly.dev --label live
+    python scripts/load_test.py --base-url https://lookahead-grid-api.vercel.app --label live
 """
 
 from __future__ import annotations

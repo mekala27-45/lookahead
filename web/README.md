@@ -37,7 +37,7 @@ regenerates it.
 
 The budget and experiments pages call the live API named by `NEXT_PUBLIC_MARGINAL_API`, which the
 Pages workflow sets from the `MARGINAL_API_URL` repository variable and which falls back to
-`https://marginal-alderquist-api.fly.dev` when empty. The first call probes `/v1/health` with a six
+`https://lookahead-grid-api.vercel.app` when empty. The first call probes `/v1/health` with a six
 second limit. If the API is asleep or unreachable, the page answers from `recorded_session.json`, a
 session recorded against the real API, for the rest of the visit: the budget slider reads the surface
 the pipeline solved in advance, labeled "precomputed", and "Save this plan" shows the recorded save,
