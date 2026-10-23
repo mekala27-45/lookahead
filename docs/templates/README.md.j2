@@ -111,7 +111,7 @@ after Benjamini-Hochberg across the authorities. Its 90 percent bands covered
 | Statistics | block bootstrap, Benjamini-Hochberg, coverage, `packages/evaluation` |
 | Data quality and quarantine | the quarantine rules and report, `packages/contracts` |
 | SQL and analytics engineering | the marts, DuckDB in `packages/meter/queries.py`, DuckDB-WASM on the site |
-| APIs, persistence, deployment | `packages/api`, `fly.toml`, `scripts/check_persistence.py`, `deploy/` |
+| APIs, persistence, deployment | `packages/api`, `Dockerfile.vercel`, `scripts/check_persistence.py`, `deploy/` |
 | Registry, gates, model cards | `packages/registry/gates.py`, `report/cards/` |
 | Visualization | `web/`, the validated palette, the tile map |
 | Communication | `report/operations-review.md`, the pushback paragraphs |
@@ -124,7 +124,7 @@ after Benjamini-Hochberg across the authorities. Its 90 percent bands covered
 Stretch items, never counted toward the checklist: the refresh job (not done), forecast weather
 in place of observed weather (not done), a neural backend (not done), the published benchmark
 comparison (not done), the models, explore and simulator pages (not done), the containers in CI
-(Dockerfile.api is built by the deploy; a pipeline container is not done).
+(Vercel builds the API image from Dockerfile.vercel; a pipeline container is not done).
 
 ## Running it
 
@@ -133,8 +133,8 @@ comparison (not done), the models, explore and simulator pages (not done), the c
 every stage in order and writes `results/manifest.json`; `make render` renders every document from
 it; `make check` runs the gates, lint, types and tests; `make rederive` reruns the pipeline in a
 worktree and compares the manifests. The API runs with `uvicorn lookahead_api.main:app` against
-`DATABASE_URL`; `deploy/deploy.ps1` deploys it to Fly from a Windows machine and
-`deploy/verify.ps1` checks it from there. Writes to the API need the token; this is a
+`DATABASE_URL`. Vercel builds it from `Dockerfile.vercel` and redeploys on every push to main
+(`docs/serving.md` has the setup), and `deploy/verify.ps1` checks it from a Windows machine. Writes to the API need the token; this is a
 demonstration, and the statement on every surface says so.
 
 ## License

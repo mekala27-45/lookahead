@@ -12,14 +12,21 @@ actual; token), `GET /v1/scorecard`, `GET /v1/models`, `GET /v1/authorities`, `G
 `GET /v1/health`. Every response carries the statement. Every write goes: the rows, then the
 audit row, then commit, then the response; `test_audit_precedes_response` holds it to that.
 
-Deployed at https://lookahead-grid-api.vercel.app on Fly.io's free allowance (one shared CPU machine that
-stops when idle and starts on the first request, which is why the site probes twice) with Neon
-Postgres; the tables live in the `lookahead` schema when the database is shared with another
-project. Verified from a separate client (AJAY, Windows, PowerShell 5.1.26100.9711) at 2026-10-23T17:54:14.2299362Z:
+Deployed at https://lookahead-grid-api.vercel.app as a container function on Vercel's free Hobby plan, with
+Neon Postgres; the tables live in the `lookahead` schema when the database is shared with another
+project. The instance scales to zero when idle and starts on the first request, which is why the
+site probes twice. Verified from a separate client (AJAY, Windows, PowerShell 5.1.26100.9711) at 2026-10-23T17:54:14.2299362Z:
 deployed, 48 rows read back, audit before
 response yes. Latency from `scripts/load_test.py`:
 2 measurement files (local p99 for issuing
 42 ms); the registry's gate reads the latest.
+
+To deploy it: import the repository in Vercel, pick the Container preset and point it at
+`Dockerfile.vercel` (the same image as `Dockerfile.api`, on the port Vercel sends traffic to). Set
+`DATABASE_URL`, `LOOKAHEAD_WRITE_TOKEN`, `LOOKAHEAD_DB_SCHEMA` and `LOOKAHEAD_CORS_ORIGINS` in the
+project settings. After that every push to main redeploys, and the migration runs at each start.
+`fly.toml` and the scripts in `deploy/` are the former Fly route, kept for history; Fly now wants a
+card, and `DECISIONS.md` has the move.
 
 Writes need the token and nothing else, because this is a demonstration. The refresh job that
 would pull the latest EIA file and issue the day's forecasts is a stretch step; until it exists the

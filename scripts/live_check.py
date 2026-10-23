@@ -1,9 +1,9 @@
-"""The live check: the Pages site and the Fly API opened in a real browser after the deploy.
+"""The live check: the Pages site and the Vercel API opened in a real browser after the deploy.
 
 The check itself is done in a browser on a machine that can reach both hosts (the build sandbox
 cannot): every route loaded, the statement read on each, one forecast issued through the site
-with its id shown, and the recorded session verified with the API asleep (the machine stopped
-after its idle timeout, so the site's first probe meets the wake up). This script writes what
+with its id shown, and the recorded session verified with the API asleep (the instance scaled
+to zero after its idle timeout, so the site's first probe meets the wake up). This script writes what
 was seen to results/live_check.json in the shape the claim gate reads; it refuses a report that
 names no browser, no routes or no forecast id.
 

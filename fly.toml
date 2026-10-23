@@ -1,3 +1,4 @@
+# The former Fly route, kept for history; the live API runs on Vercel (docs/serving.md).
 # Fly.io, free allowance: one shared CPU machine that stops when idle and starts on the first
 # request. The control room reads the committed results while it wakes and says so.
 app = "lookahead-grid-api"

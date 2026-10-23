@@ -21,7 +21,7 @@ and graded in public against the operator's own day ahead forecast.
 - The meter: {{ v('meter.households_profiled') }} London households in {{ v('meter.clusters') }} load
   shape clusters, a pre-registered time of use analysis (response {{ v('meter.tou.response_pct') }}),
   and a cluster forecast reconciled to the panel total.
-- A live forecast log on Fly with Neon ({{ v('deploy.base_url') }}), verified from a separate
+- A live forecast log on Vercel with Neon ({{ v('deploy.base_url') }}), verified from a separate
   client, and a control room on GitHub Pages that works from a recorded session when the API is
   asleep. The test server refuses HEAD and answers a first 503, as the hosts do.
 - The recovery study on a simulator with known truth ({{ v('recovery.runs') }} runs), the rederive

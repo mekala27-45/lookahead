@@ -1,4 +1,5 @@
-# Read the live API's recent logs from Fly on a Windows machine, so a failing health check can be
+# The former Fly route, kept for history; the live API runs on Vercel (docs/serving.md).
+# Read the API's recent logs from Fly on a Windows machine, so a failing health check can be
 # explained without opening a dashboard. Reads FLY_API_TOKEN from C:\Project FullTime\.env (or the
 # environment), asks flyctl for the log tail, redacts anything that looks like a connection string
 # or a bearer token, and writes the result to deploy\fly-logs.txt.

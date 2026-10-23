@@ -27,7 +27,7 @@
   manifest.json          every metric, interval, curve point, event   packages/registry
         | render          memo, README, RESULTS, cards, callouts      packages/render
    +----------------------------------------------------------------------------+
-   |  FLY API      /v1/forecasts (issue, store), /v1/score, /v1/models,         |
+   |  VERCEL API   /v1/forecasts (issue, store), /v1/score, /v1/models,         |
    |               /v1/audit, /v1/scorecard, /v1/health          packages/api  |
    |  GITHUB PAGES control room, forecast/[authority], backtest, hierarchy,    |
    |               events, households, report                        web/     |
@@ -83,7 +83,7 @@ from a separate process.
 
 ## Free tier only
 
-Fly.io for the API (one shared CPU machine that stops when idle, which is why the site probes
-twice), Neon Postgres (one project, shared with another build through a schema), GitHub Pages for
+Vercel's Hobby plan for the API (a container function built from `Dockerfile.vercel` that scales
+to zero when idle, which is why the site probes twice), Neon Postgres (one project, shared with another build through a schema), GitHub Pages for
 the site, GitHub Actions for CI. The data pipeline runs on one machine with two CPUs; the gbm
 backend trains on every third origin day for that reason, and says so.

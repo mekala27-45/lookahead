@@ -1,4 +1,5 @@
 #!/bin/sh
+# The former Fly route, kept for history; the live API runs on Vercel (docs/serving.md).
 # Deploy the API to Fly with the Neon connection string and the write token as secrets.
 # Reads FLY_API_TOKEN, LOOKAHEAD_DATABASE_URL (or DATABASE_URL, then the tables go in the
 # `lookahead` schema of that database) and LOOKAHEAD_WRITE_TOKEN from the environment or from

@@ -4,7 +4,7 @@ read the rows back through a connection this process opens itself.
 Two modes. `--start-server` migrates with alembic, starts the API in a child process against
 the database URL, drives it over HTTP, then reads the forecast, its rows, its scores and the
 audit row with a fresh psycopg connection in this process. `--base-url` drives a live server
-(the Fly deployment) and reads back through the API's own GET endpoints from this separate
+(the Vercel deployment) and reads back through the API's own GET endpoints from this separate
 client, which is the verification the README prints. In both modes the audit row must be
 observed at or before the response's served_at.
 

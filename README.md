@@ -105,7 +105,7 @@ after Benjamini-Hochberg across the authorities. Its 90 percent bands covered
 | Statistics | block bootstrap, Benjamini-Hochberg, coverage, `packages/evaluation` |
 | Data quality and quarantine | the quarantine rules and report, `packages/contracts` |
 | SQL and analytics engineering | the marts, DuckDB in `packages/meter/queries.py`, DuckDB-WASM on the site |
-| APIs, persistence, deployment | `packages/api`, `fly.toml`, `scripts/check_persistence.py`, `deploy/` |
+| APIs, persistence, deployment | `packages/api`, `Dockerfile.vercel`, `scripts/check_persistence.py`, `deploy/` |
 | Registry, gates, model cards | `packages/registry/gates.py`, `report/cards/` |
 | Visualization | `web/`, the validated palette, the tile map |
 | Communication | `report/operations-review.md`, the pushback paragraphs |
@@ -121,7 +121,7 @@ after Benjamini-Hochberg across the authorities. Its 90 percent bands covered
 | 4 | Baselines and the own backend with conformal quantiles; the recovery study on every condition with at least twenty seeds each | done | `own` over 18,615 origins, MAPE 5.65% against the naive's 11.66%; the recovery study ran 120 runs over 6 conditions with 20 seeds each (`results/recovery/`). |
 | 5 | The gbm backend with quantile objectives and conformal; the cross check table with both baselines | done | `gbm` (XGBoost, quantile objective at the five levels, conformalized intervals) over 18,615 origins with 13 monthly refits, MAPE 5.48%; the cross check table in `RESULTS.md` (own better in 4, gbm in 40, disagreements on the operator 8). |
 | 6 | The skill table against the operator: wins, losses and ties across the authorities with intervals; the two headline numbers | done | gbm beat the operator in 18 of 44 comparable authorities (13 to 24) and lost in 17 (12 to 22); `results/skill/skill_rows.parquet`. |
-| 7 | API deployed on Fly with Neon; live URL in the README; verified from a separate client, with the client's response printed | done | https://lookahead-grid-api.vercel.app, checked from AJAY, Windows, PowerShell 5.1.26100.9711 at 2026-10-23T17:54:14.2299362Z: passed yes, 48 rows read back, audit before response yes; `results/deploy/verification.json`. |
+| 7 | API deployed on Vercel with Neon; live URL in the README; verified from a separate client, with the client's response printed | done | https://lookahead-grid-api.vercel.app, checked from AJAY, Windows, PowerShell 5.1.26100.9711 at 2026-10-23T17:54:14.2299362Z: passed yes, 48 rows read back, audit before response yes; `results/deploy/verification.json`. |
 | 8 | Forecasts and scores observed from an independent connection; audit before response; the out of process check | done | `tests/api/test_forecast_log.py` (`test_forecast_is_committed`, `test_scores_are_committed`, `test_audit_precedes_response`) and `scripts/check_persistence.py --start-server` in CI. |
 | 9 | Quantile coverage and the reliability diagram per horizon; the served levels with their interior test | done | gbm 90 percent coverage 89.1% and 50 percent 49.0% on test, 90.0% on validation; degenerate levels none, interior yes; the reliability table in `RESULTS.md`. |
 | 10 | Hierarchy reconciliation by three methods with coherence tests; accuracy by level before and after with intervals | done | 159 nodes, coherence gaps 0.0000 MW (bottom up), 0.0000 MW (top down), 0.0000 MW (MinT); helped at bottom_up at the lower 48 level; bottom_up at the interconnection level; bottom_up at the region level; mint at the lower 48 level; mint at the interconnection level; mint at the region level; hurt at top_down at the interconnection level; top_down at the region level; top_down at the authority level; top_down at the subregion level; mint at the authority level; mint at the subregion level. |
@@ -137,7 +137,7 @@ after Benjamini-Hochberg across the authorities. Its 90 percent bands covered
 Stretch items, never counted toward the checklist: the refresh job (not done), forecast weather
 in place of observed weather (not done), a neural backend (not done), the published benchmark
 comparison (not done), the models, explore and simulator pages (not done), the containers in CI
-(Dockerfile.api is built by the deploy; a pipeline container is not done).
+(Vercel builds the API image from Dockerfile.vercel; a pipeline container is not done).
 
 ## Running it
 
@@ -146,8 +146,8 @@ comparison (not done), the models, explore and simulator pages (not done), the c
 every stage in order and writes `results/manifest.json`; `make render` renders every document from
 it; `make check` runs the gates, lint, types and tests; `make rederive` reruns the pipeline in a
 worktree and compares the manifests. The API runs with `uvicorn lookahead_api.main:app` against
-`DATABASE_URL`; `deploy/deploy.ps1` deploys it to Fly from a Windows machine and
-`deploy/verify.ps1` checks it from there. Writes to the API need the token; this is a
+`DATABASE_URL`. Vercel builds it from `Dockerfile.vercel` and redeploys on every push to main
+(`docs/serving.md` has the setup), and `deploy/verify.ps1` checks it from a Windows machine. Writes to the API need the token; this is a
 demonstration, and the statement on every surface says so.
 
 ## License

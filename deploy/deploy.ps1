@@ -1,3 +1,4 @@
+# The former Fly route, kept for history; the live API runs on Vercel (docs/serving.md).
 # Deploy the lookahead API to Fly from a Windows machine.
 #
 # Reads FLY_API_TOKEN, LOOKAHEAD_DATABASE_URL (or DATABASE_URL, in which case the tables go in the

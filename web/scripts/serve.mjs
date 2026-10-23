@@ -3,7 +3,7 @@
 // Two refusals on purpose, found on Day 12's live URL after the tests had passed: HEAD requests
 // get a 405 (Pages answers them with an error), so the data layer has to size a mart from the
 // bundle and never from HEAD; and the mock API under /mock-api answers its first request with a
-// 503, the way the Fly machine answers while it wakes, so the site's client has to probe twice.
+// 503, the way a sleeping API host can answer while it wakes, so the site's client has to probe twice.
 // After the first 503 the mock answers every /v1 route from the recorded session in out/data.
 // Byte range requests are honored because the parquet reader reads the footer first.
 import { createReadStream, existsSync, readFileSync, statSync } from "node:fs";
