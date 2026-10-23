@@ -8,7 +8,7 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "/lookahead";
 // The live API. The workflow passes the LOOKAHEAD_API_URL repository variable, which is empty
 // until someone sets it, so an empty value falls back to the deployed address. The end to end
 // build points it at the test server's mock, which refuses HEAD and answers a first 503.
-const api = process.env.NEXT_PUBLIC_LOOKAHEAD_API || "https://lookahead-grid-api.fly.dev";
+const api = process.env.NEXT_PUBLIC_LOOKAHEAD_API || "https://lookahead-grid-api.vercel.app";
 
 const config: NextConfig = {
   output: "export",

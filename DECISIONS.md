@@ -157,3 +157,6 @@ table row for row. Wall clock timings differ between runs and are reported besid
 never judged; the hierarchy's committed timing is the short one from a run that read its chunk
 checkpoints, and the rederive's is the full one.
 
+## 2026-10-23: the container moves to Vercel, because Fly needs a card and Hugging Face needs a plan
+
+The Fly trial on the account ended in October and every Fly operation now asks for a card, which stopped this API; Hugging Face Docker Spaces, the route prepared as the replacement, require a paid plan since mid 2026. The same image deploys as a Vercel container function from `Dockerfile.vercel` (the Hobby plan: no card, non commercial use, a 300 second ceiling per request, scale to zero, a cold start on the first request after idle that the site's two probes already handle), with the migration in the container start command as before. The site default names the new address; `fly.toml` and the Fly scripts stay as the record of the first host.

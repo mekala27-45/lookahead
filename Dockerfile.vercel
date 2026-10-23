@@ -1,0 +1,17 @@
+# The lookahead API as a Vercel container function (free Hobby plan, no card): the same image as
+# Dockerfile.api, listening on port 80, where Vercel sends the traffic. Vercel builds it from this file,
+# starts an instance on the first request after idle and scales it to zero again; the migration runs at
+# every start and is a no-op after the first.
+FROM python:3.12-slim AS base
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
+RUN pip install --no-cache-dir "uv>=0.8,<0.9"
+WORKDIR /app
+COPY pyproject.toml uv.lock README.md ./
+COPY packages ./packages
+# Only the API package and what it imports: core, contracts, features and forecast.
+RUN uv sync --frozen --no-dev --no-default-groups --package lookahead-api
+COPY results/models ./results/models
+COPY results/registry ./results/registry
+ENV LOOKAHEAD_ROOT=/app PORT=80 PATH="/app/.venv/bin:$PATH" LOOKAHEAD_ENV=production
+EXPOSE 80
+CMD ["sh", "-c", "cd packages/api && alembic upgrade head && cd /app && uvicorn lookahead_api.main:app --host 0.0.0.0 --port ${PORT}"]
